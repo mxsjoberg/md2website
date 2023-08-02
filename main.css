@@ -44,3 +44,9 @@ code {
   font-size: 80%;
   color: #767976;
 }
+
+#footer p {
+  width: 640px;
+  padding: 0 2rem;
+  margin-top: 0;
+}
