@@ -1,4 +1,5 @@
 html.invert {
+  background: #000000;
   filter: invert(1);
 }
 
@@ -9,11 +10,19 @@ nav {
   background: #161716;
 }
 
+html.invert nav {
+  background: #000000;
+}
+
 body {
   background: #161716;
   color: #D7D7D8;
   font-family: 'Lucida Console', monospace;
   margin: 0;
+}
+
+html.invert body {
+  background: #000000;
 }
 
 div.page {
