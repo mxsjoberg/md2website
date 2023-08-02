@@ -1,3 +1,7 @@
+nav {
+  position: fixed;
+}
+
 body {
   background: #161716;
   color: #D7D7D8;
