@@ -37,5 +37,10 @@ pre {
 
 code {
   font-family: 'Lucida Console', monospace;
-  color: #666666;
+  color: #767976;
+}
+
+.small {
+  font-size: 80%;
+  color: #767976;
 }
