@@ -37,9 +37,10 @@ def write_header(file, title="Built with Static Webpage Builder", root=0):
     file.write("<div class='page'>")
 
 def write_footer(file):
-    # invert
-    file.write("[<a id='invert'>invert</a>]")
-    file.write(f"<p><span class='small'>Page loaded in <span id='load_time'></span></span></p>")
+    file.write("</div>")
+    file.write("<div id='footer'>")
+    file.write("<p>[<a id='invert'>light|dark</a>]</p>")
+    file.write(f"<p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p>")
     file.write("</div>")
     file.write("</body>")
     file.write("</html>")
@@ -105,3 +106,4 @@ with open(f"{ROOT_DIR}/main.min.js", "w+") as file:
     js_content = js_content.replace("\t", "")
     file.write(js_content)
     js_file.close()
+
