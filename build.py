@@ -79,7 +79,7 @@ with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
                     posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                     # write
                     write_header(tmp_file, title=title)
-                    tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code"]))
+                    tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
                     write_footer(tmp_file)
                     post_file.close()
     # sort posts_lst by date then by name
