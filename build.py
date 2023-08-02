@@ -115,7 +115,7 @@ with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
     current_date = None
     for post in sorted_posts_lst:
         if current_date != post['date'].year:
-            html_posts.write(f"<p>{post['date'].year}</p>")
+            html_posts.write(f"<h1>{post['date'].year}</h1>")
             current_date = post['date'].year
         html_posts.write(f"<p><a href='{post['url']}.html'>{post['title']}</a></p>")
     write_footer(html_posts)
