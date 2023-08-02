@@ -99,7 +99,7 @@ with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
 # programming
 with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
     write_header(html_programming, title="Programming")
-    posts_lst = []
+    programming_dict = {}
     for root, dirs, posts in os.walk("programming"):
         for post in posts:
             if post.split(".")[1] == "md":
@@ -112,22 +112,36 @@ with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
                     title = post_content.split("\n")[0].split("# ")[1]
                     # date (third line)
                     date = post_content.split("\n")[2].split("*")[1]
-                    # append to posts_lst
-                    posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                    # meta
+                    language = None
+                    category = None
+                    try:
+                        language = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[0].split("]")[0][1:].lower()
+                        category = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[1].split("]")[0][1:].lower()
+                    except:
+                        pass
+                    if language and category:
+                        if not language in programming_dict:
+                            programming_dict[language] = {}
+                        if not category in programming_dict[language]:
+                            programming_dict[language][category] = []
+                        programming_dict[language][category].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                    else:
+                        pass
                     # write
                     write_header(tmp_file, title=title)
                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
                     write_footer(tmp_file)
                     post_file.close()
-    # sort posts_lst by date then by name
-    sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
-    # write posts
-    current_date = None
-    for post in sorted_posts_lst:
-        if current_date != post['date'].year:
-            html_programming.write(f"<p>{post['date'].year}</p>")
-            current_date = post['date'].year
-        html_programming.write(f"<p><a href='{post['url']}.html'>{post['title']}</a></p>")
+
+    # write programming
+    for language in programming_dict:
+        html_programming.write(f"<h1 id='{language}'>{language.title()}</h1>")
+        for category in programming_dict[language]:
+            html_programming.write(f"<p id='{category}'>{category.title()}</p>")
+            sorted_posts_lst = sorted(programming_dict[language][category], key=sort_by_date_and_title, reverse=True)
+            for post in sorted_posts_lst:
+                html_programming.write(f"<p><a href='{post['url']}.html'>{post['title']}</a></p>")
     write_footer(html_programming)
 
 # minimize css
