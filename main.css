@@ -17,3 +17,12 @@ h1 {
 a {
   color: #6BF;
 }
+
+pre {
+  white-space: break-spaces;
+}
+
+code {
+  font-family: 'Lucida Console', monospace;
+  color: #666666;
+}
