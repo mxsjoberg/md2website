@@ -1,6 +1,6 @@
 # Backpropagation
 
-*June 2021*
+*June 2021* [Python](programming.html#python) [Machine Learning](programming.html#machine-learning)
 
 Backpropagation is a method used in artificial neural networks to adjust weights.
 

@@ -1,6 +1,6 @@
 # Convolutional Neural Network
 
-*May 2021*
+*May 2021* [Python](programming.html#python) [Machine Learning](programming.html#machine-learning)
 
 A convolutional neural network for classifying MNIST data using Keras (Tensorflow).
 

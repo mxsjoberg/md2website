@@ -1,6 +1,6 @@
 # Combinations with Replacement in Python
 
-*June 2018*
+*June 2018* [Python](programming.html#python) [Misc](programming.html#misc)
 
 ```python
 from itertools import combinations_with_replacement

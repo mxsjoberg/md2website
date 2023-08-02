@@ -1,6 +1,6 @@
 # Genetic Algorithm Optimization (BGA)
 
-*January 2023*
+*January 2023* [Python](programming.html#python) [Computational Intelligence](programming.html#computational-intelligence)
 
 BGA is a metaheuristic optimization algorithm inspired by the process of natural selection. It is a population-based algorithm that uses a genetic representation of the decision variables to search for the optimal solution.
 

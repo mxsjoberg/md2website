@@ -1,6 +1,6 @@
 # Operator Fusion on Parse Tree
 
-*July 2023*
+*July 2023* [Python](programming.html#python) [Compilers](programming.html#compilers)
 
 Operator fusion is a technique to combine or rearrange consecutive operations in a parse tree to improve efficiency of code execution. It is a common optimization technique used in compilers.
 

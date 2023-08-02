@@ -1,6 +1,6 @@
 # Class and Subclass in Python
 
-*November 2018*
+*November 2018* [Python](programming.html#python) [Misc](programming.html#misc)
 
 ```python
 # class

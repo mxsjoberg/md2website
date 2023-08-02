@@ -1,6 +1,6 @@
 # Shunting Yard Algorithm
 
-*July 2022*
+*July 2022* [Python](programming.html#python) [Compilers](programming.html#compilers)
 
 Shunting Yard Algorithm is a method for parsing mathematical expressions specified in infix notation.
 

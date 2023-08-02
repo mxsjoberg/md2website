@@ -1,6 +1,6 @@
 # Widrow Hoff Learning Algorithm
 
-*October 2020*
+*October 2020* [Python](programming.html#python) [Machine Learning](programming.html#machine-learning)
 
 The Widrow Hoff Learning Algorithm is a sequential learning algorithm to train a linear classifier. The algorithm is also known as the Least Mean Square (LMS) algorithm.
 
