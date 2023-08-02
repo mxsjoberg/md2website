@@ -1,9 +1,5 @@
 # html static webpage builder
 
-# TODO
-#
-# - define folders in dict or list to use as "pages" (i.e. posts, etc.), ignore other folders
-
 import os
 import markdown
 
@@ -26,9 +22,6 @@ def write_header(file, title="Built with Static Webpage Builder", root=0):
         nav_content = nav_file.read()
         if nav_content != "":
             file.write(markdown.markdown(nav_content))
-            # file.seek(file.tell() - 4, os.SEEK_SET)
-            # file.write(" [<a id='invert'>invert</a>]")
-            # file.write("</p>")
         else:
             raise
     except:
@@ -72,12 +65,14 @@ with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
         for post in posts:
             if post.split(".")[1] == "md":
                 post_name = post.split(".")[0]
-                html_posts.write(F"<p><a href='{post_name}.html'>{post_name}</a></p>")
+                # html_posts.write(F"<p><a href='{post_name}.html'>{post_name.replace('-', ' ').title()}</a></p>")
                 # create page
                 with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
                     post_file = open(f"{root}/{post}")
                     post_content = post_file.read()
                     title = post_content.split("\n")[0].split("# ")[1]
+                    # create href
+                    html_posts.write(F"<p><a href='{post_name}.html'>{title}</a></p>")
                     # write
                     write_header(tmp_file, title=title)
                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code"]))
