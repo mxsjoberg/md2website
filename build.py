@@ -12,7 +12,21 @@ def sort_by_date_and_title(item):
 def write_header(file, title="Built with Static Webpage Builder", root=0):
     file.write("<html lang='en'>")
     file.write("<head>")
+    # favicon
+    file.write("<link rel='icon' href='fav.png'>")
+    # title
     file.write(f"<title>{title}</title>")
+    # meta
+    file.write("<meta charset='utf-8'>")
+    file.write("<meta name='viewport' content='width=device-width, initial-scale=1'>")
+    file.write("<meta name='author' content='Michael Sjöberg'>")
+    file.write("<meta name='description' content='My projects, posts, and programming notes.'>")
+    file.write("<meta name='theme-color' content='#161716'>")
+    file.write("<meta name='application-name' content='Michael Sjöberg'>")
+    file.write("<meta name='apple-mobile-web-app-title' content='Michael Sjöberg'>")
+    file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
+    file.write("<meta name='mobile-web-app-capable' content='yes'>")
+    file.write("<meta name='apple-mobile-web-app-status-bar-style' content='#161716'>")
     # css
     file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
     # js
@@ -60,6 +74,16 @@ with open(f"{ROOT_DIR}/index.html", "w+") as file:
     write_header(file, title)
     file.write(markdown.markdown(index_content))
     index_file.close()
+    write_footer(file)
+
+# projects
+with open(f"{ROOT_DIR}/projects.html", "w+") as file:
+    projects_file = open("projects.md")
+    projects_content = projects_file.read()
+    title = projects_content.split("\n")[0].split("# ")[1]
+    write_header(file, title)
+    file.write(markdown.markdown(projects_content))
+    projects_file.close()
     write_footer(file)
 
 # posts
@@ -166,3 +190,7 @@ with open(f"{ROOT_DIR}/main.min.js", "w+") as file:
     file.write(js_content)
     js_file.close()
 
+
+
+# copy fav.png to dist/fav.png
+os.system("cp fav.png dist/fav.png")
