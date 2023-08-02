@@ -33,16 +33,18 @@ a {
 
 pre {
   white-space: break-spaces;
+  padding-inline-start: 40px;
 }
 
 code {
   font-family: 'Lucida Console', monospace;
-  color: #767976;
+  font-size: 80%;
+  color: #66666C;
 }
 
 .small {
   font-size: 80%;
-  color: #767976;
+  color: #66666C;
 }
 
 #footer p {
