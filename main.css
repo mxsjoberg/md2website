@@ -33,13 +33,14 @@ a {
 
 pre {
   white-space: break-spaces;
-  padding-inline-start: 40px;
+  background: #1B1B1B;
+  padding: 1rem;
 }
 
 code {
   font-family: 'Lucida Console', monospace;
   font-size: 80%;
-  color: #66666C;
+  color: #97979A;
 }
 
 .small {
