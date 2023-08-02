@@ -1,0 +1,39 @@
+<html lang='en'><head><title>Class and Subclass in Python</title><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Class and Subclass in Python</h1>
+<p><em>November 2018</em> <a href="programming.html#python">Python</a> <a href="programming.html#misc">Misc</a></p>
+<pre><code class="language-python"># class
+class Money(object):
+    # constructor
+    def __init__(self, amount, currency):
+        self.amount = amount
+        self.currency = currency
+    # string representation
+    def __str__(self):
+        return f&quot;{self.amount} {self.currency}&quot;
+
+# create new instance of class
+money = Money(220, &quot;EUR&quot;)
+money.amount, money.currency
+
+print(money)
+# 220 EUR
+print(money.amount, money.currency)
+# 220 EUR
+</code></pre>
+<pre><code class="language-python"># subclass
+class VirtualMoney(Money):
+    def __init__(self, date):
+        self.date = date
+        # inherits amount and currency from Money
+
+    # override string representation
+    def __str__(self):
+        return f&quot;{self.amount} {self.currency} (expire: {self.date})&quot;
+
+# create new instance of subclass
+virtual_money = VirtualMoney(&quot;2018-12-31&quot;)
+virtual_money.amount = 20
+virtual_money.currency = &quot;V-Bucks&quot;
+
+print(virtual_money)
+# 20 V-Bucks (expire: 2018-12-31)
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p></div></body></html>

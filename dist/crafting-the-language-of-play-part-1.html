@@ -1,0 +1,389 @@
+<html lang='en'><head><title>Crafting the Language of Play – Part 1: Introduction and operator precedence</title><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Crafting the Language of Play – Part 1: Introduction and operator precedence</h1>
+<p><em>May 2023</em></p>
+<p>This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available <a href="https://github.com/mixmaester/playcode">here</a>.</p>
+<ul>
+<li><a href="#what-is-playcode">What is PlayCode?</a><ul>
+<li><a href="#implementation-language-and-method">Implementation language and method</a></li>
+</ul>
+</li>
+<li><a href="#operator-precedence">Operator precedence</a></li>
+<li><a href="#lexer">Lexer</a></li>
+<li><a href="#parser">Parser</a><ul>
+<li><a href="#program">Program</a></li>
+<li><a href="#expression">Expression</a></li>
+<li><a href="#term">Term</a></li>
+<li><a href="#factor">Factor</a></li>
+</ul>
+</li>
+<li><a href="#interpreter">Interpreter</a></li>
+</ul>
+<h2><a name="what-is-playcode" class="anchor"></a> <a href="#what-is-playcode">What is PlayCode?</a></h2>
+<p>The general idea behind PlayCode is to make a playful programmig language and to function as a testbed for experimental programming language features. It is not really meant to be used for anything serious, but rather as a playground for new ideas. So, the implementation need to be easy to manage, change, and build on.</p>
+<p>PlayCode is procedural because knowing-how is more important than knowing-that, i.e. <a href="https://en.wikipedia.org/wiki/Procedural_knowledge">street smarts</a>. It will most likely be dynamically typed because no one have time for types anyway. There will be numbers, strings, lists, if-statements, for-loops, variables, and comments. There will probably also be a lot of things that are not yet decided.</p>
+<p>Additionally, and more importantly, there will be two main features that will make PlayCode exciting:</p>
+<ul>
+<li>
+<p>Tags <code>@&lt;tag&gt;</code> and goto tag <code>goto @&lt;tag&gt;</code> to enable any statement to become a function, so that basically every line can be called from anywhere in the program and return itself once. Imagine playing an instrument where each key or string can be played at any moment and always return some sound.</p>
+</li>
+<li>
+<p>Swaps <code>swap &lt;a&gt; &lt;b&gt;</code> to swap the values of two variables, which is useful for example when sorting.</p>
+</li>
+</ul>
+<p>Below are examples of valid programs.</p>
+<pre><code>print 42
+</code></pre>
+<pre><code>x = 42
+-- comment
+if x &lt; 0:
+    print false
+else
+    print &quot;positive&quot;
+end
+</code></pre>
+<pre><code>-- swap
+x = 2
+y = 3
+swap x y
+print y == 2 -&gt; true
+</code></pre>
+<pre><code>-- tags
+x = 0
+@inc x++
+goto @inc
+print x -&gt; 2
+</code></pre>
+<p>There are two ways to include comments, <code>--</code> and <code>-&gt;</code>, which also can be used as helpers in source for more readable code.</p>
+<h3><a name="implementation-language-and-method" class="anchor"></a> <a href="#implementation-language-and-method">Implementation language and method</a></h3>
+<p>I started working on PlayCode before writing this post and managed to implement a basic but working structure for lexer and parser in C++ (mainly to refresh my knowledge of C++ programming). The code is available <a href="https://github.com/mixmaester/playcode/blob/main/fpc.cpp">here</a>. However, having to refresh it in the first place is probably due to its insane complexity. It is not a very fun language to work with, so decided to start over in Python. I could always rewrite in C++, C, or something like Zig later if performance is important. </p>
+<p>Python is my go-to language to express ideas, and since Python 3.4+ there is support for enumerations and 3.10+ structural pattern matching (switch statements). Maybe can be used for compiler-writing now?</p>
+<p>The method is to start with a subset of the language as per <a href="http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf">an incremental approach</a>. Not necessary the smallest subset or adding a single operator at a time, but managable pieces. This means there will be a working interpreter in each post. I will probably look at code generation later, but interpreting is good enough to get started with exploring programming language features.</p>
+<h2><a name="operator-precedence" class="anchor"></a> <a href="#operator-precedence">Operator precedence</a></h2>
+<p>In this post, the goal is to implement this subset:</p>
+<pre><code class="language-python"># program       ::= PRINT expression
+# expression    ::= term ((PLUS | MINUS) term)*
+# term          ::= factor ((MULTIPLY | DIVIDE) factor)*
+# factor        ::= INTEGER | LPAR expression RPAR
+
+PRINT       = &quot;PRINT&quot;
+INTEGER     = &quot;INTEGER&quot;
+PLUS        = &quot;+&quot;
+MINUS       = &quot;-&quot;
+MULTIPLY    = &quot;*&quot;
+DIVIDE      = &quot;/&quot;
+LPAR        = &quot;(&quot;
+RPAR        = &quot;)&quot;
+
+RESERVED = [
+    &quot;PRINT&quot;
+]
+</code></pre>
+<p>I have defined two classes to deal with tokens (using classes makes this more readable later).</p>
+<pre><code class="language-python">class TokenType(Enum):
+    KEYWORD     = 100
+    INTEGER     = 201
+    PLUS        = 301
+    MINUS       = 302
+    MULTIPLY    = 304
+    DIVIDE      = 305
+    LPAR        = 401
+    RPAR        = 402
+
+class Token(object):
+    def __init__(self, m_type, m_value):
+        self.m_type = m_type
+        self.m_value = m_value
+
+    def __repr__(self):
+        if self.m_value:
+            return f&quot;Token({self.m_type}, '{self.m_value}')&quot;
+        else:
+            return f&quot;Token({self.m_type})&quot;
+</code></pre>
+<p>Here are examples of valid programs (note that <code>-&gt;</code> is start of comment):</p>
+<pre><code>print 42
+</code></pre>
+<pre><code>print 4 + 2 -&gt; 6
+</code></pre>
+<pre><code>print 1 + (2 * 4) - (6 / 2) -&gt; 6
+</code></pre>
+<h2><a name="lexer" class="anchor"></a> <a href="#lexer">Lexer</a></h2>
+<p>Building a lexer is fairly straightforward. It is just the usual read-each-char in source routine and match with defined tokens.</p>
+<pre><code class="language-python">def tokenize(source):
+    tokens = []
+    current_line = 1
+    current_char = ''
+    current_char_index = 0
+
+    while current_char_index &lt; len(source):
+        current_char = source[current_char_index]
+        match current_char:
+            # ...
+
+    return tokens
+</code></pre>
+<p>I am skipping whitespace, so first cases match whitespace characters and increment the lexer accordingly.</p>
+<pre><code class="language-python">case ' ' | '\t' | '\r':
+    current_char_index += 1
+case '\n':
+    current_line += 1
+    current_char_index += 1
+</code></pre>
+<p>The next cases match operators, nothing fancy here. Comments are first matched with <code>-</code> and if next character is another <code>-</code> or <code>&gt;</code> then the rest is skipped until newline.</p>
+<pre><code class="language-python">case '+':
+    tokens.append(Token(TokenType.PLUS, PLUS))
+    current_char_index += 1
+case '-':
+    # comments
+    next_char = source[current_char_index + 1]
+    if next_char == '-' or next_char == '&gt;':
+        current_char_index += 1
+        # skip until newline
+        while source[current_char_index] != '\n':
+            current_char_index += 1
+    # minus
+    else:
+        tokens.append(Token(TokenType.MINUS, MINUS))
+        current_char_index += 1
+case '*':
+    tokens.append(Token(TokenType.MULTIPLY, MULTIPLY))
+    current_char_index += 1
+case '/':
+    tokens.append(Token(TokenType.DIVIDE, DIVIDE))
+    current_char_index += 1
+</code></pre>
+<p>The next case matches parentheses, again nothing fancy.</p>
+<pre><code class="language-python">case '(':
+    tokens.append(Token(TokenType.LPAR, LPAR))
+    current_char_index += 1
+case ')':
+    tokens.append(Token(TokenType.RPAR, RPAR))
+    current_char_index += 1
+</code></pre>
+<p>Then there is the default case, which matches numbers (currently integers) with <code>isdigit</code> and identifiers with <code>isalpha</code>.</p>
+<pre><code class="language-python">case _:
+    if current_char.isdigit():
+        # ...
+    elif current_char.isalpha():
+        # ...
+    else:
+        raise Exception(&quot;Unknown character:&quot;, current_char)
+</code></pre>
+<p>Numbers can be multi-digit, so each subsequent character that <code>isdigit</code> is concatenated to a <code>number</code>-string.</p>
+<pre><code class="language-python">number = str(current_char)
+current_char_index += 1
+while source[current_char_index].isdigit() and current_char_index &lt; len(source):
+    number += str(source[current_char_index])
+    current_char_index += 1
+tokens.append(Token(TokenType.INTEGER, number))
+</code></pre>
+<p>Same goes for identifiers, which is also checked against a list of reserved keywords. There are no variables yet so identifiers not in <code>RESERVED</code> is discarded.</p>
+<pre><code class="language-python">identifier = str(current_char)
+current_char_index += 1
+while source[current_char_index].isalpha() and current_char_index &lt; len(source):
+    identifier += str(source[current_char_index])
+    current_char_index += 1
+if identifier.upper() in RESERVED:
+    tokens.append(Token(TokenType.KEYWORD, identifier.upper()))
+</code></pre>
+<p>The lexer is now complete.</p>
+<pre><code class="language-python">tokens = tokenize(&quot;print 1 + (2 * 4) - (6 / 2) -&gt; 6&quot;)
+for token in tokens: print(token)
+# Token(TokenType.KEYWORD, 'PRINT')
+# Token(TokenType.INTEGER, '1')
+# Token(TokenType.PLUS, '+')
+# Token(TokenType.LPAR, '(')
+# Token(TokenType.INTEGER, '2')
+# Token(TokenType.MULTIPLY, '*')
+# Token(TokenType.INTEGER, '4')
+# Token(TokenType.RPAR, ')')
+# Token(TokenType.MINUS, '-')
+# Token(TokenType.LPAR, '(')
+# Token(TokenType.INTEGER, '6')
+# Token(TokenType.DIVIDE, '/')
+# Token(TokenType.INTEGER, '2')
+# Token(TokenType.RPAR, ')')
+</code></pre>
+<h2><a name="parser" class="anchor"></a> <a href="#parser">Parser</a></h2>
+<p>The parser is predictive and recursive descent. It starts with <code>parse</code>, which takes the flat list of tokens and returns a nested list of tokens (representing a tree structure for a valid program).</p>
+<p>It works by recursively calling non-terminals, i.e. program, expression, term, and factor until finding a terminal (currently only <code>INTEGER</code>).</p>
+<pre><code class="language-python">def parse(tokens):
+    tree = []
+    current_token = None
+    current_token_index = 0
+
+    while current_token_index &lt; len(tokens):
+        program, current_token_index = parse_program(tokens, current_token_index)
+        tree = program
+
+    return tree
+</code></pre>
+<h3><a name="program" class="anchor"></a> <a href="#program">Program</a></h3>
+<p>The program production rule is the starting point in the grammar, so <code>parse_program</code> is the first non-terminal called. It matches the current token with <code>PRINT</code>, which is currently the only acceptable statement in the language. It then calls <code>parse_expression</code> to parse the expression as per the grammar rule.</p>
+<pre><code class="language-python"># program ::= PRINT expression
+def parse_program(tokens, current_token_index):
+    program = []
+    current_token = tokens[current_token_index]
+    current_token_index += 1
+
+    # PRINT
+    if current_token.m_value == PRINT:
+        program.append(current_token)
+        # expression
+        expression, current_token_index = parse_expression(tokens, current_token_index)
+        program.append(expression)
+    else:
+        raise Exception(&quot;parse_program&quot;, &quot;Unexpected token:&quot;, tokens[current_token_index])
+
+    return program, current_token_index
+</code></pre>
+<h3><a name="expression" class="anchor"></a> <a href="#expression">Expression</a></h3>
+<p>The expression, term, and factor rules are primarily there to enforce operator precedence, where the expression rule is the highest precedence, followed by term, and then factor.</p>
+<p>It works by first calling <code>parse_term</code>, which is non-optional, then matches either of the tokens <code>PLUS</code> or <code>MINUS</code> followed by another <code>parse_term</code>, zero or more times.</p>
+<pre><code class="language-python"># expression ::= term ((PLUS | MINUS) term)*
+def parse_expression(tokens, current_token_index):
+    expression = []
+
+    # term
+    term, current_token_index = parse_term(tokens, current_token_index)
+    expression = term
+
+    while current_token_index &lt; len(tokens) and (tokens[current_token_index].m_type == TokenType.PLUS or tokens[current_token_index].m_type == TokenType.MINUS):
+        current_token = tokens[current_token_index]
+        current_token_index += 1
+        match current_token.m_type:
+            # PLUS
+            case TokenType.PLUS:
+                # term
+                term, current_token_index = parse_term(tokens, current_token_index)
+                expression = [current_token, [expression, term]]
+            # MINUS
+            case TokenType.MINUS:
+                # term
+                term, current_token_index = parse_term(tokens, current_token_index)
+                expression = [current_token, [expression, term]]
+            case _:
+                raise Exception(&quot;parse_expression&quot;, &quot;Unexpected token:&quot;, tokens[current_token_index])
+
+    return expression, current_token_index
+</code></pre>
+<h3><a name="term" class="anchor"></a> <a href="#term">Term</a></h3>
+<p>The term rule is similar to the expression rule but matches <code>MULTIPLY</code> or <code>DIVIDE</code> instead of <code>PLUS</code> or <code>MINUS</code>. It first calls <code>parse_factor</code>, which is non-optional, then the optional part zero or more times.</p>
+<pre><code class="language-python"># term ::= factor ((MULTIPLY | DIVIDE) factor)*
+def parse_term(tokens, current_token_index):
+    term = []
+
+    # factor
+    factor, current_token_index = parse_factor(tokens, current_token_index)
+    term = factor
+
+    while current_token_index &lt; len(tokens) and (tokens[current_token_index].m_type == TokenType.MULTIPLY or tokens[current_token_index].m_type == TokenType.DIVIDE):
+        current_token = tokens[current_token_index]
+        current_token_index += 1
+        match current_token.m_type:
+            # MULTIPLY
+            case TokenType.MULTIPLY:
+                # factor
+                factor, current_token_index = parse_factor(tokens, current_token_index)
+                term = [current_token, [term, factor]]
+            # DIVIDE
+            case TokenType.DIVIDE:
+                # factor
+                factor, current_token_index = parse_factor(tokens, current_token_index)
+                term = [current_token, [term, factor]]
+            case _:
+                raise Exception(&quot;parse_term&quot;, &quot;Unexpected token:&quot;, tokens[current_token_index])
+
+    return term, current_token_index
+</code></pre>
+<h3><a name="factor" class="anchor"></a> <a href="#factor">Factor</a></h3>
+<p>The factor rule has the lowest precedence and matches either an <code>INTEGER</code> or <code>LPAR</code>, which indicates the start of another expression. If <code>LPAR</code> is matched, then it calls <code>parse_expression</code> and the process starts all over again. It finally matches <code>RPAR</code> or raises an error (no closing parantheses).</p>
+<pre><code class="language-python"># factor ::= INTEGER | LPAR expression RPAR
+def parse_factor(tokens, current_token_index):
+    factor = []
+    current_token = tokens[current_token_index]
+    current_token_index += 1
+
+    match current_token.m_type:
+        # INTEGER
+        case TokenType.INTEGER:
+            factor = current_token
+        # LPAR
+        case TokenType.LPAR:
+            # expression
+            expression, current_token_index = parse_expression(tokens, current_token_index)
+            factor = expression
+            # RPAR
+            if current_token_index &lt; len(tokens) and tokens[current_token_index].m_type == TokenType.RPAR:
+                current_token_index += 1
+            else:
+                raise Exception(&quot;parse_factor&quot;, &quot;Expecting ')':&quot;)
+        case _:
+            raise Exception(&quot;parse_factor&quot;, &quot;Unexpected token:&quot;, tokens[current_token_index])
+
+    return factor, current_token_index
+</code></pre>
+<p>There is also a helper function to print nested list as tree.</p>
+<pre><code class="language-python">def print_tree(tree, indent_level=-1):
+    if isinstance(tree, list):
+        for item in tree:
+            print_tree(item, indent_level + 1)
+    else:
+        indent = '\t' * indent_level
+        print(f&quot;{indent}{tree}&quot;)
+</code></pre>
+<p>The parser is now complete.</p>
+<pre><code class="language-python">tokens = tokenize(&quot;print 1 + (2 * 4) - (6 / 2) -&gt; 6&quot;)
+tree = parse(tokens)
+print_tree(tree)
+# Token(TokenType.KEYWORD, 'PRINT')
+#     Token(TokenType.MINUS, '-')
+#             Token(TokenType.PLUS, '+')
+#                 Token(TokenType.INTEGER, '1')
+#                     Token(TokenType.MULTIPLY, '*')
+#                         Token(TokenType.INTEGER, '2')
+#                         Token(TokenType.INTEGER, '4')
+#             Token(TokenType.DIVIDE, '/')
+#                 Token(TokenType.INTEGER, '6')
+#                 Token(TokenType.INTEGER, '2')
+
+</code></pre>
+<h2><a name="interpreter" class="anchor"></a> <a href="#interpreter">Interpreter</a></h2>
+<p>The interpreter is the final step. It takes the tree, recursively evaluates it, and returns the result. Nothing more than that as of yet. It works by matching the left-most node, which should be a keyword, operator, or number, and evaluating the right (children).</p>
+<p>In our example program, it matches the keyword (currently only <code>PRINT</code>) and calls <code>interpret</code> on the right node. If it is an operator then it evaluates the expression on the right node and returns the result. A number simply returns the number.</p>
+<pre><code class="language-python">def interpret(tree):
+    result = ''
+    node = tree
+    if isinstance(node, list):
+        left = node[0]
+        right = node[1]
+    else:
+        left = node
+        right = None
+
+    match left.m_type:
+        case TokenType.KEYWORD if left.m_value == PRINT:
+            print(interpret(right))
+        case TokenType.PLUS:
+            result = int(interpret(right[0])) + int(interpret(right[1]))
+        case TokenType.MINUS:
+            result = int(interpret(right[0])) - int(interpret(right[1]))
+        case TokenType.MULTIPLY:
+            result = int(interpret(right[0])) * int(interpret(right[1]))
+        case TokenType.DIVIDE:
+            result = int(interpret(right[0])) / int(interpret(right[1]))
+        case _:
+            # NUMBER
+            if left.m_value.isdigit():
+                return left.m_value
+            else:
+                raise Exception(&quot;interpret&quot;, &quot;Unexpected node:&quot;, node)
+
+    return result
+</code></pre>
+<pre><code class="language-python">tokens = tokenize(&quot;print 1 + (2 * 4) - (6 / 2) -&gt; 6&quot;)
+tree = parse(tokens)
+
+interpret(tree)
+# 6
+</code></pre>
+<p>It prints <code>6</code>, which is the correct behaviour.</p></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p></div></body></html>

@@ -1,0 +1,199 @@
+<html lang='en'><head><title>Lecture notes on Security Engineering – Part 1: Introduction</title><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Lecture notes on Security Engineering – Part 1: Introduction</h1>
+<p><em>August 2022</em></p>
+<p>This is the first post in a series of lecture notes on security engineering, based on the postgraduate-level course with the same name at King's College London. These notes cover most of the topics, but not as deep and without assignments, and are primarily intended as a reference for myself.</p>
+<ul>
+<li><a href="#computer-programs">Computer programs</a><ul>
+<li><a href="#compilation">Compilation</a></li>
+<li><a href="#tools">Tools</a></li>
+</ul>
+</li>
+<li><a href="#computer-organisation">Computer organisation</a><ul>
+<li><a href="#cpu">CPU</a></li>
+</ul>
+</li>
+<li><a href="#cache-memory">Cache memory</a></li>
+<li><a href="#operating-system">Operating system</a><ul>
+<li><a href="#shell">Shell</a></li>
+<li><a href="#system-calls">System calls</a></li>
+<li><a href="#processes">Processes</a></li>
+<li><a href="#virtual-memory">Virtual memory</a></li>
+<li><a href="#files">Files</a></li>
+</ul>
+</li>
+</ul>
+<h2><a name="computer-programs" class="anchor"></a> <a href="#computer-programs">Computer programs</a></h2>
+<p>A computer program is a sequence of bits, and organized as 8-bit bytes, where one byte is 8-bits and each byte represent some text character (ASCII standard). Most programs are developed in a high-level programming language, then compiled, or translated, into an object file, which is executed by a process, and finally terminated.</p>
+<p>An object file contains application and libraries, such as program code in binary format, relocation information, which are things that need to be fixed once loaded into memory, symbol information as defined by object or imported, and optional debugging information. Interpreted languages are typically translated into an intermediate format.</p>
+<h3><a name="compilation" class="anchor"></a> <a href="#compilation">Compilation</a></h3>
+<pre><code class="language-c">/* hello.c */
+#include &lt;stdio.h&gt;
+
+int main() {
+    printf(&quot;hello c\n&quot;);
+    return 0;
+}
+</code></pre>
+<p>The compilation system generally includes preprocessor, compiler, assembler, and linker, which are used in stages to translate some program into a sequence of machine-language instructions packed into an executable object file. The compilation process is often referred to as simply compilation, or compiler.</p>
+<p>The compilation process (note that most program code in this post refer to programs written in the C programming language and using <a href="https://linux.die.net/man/1/gcc">gcc</a> to compile):</p>
+<ul>
+<li>
+<p><strong>preprocessor</strong>, such as <a href="https://linux.die.net/man/1/cpp">cpp</a>, modifies the program according to directives that begin with <code>#</code>, in this case <code>#include &lt;stdio.h&gt;</code>, and are imported into the program text, resulting in an intermediate file with <code>.i</code> suffix, use flag <code>-E</code> to see intermediate file</p>
+</li>
+<li>
+<p><strong>compiler</strong>, translates the intermediate file into an assembly program with <code>.s</code> suffix, where each line describe one instruction, use flag <code>-S</code> to generate assembly program (note that below assembly is generated on 64-bit mac, operand size suffix and special directives for assembler is omitted for clarity)</p>
+</li>
+</ul>
+<pre><code class="language-x86asm">.section __TEXT
+    .globl  _main
+
+_main:
+    push    %rbp
+    mov     %rsp, %rbp
+    sub     $16, %rsp
+    mov     $0, -4(%rbp)
+    lea     L_.str(%rip), %rdi
+    mov     $0, %al
+    call    _printf
+    xor     %eax, %eax
+    add     $16, %rsp
+    pop     %rbp
+    ret
+
+.section __TEXT
+    L_.str: .asciz  &quot;hello c\n&quot;
+</code></pre>
+<ul>
+<li>
+<p><strong>assembler</strong>, such as <a href="https://linux.die.net/man/1/as">as</a>, translates assembly program instructions into machine-level instructions, use flag <code>-c</code> to compile assembly program, resulting in a relocatable object file with <code>.o</code> suffix (this is a binary file)</p>
+</li>
+<li>
+<p><strong>linker</strong>, such as <a href="https://linux.die.net/man/1/ld">ld</a>, merges one or more relocatable object files, which are separate and precompiled <code>.o</code>-files that the program is using, such as <code>printf.o</code>, resulting in an executable file with no suffix, ready to be loaded into memory and executed by the system</p>
+</li>
+</ul>
+<p>A linker is used to resolve references to external objects, such as variables and functions (e.g. <code>printf</code>). Static linking is performed at compile-time and dynamic linking is performed at run-time.</p>
+<h3><a name="tools" class="anchor"></a> <a href="#tools">Tools</a></h3>
+<p>Useful tools for working with programs from a systems perspective:</p>
+<ul>
+<li><a href="https://www.sourceware.org/gdb/">gdp</a>, GNU debugger</li>
+<li><code>objdump</code> such as <code>objdump -d &lt;filename&gt;</code> to display information about object file (disassembler)<ul>
+<li><code>gcc hello.c &amp;&amp; objdump -d hello</code> (alternative to <code>gcc -S</code> to see assembly)</li>
+</ul>
+</li>
+<li><code>readelf</code> to display information about ELF files, which is a standard file format for executable files</li>
+<li><code>elfish</code> to manipulate ELF files</li>
+<li><code>hexdump</code> to display content in binary file</li>
+<li><code>/proc/pid/maps</code> to show memory layout for process</li>
+</ul>
+<h2><a name="computer-organisation" class="anchor"></a> <a href="#computer-organisation">Computer organisation</a></h2>
+<p>A modern computer is organized as an assemble of buses, I/O devices, main memory, and processor:</p>
+<ul>
+<li>buses are collections of electrical conduits that carry bytes between components, usually fixed sized and referred to as words, where the word size is 4 bytes (32 bits) or 8 bytes (64 bits)</li>
+<li>
+<p>I/O devices are connections to the external world, such as keyboard, mouse, and display, but also disk drives, which is where executable files are stored</p>
+<ul>
+<li><strong>controllers</strong> are chip sets in the devices themselves or main circuit board (motherboard)</li>
+<li><strong>adapters</strong> are cards plugged into the motherboard</li>
+</ul>
+</li>
+<li>
+<p>main memory is a temporary storage device that holds program and data when executed by the processor, physically, it is a collection of dynamic random-access memory (DRAM) chips, and logically, it is a linear array of bytes with its own unique address (array index)</p>
+</li>
+<li>processor, or central processing unit (CPU), is the engine that interprets and executes the machine-level instructions stored in the main memory</li>
+</ul>
+<h3><a name="cpu" class="anchor"></a> <a href="#cpu">CPU</a></h3>
+<p>The CPU has a word size storage device (register) called program counter (PC) that points at some instruction in main memory. Instructions are executed in a strict sequence, which is to read and interpret the instruction as pointed to by program counter, perform operation (as per the instruction), and then update the counter to point to next instruction (note that each instruction has its own unique address).</p>
+<p>An operation, as performed by the CPU, use main memory, register file, which is a small storage device with collection of word-size registers, and the arithmetic logic unit (ALU) to compute new data and address values:</p>
+<ul>
+<li><strong>load</strong>, copy byte (or word) from main memory into register, overwriting previous content in register</li>
+<li><strong>store</strong>, copy byte (or word) from register to location in main memory, overwriting previous content in location</li>
+<li><strong>operate</strong>, copy content of two registers to ALU, perform arithmetic operation on the two words and store result in register, overwriting previous content in register</li>
+<li><strong>jump</strong>, extract word from instruction and copy that word into counter, overwriting previous value in counter</li>
+</ul>
+<h2><a name="cache-memory" class="anchor"></a> <a href="#cache-memory">Cache memory</a></h2>
+<p>A cache memory is memory devices at different levels of accessibility, or sizes, where smaller sizes are faster. The different levels of cache memory is typically used to make programs run faster.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: left;"></th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0</td>
+<td style="text-align: left;">Register</td>
+<td style="text-align: left;">CPU register hold <strong>words</strong> copied from other cache levels</td>
+</tr>
+<tr>
+<td>L1</td>
+<td style="text-align: left;">SRAM</td>
+<td style="text-align: left;">L1 hold cache <strong>lines</strong> copied from L2</td>
+</tr>
+<tr>
+<td>L2</td>
+<td style="text-align: left;">SRAM</td>
+<td style="text-align: left;">L2 hold cache <strong>lines</strong> copied from L3</td>
+</tr>
+<tr>
+<td>L3</td>
+<td style="text-align: left;">SRAM</td>
+<td style="text-align: left;">L3 hold cache <strong>lines</strong> copied from main memory</td>
+</tr>
+<tr>
+<td>L4</td>
+<td style="text-align: left;">DRAM</td>
+<td style="text-align: left;">Main memory to hold disk <strong>blocks</strong> from local disks</td>
+</tr>
+<tr>
+<td>L5</td>
+<td style="text-align: left;">Local secondary storage</td>
+<td style="text-align: left;">Local disks hold <strong>files</strong> copied from other disks or remote network storage</td>
+</tr>
+<tr>
+<td>L6</td>
+<td style="text-align: left;">Remote secondary storage</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>The different levels of memory is also referred to as <a href="https://en.wikipedia.org/wiki/Memory_hierarchy">memory hierarchy</a>, and is often measured in response time. Each level act as cache memory for the level below, and top-most levels are reserved for information that the processor might need in the near future.</p>
+<h2><a name="operating-systems" class="anchor"></a> <a href="#operating-systems">Operating systems</a></h2>
+<p>An operating system provides services to programs. The services are used via abstractions to make it easier to manipulate low-level devices and protect the hardware.</p>
+<h3><a name="shell" class="anchor"></a> <a href="#shell">Shell</a></h3>
+<p>A shell provides an interface to the operating system via the command-line (or library functions):</p>
+<ul>
+<li>when opened, waiting for commands and read each character as it is typed into some register, which is then stored in memory</li>
+<li>load executable file, such as <code>./hello</code> (command to execute program <code>hello</code>), which basically copies the code and data in file from disk to main memory</li>
+<li>once loaded, the processor starts to execute the machine-language instructions in the <code>main</code> routine, which corresponds to the function <code>main</code> in program, copies the data from memory to register, and then from register to display device, which should output the string "hello assembly"</li>
+</ul>
+<p>A shell command is a command-line program and <code>system()</code> is a library function to execute shell commands in C programs:</p>
+<ul>
+<li>sort files with <code>ls | sort</code></li>
+</ul>
+<pre><code class="language-c">int main() {
+    system(&quot;ls | sort&quot;);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>copy files with <code>cp</code>, such as <code>cp ~/file /dest</code> (note that <code>~</code> expands into <code>HOME</code> environment variable)</li>
+</ul>
+<p>For more shell commands, see <a href="https://en.wikipedia.org/wiki/List_of_Unix_commands">List of Unix commands</a>.</p>
+<h3><a name="system-calls" class="anchor"></a> <a href="#system-calls">System calls</a></h3>
+<p>A system call is a function executed by the operating system, such as accessing hard drive and creating processes. System calls use shell commands to implement functions and used by programs to request services from the operating system.</p>
+<p>In the C programming language, system commands such as <code>write</code>, is wrapped in some other function, such as <code>printf</code>.</p>
+<h3><a name="processes" class="anchor"></a> <a href="#processes">Processes</a></h3>
+<p>A process is an abstraction for processor, main memory, or I/O devices, and represent a running program. Its context is the state information the process needs to run. The processor switch between multiple running programs such as shell and some program using context switching, which saves the state of current process and restores the state of some new process. A thread is multiple execution units within a process with access to the same code and global data. </p>
+<p>A <strong>kernel</strong> is a collection of code and data structures that is always in memory. It is used to manage all processes and called using system call instructions, or <code>syscall</code>, which transfers control to the kernel when the program need some action done by the operating system, such as read or write to file.</p>
+<h3><a name="virtual-memory" class="anchor"></a> <a href="#virtual-memory">Virtual memory</a></h3>
+<p>A virtual memory is an abstraction for main memory and local disks. It provides each program with a virtual address space to make it seem as programs have exclusive use of memory:</p>
+<ul>
+<li><strong>program code and data</strong>, code begins at same fixed address for all processes at bottom of the virtual address space, followed by global variables, and is fixed size once process is running</li>
+<li><strong>heap</strong> expands and contracts its size dynamically at run-time using library functions such as <code>malloc</code> and <code>free</code></li>
+<li><strong>shared libraries</strong>, such as the C standard library, is near the middle of the virtual address space</li>
+<li><strong>stack</strong> is at top of user-section of the virtual address space and used by compiler to implement function calls, it expands and contracts its size dynamically at run-time so that stack grows with each function call and contracts on return</li>
+<li><strong>kernel virtual memory</strong> is at top of the virtual memory space and reserved for kernel, programs must call kernel to read or write in this space</li>
+</ul>
+<h3><a name="files" class="anchor"></a> <a href="#files">Files</a></h3>
+<p>A file is an abstraction for I/O devices and provides a uniform view of devices. Most input and output in a system is reading and writing to files.</p></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p></div></body></html>

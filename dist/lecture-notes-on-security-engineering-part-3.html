@@ -1,0 +1,202 @@
+<html lang='en'><head><title>Lecture notes on Security Engineering – Part 3: Assembly</title><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Lecture notes on Security Engineering – Part 3: Assembly</h1>
+<p><em>August 2022</em></p>
+<h2><a name="1" class="anchor"></a> <a href="#1">Assembly basics</a></h2>
+<p>An assembly language is a low-level symbolic language with processor specific instructions and syntax, such as those developed at AT&amp;T and Intel. Instructions, syntax, data types, registers, and hardware support are typically specified in the instruction set architecture (ISA), which represent an abstract model of some computer implementation.</p>
+<p>An assembly program is a sequence of instructions, where each instruction represents an actual operation to be performed by the processor.</p>
+<p>In most assembly-like languages, an instruction has the form <code>mnemonic &lt;source&gt;, &lt;destination&gt;</code> (AT&amp;T syntax, or <code>mnemonic &lt;destination&gt;, &lt;source&gt;</code> in Intel syntax) such as <code>mov %eax, %ebx</code>, which is instruction to copy value from <code>%eax</code> to <code>%ebx</code>:</p>
+<ul>
+<li>mnemonics tell the CPU what to do, such as <code>mov</code>, <code>add</code>, <code>sub</code>, <code>push</code>, <code>pop</code>, <code>call</code>, and <code>jmp</code></li>
+<li>
+<p>source and destination</p>
+<ul>
+<li>registers, such as <code>%eax</code>, <code>%esp</code>, or <code>%al</code></li>
+<li>memory location, such as <code>0x401000, 8(%ebp)</code> or <code>%edx, %ecx, 4</code></li>
+<li>constants (source only), such as <code>$42</code> or <code>$0x401000</code></li>
+</ul>
+</li>
+<li>
+<p>directives are commands for assembler</p>
+<ul>
+<li><code>.data</code> to identify section with variables</li>
+<li><code>.text</code> to identify section with code</li>
+<li><code>.byte</code>, <code>.word</code>, or <code>.long</code> to define integer as 8, 16, or 32-bit</li>
+<li><code>.ascii</code> or <code>.asciz</code> to define string with or without terminator</li>
+</ul>
+</li>
+<li>
+<p>labels represent symbols at current address, so <code>number: .byte 42</code> is same as <code>char number = 42;</code> in the C programming language</p>
+</li>
+</ul>
+<h3><a name="1.1" class="anchor"></a> <a href="#1.1">Registers</a></h3>
+<p>A register is a memory location on the CPU and prefixed with <code>%</code>. There are general-purpose registers, which includes stack pointer <code>%esp</code>, frame pointer <code>%ebp</code>, and instruction pointer <code>%eip</code>, and flags registers:</p>
+<ul>
+<li>extended (32-bit), such as <code>%eax</code>, <code>%ebx</code>, <code>%ecx</code>, <code>%edx</code>, <code>%esi</code>, and <code>%edi</code></li>
+<li>smaller parts (16-bit), such as <code>%ax</code>, <code>%bx</code>, <code>%cx</code>, <code>%dx</code>, <code>%sp</code> (stack pointer), <code>%bp</code> (frame pointer), <code>%si</code>, and <code>%di</code></li>
+<li>lower byte, such as <code>%a1</code>, <code>%b1</code>, <code>%c1</code>, and <code>%d1</code></li>
+<li>second byte, such as <code>%ah</code>, <code>%bh</code>, <code>%ch</code>, and <code>%dh</code></li>
+</ul>
+<p>A constant is prefixed with <code>$</code> and operand size is specified as suffix to mnemonic, where byte is <code>b</code> (8 bit), word is <code>w</code> (16 bit), and long is <code>l</code> (32-bit or 64-bit floating point). </p>
+<p>Below is the initial layout and final layout after <code>mov $1, %eax</code>, or copy 1 and set rest to zero (note that <code>%ax</code> is bits 0-15 and <code>%eax</code> is bits 0-31):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%a1</code></td>
+<td><code>%ah</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0</td>
+<td>8</td>
+<td>16</td>
+<td>31</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%a1</code></td>
+<td><code>%ah</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>10000000</td>
+<td>00000000</td>
+<td>0 – 0</td>
+<td>0 – 0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>8</td>
+<td>16</td>
+<td>31</td>
+</tr>
+</tbody>
+</table>
+<p>In programs, a memory location is accessed using pointers, which are variables that store memory addresses. Dereferencing a pointer means accessing the value stored at the memory address pointed to by the pointer.</p>
+<p>In order to dereference a pointer, the memory address must be computed based on the contents of the base and index registers with an optional constant displacement and scaling factor (determined by architecture and instruction set).</p>
+<h2><a name="2" class="anchor"></a> <a href="#2">Assembly programming</a></h2>
+<p>Assembly programs are practically always generated by compilers and hand-writing programs using assembly instructions is not very efficient (and can be very error prone).</p>
+<p>Below is an assembly program to output <code>hello assembly</code> (note that <code>r*</code> is 64 bit).</p>
+<pre><code class="language-x86asm">; assembly program (64-bit, intel syntax)
+section .text
+    global _main        ; start point for execution
+
+_main:
+    mov rax, 1          ; write (system call)
+    mov rdi, 1          ; stdout
+    mov rsi, msg        ; address to output
+    mov rdx, 14         ; bytes to output
+    syscall             ; invoke write
+    mov rax, 60         ; exit (system call)
+    xor rdi, rdi        ; 0
+    syscall             ; invoke exit
+
+section .data
+    ; db is raw bytes and line feed \n is 0xah, or 10
+    msg db &quot;hello assembly&quot;, 10
+</code></pre>
+<p>It is often easier to explore assembly programs in emulators, such as <a href="https://rextester.com/l/nasm_online_compiler">nasm Online Compiler</a> or <a href="https://godbolt.org/">Compiler Explorer</a>.</p>
+<h3><a name="2.1" class="anchor"></a> <a href="#2.1">Data transfer</a></h3>
+<p>Data transfer instructions are used to move data between registers, memory, and stack.</p>
+<pre><code class="language-x86asm">; set destination as source
+mov &lt;source&gt;, &lt;destination&gt;
+
+; swap destinations
+xchg &lt;destination&gt;, &lt;destination&gt;
+
+; store source on top of stack
+push &lt;source&gt;
+
+; get destination from top of stack
+pop &lt;destination&gt;
+</code></pre>
+<h3><a name="2.2" class="anchor"></a> <a href="#2.2">Binary arithmetic</a></h3>
+<p>Binary arithmetic instriuctions are used to perform arithmetic operations on binary data.</p>
+<pre><code class="language-x86asm">; addition, destination += source
+add &lt;source&gt;, &lt;destination&gt;
+
+; subtraction, destination -= source
+sub &lt;source&gt;, &lt;destination&gt;
+
+; increment, destination += 1
+inc &lt;destination&gt;
+
+; decrement, destination -= 1
+dec &lt;destination&gt;
+
+; negation, destination = -destination
+neg &lt;destination&gt;
+</code></pre>
+<h3><a name="2.3" class="anchor"></a> <a href="#2.3">Logical operators</a></h3>
+<p>Logical operator instructions are used to perform logical operations on binary data.</p>
+<pre><code class="language-x86asm">; and, destination &amp;= source
+and &lt;source&gt;, &lt;destination&gt;
+
+; or, destination |= source
+or &lt;source&gt;, &lt;destination&gt;
+
+; exclusive or, destination ^= source
+xor &lt;source&gt;, &lt;destination&gt;
+
+; not, destination = ~destination
+not &lt;destination&gt;
+</code></pre>
+<h3><a name="2.4" class="anchor"></a> <a href="#2.4">Unconditional branches</a></h3>
+<p>Unconditional branch instructions are used to change the flow of execution.</p>
+<pre><code class="language-x86asm">; jump to address
+jmp &lt;address&gt;
+
+; push return address and call function at address
+call &lt;address&gt;
+
+; pop return address and return
+ret
+
+; call OS-defined handler represented by const
+int &lt;const&gt;
+</code></pre>
+<h3><a name="2.5" class="anchor"></a> <a href="#2.5">Conditional branches</a></h3>
+<p>Conditional branch instructions are used to change the flow of execution based on the value of the flags register.</p>
+<pre><code class="language-x86asm">; jump below (unsigned), %eax &lt; %ebx (label is location)
+cmp %ebx, %eax
+jb &lt;label&gt;
+
+; jump not less (signed), %eax &gt;= %ebx
+cmp %ebx, %eax
+jnl &lt;label&gt;
+
+; jump zero, %eax = 0
+test %eax, %eax
+jz &lt;label&gt;
+
+; jump not signed, or not below (signed), %eax &gt;= 0
+cmp $0, %eax
+jns &lt;label&gt;
+</code></pre>
+<h3><a name="2.6" class="anchor"></a> <a href="#2.6">Other instructions</a></h3>
+<p>Other common instructions, such as <code>lea</code> and <code>nop</code>.</p>
+<pre><code class="language-x86asm">; load effective address (source must be in memory), destination = &amp;source
+lea &lt;source&gt;, &lt;destination&gt;
+
+; do nothing
+nop
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p></div></body></html>

@@ -1,0 +1,54 @@
+<html lang='en'><head><title>Lecture notes on Security Engineering – Part 5: Secure system design</title><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Lecture notes on Security Engineering – Part 5: Secure system design</h1>
+<p><em>September 2022</em></p>
+<h2><a name="1" class="anchor"></a> <a href="#1">Hardware and software solutions</a></h2>
+<p>A system design involves both hardware and software, where software is easy to change, which is good for functionality but bad for security and generally bad for performance, and hardware is hard to change, which is bad for functionality but good for security:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/AES_instruction_set">AES instruction set</a> implements cryptography instructions</li>
+<li><a href="https://en.wikipedia.org/wiki/Software_Guard_Extensions">Intel SGX</a> support encrypted computation, such as for cloud computing applications</li>
+<li>hardware primitives, such as <a href="https://en.wikipedia.org/wiki/Physical_unclonable_function">Physical unclonable function</a>, which provides unpredictable and repeatable randomness (fingerprint)</li>
+</ul>
+<p>A secure system design favor simplicity, such as fail-safe defaults (key lengths, whitelist better than blacklist) and assume non-expert users, so keep user interface simple and avoid choices. It is preferable to reduce need to trust other parts of system (kernel is assumed to be trusted) and grant least privileges possible, such as restricting flow of sensitive data, secure compartments (operating system), <code>seccomp</code> system call isolates process by limiting possible interactions.</p>
+<p>Layers of security can be used to further secure systems, such as firewall, encrypting data at rest, using type-safe programming languages, and logging relevant operational information.</p>
+<h3><a name="1.1" class="anchor"></a> <a href="#1.1">Tainted flow analysis</a></h3>
+<p>Trusting unvalidated inputs is the root cause of many attacks, such as a program getting unsafe input, or tainted data, from a user and assuming it is safe, or untainted:</p>
+<p>Below is an example vulnerable program, where an input such as <code>name="%s%s%s"</code> would crash program and <code>name="...%n..."</code> would write to memory.</p>
+<pre><code class="language-c">char *name = fgets( /* ... */, network_fd);
+printf(name); /* vulnerable to format string */
+</code></pre>
+<p>In tainted flow analysis, such as <a href="https://en.wikipedia.org/wiki/Taint_checking">Taint checking</a>, the goal is to prove that no tainted data is used where untainted data is expected for all possible inputs (<code>untainted</code> indicate trusted and <code>tainted</code> indicate untrusted):</p>
+<ul>
+<li>legal flow</li>
+</ul>
+<pre><code class="language-c">void f(tainted int);
+
+untainted int a = /* ... */ ;
+f(a); /* function expect tainted, and input is untainted, so legal flow */
+</code></pre>
+<ul>
+<li>illegal flow</li>
+</ul>
+<pre><code class="language-c">void f(untainted int);
+
+tainted int a = /* ... */ ;
+f(a); /* function assume untainted, and input is tainted, so illegal flow */
+</code></pre>
+<h3><a name="1.2" class="anchor"></a> <a href="#1.2">Tracking tainted data in programs</a></h3>
+<p>Below is an example tainted flow analysis on vulnerable program at each line of execution (<code>tainted</code> label can be introduced as type or annotation).</p>
+<pre><code class="language-c">void copy(tainted char *src, untainted char *dst, int len) {
+    /* tainted: src; untainted: dst; unknown: len */
+    untainted int i;
+    /* tainted: src; untainted: dst, i; unknown: len */
+    for (i = 0; i &lt; len; i++) {
+        /* tainted: src; untainted: dst, i; unknown: len */
+        dst[i] = src[i]; /* illegal, tainted into untainted */
+    }
+}
+</code></pre>
+<h2><a name="2" class="anchor"></a> <a href="#2">Preventing buffer overflows</a></h2>
+<p>Buffer overflow attacks can sometimes be prevented using programming languages with boundary checking, such as Java or Python, or contained using virtualization. Here are a few other common methods:</p>
+<ul>
+<li><a href="https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf">StackGuard</a> is a canary-based method to protect or detect potential danger, where a canary-value is placed on stack, which can be verified to not be corrupted during execution</li>
+<li>non-executable memory, or <a href="https://en.wikipedia.org/wiki/NX_bit">NX-bit</a>, can be used to segregate area in memory used by code and data</li>
+<li>randomized addresses and instructions, such as <a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">ASLR</a>, which can be used to randomize address space layout (instructions can also be encrypted in memory and decrypted before execution, but substantial overhead)</li>
+</ul>
+<p>For further reading, see <a href="https://en.wikipedia.org/wiki/Return-oriented_programming">Return-oriented programming (ROP)</a>.</p></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p></div></body></html>

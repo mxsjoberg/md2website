@@ -1,0 +1,73 @@
+<html lang='en'><head><title>Gradient Descent Algorithm</title><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Gradient Descent Algorithm</h1>
+<p><em>October 2020</em> <a href="programming.html#python">Python</a> <a href="programming.html#machine-learning">Machine Learning</a></p>
+<p>Gradient descent is a first-order iterative optimization algorithm for finding a local minimum of a differentiable function.</p>
+<pre><code class="language-python"># https://en.wikipedia.org/wiki/Gradient_descent
+
+import numpy as np
+import random
+
+random.seed(42)
+
+def gradient_descent(x, y, theta, alpha, m, num_iterations):
+    &quot;&quot;&quot;Gradient descent algorithm
+
+    x (numpy.ndarray)       : input data
+    y (numpy.ndarray)       : target variable
+    theta (numpy.ndarray)   : parameters
+    alpha (float)           : learning rate
+    m (int)                 : number of examples
+    num_iterations (int)    : number of iterations
+    &quot;&quot;&quot;
+    x_transpose = x.transpose()
+
+    for i in range(0, num_iterations):
+        hypothesis = np.dot(x, theta)
+        loss = hypothesis - y
+        cost = np.sum(loss ** 2) / (2 * m)
+        # print
+        print(&quot;Iteration: %d, Cost: %f&quot; % (i, cost))
+        # average gradient per example
+        gradient = np.dot(x_transpose, loss) / m
+        # update
+        theta = theta - alpha * gradient
+
+    return theta
+
+def generate_data(num_points, bias, variance):
+    &quot;&quot;&quot;Generate data
+
+    num_points (int)    : number of points
+    bias (int)          : bias
+    variance (int)      : variance
+    &quot;&quot;&quot;
+    x = np.zeros(shape=(num_points, 2))
+    y = np.zeros(shape=num_points)
+    # straight line
+    for i in range(0, num_points):
+        # bias feature
+        x[i][0] = 1
+        x[i][1] = 1
+        # target variable
+        y[i] = (i + bias) + random.uniform(0, 1) * variance
+
+    return x, y
+</code></pre>
+<pre><code class="language-python"># generate data
+x, y = generate_data(100, 25, 10)
+m, n = np.shape(x)
+# configuration variables
+num_iterations = 10000
+alpha = 0.0005
+theta = np.ones(n)
+# run gradient descent
+theta = gradient_descent(x, y, theta, alpha, m, num_iterations)
+print(theta)
+# Iteration: 0, Cost: 3417.449751
+# Iteration: 1, Cost: 3411.478114
+# Iteration: 2, Cost: 3405.518415
+# ...
+# Iteration: 9997, Cost: 430.137723
+# Iteration: 9998, Cost: 430.137723
+# Iteration: 9999, Cost: 430.137723
+# [39.64610036 39.64610036]
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p></div></body></html>
