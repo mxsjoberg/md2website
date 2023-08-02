@@ -1,6 +1,7 @@
 # Michael Sjöberg
 
-[posts](posts.html) | [github](https://github.com/mixmaester) | [twitter](https://twitter.com/mixmaester)
+[[github](https://github.com/mixmaester)] [[twitter](https://twitter.com/mixmaester)] [[linkedin](https://www.linkedin.com/in/micsjo)]
+
 
 **Now: Building [Stockstack](https://trystockstack.com) and [Hackerman.AI](https://hackerman.ai)**
 
