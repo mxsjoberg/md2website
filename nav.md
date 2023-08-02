@@ -1,1 +1,1 @@
-[home](index.html) [posts](posts.html) [programming](programming.html)
+[home](index.html) [projects](projects.html) [posts](posts.html) [programming](programming.html)
