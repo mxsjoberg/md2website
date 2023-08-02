@@ -50,7 +50,7 @@ def write_header(file, title="Built with Static Webpage Builder", root=0):
 def write_footer(file):
     file.write("</div>")
     file.write("<div id='footer'>")
-    file.write("<p>[<a id='invert'>light|dark</a>]</p>")
+    file.write("<p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p>")
     file.write(f"<p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p>")
     file.write("</div>")
     file.write("</body>")
