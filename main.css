@@ -43,7 +43,12 @@ code {
   color: #97979A;
 }
 
-.small {
+img {
+  max-width: 100%;
+}
+
+.small,
+blockquote {
   font-size: 80%;
   color: #66666C;
 }
