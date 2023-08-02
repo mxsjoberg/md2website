@@ -33,6 +33,7 @@ a {
 
 pre {
   white-space: break-spaces;
+  word-break: break-all;
   background: #1B1B1B;
   padding: 1rem;
 }
