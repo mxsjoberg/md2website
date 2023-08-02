@@ -1,11 +1,19 @@
+html.invert {
+  filter: invert(1);
+}
+
 nav {
   position: fixed;
+  width: 640px;
+  padding: 0 2rem;
+  background: #161716;
 }
 
 body {
   background: #161716;
   color: #D7D7D8;
   font-family: 'Lucida Console', monospace;
+  margin: 0;
 }
 
 div.page {
@@ -20,6 +28,7 @@ h1 {
 
 a {
   color: #6BF;
+  cursor: pointer;
 }
 
 pre {
