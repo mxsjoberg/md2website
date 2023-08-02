@@ -2,7 +2,7 @@
 
 This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available [here](https://github.com/mixmaester/playcode).
 
-## <a name="1" class="anchor"></a> [What is PlayCode?](#1)
+## <a name="what-is-playcode" class="anchor"></a> [What is PlayCode?](#what-is-playcode)
 
 The general idea behind PlayCode is to make a playful programmig language and to function as a testbed for experimental programming language features. It is not really meant to be used for anything serious, but rather as a playground for new ideas. So, the implementation need to be easy to manage, change, and build on.
 
