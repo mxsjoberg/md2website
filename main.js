@@ -16,30 +16,31 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     // loading time
     function showPageLoadTime() {
-        // Check if the browser supports the performance API
+        // check if the browser supports the performance API
         if (window.performance && window.performance.timing) {
-            // Get the timing object
             var timing = window.performance.timing;
-
-            // Check if the necessary timing events are available
+            // check if the necessary timing events are available
             if (timing.loadEventEnd > 0 && timing.navigationStart > 0) {
-                // Calculate the page load time
-                var loadTime = (timing.loadEventEnd - timing.navigationStart) / 1000;
-
-                // Log the result in the console
-                // console.log("Page load time: " + loadTime + " seconds");
+                // calculate the DOMContentLoaded time in seconds
+                // var domContentLoadedTime = (timing.domContentLoadedEventEnd - timing.navigationStart) / 1000;
+                var domContentLoadedTime = timing.domContentLoadedEventEnd - timing.navigationStart;
+                // calculate the page load time in seconds
+                // var loadTime = (timing.loadEventEnd - timing.navigationStart) / 1000;
+                var loadTime = timing.loadEventEnd - timing.navigationStart;
+                // write to dom_time
+                // document.querySelector("#dom_time").innerHTML = domContentLoadedTime + " seconds";
+                document.querySelector("#dom_time").innerHTML = domContentLoadedTime + " ms";
                 // write to load_time
-                document.querySelector("#load_time").innerHTML = loadTime + " seconds";
+                // document.querySelector("#load_time").innerHTML = loadTime + " seconds";
+                document.querySelector("#load_time").innerHTML = loadTime + " ms";
             } else {
-                // Retry after 100 milliseconds if timing data is not available yet
                 setTimeout(showPageLoadTime, 100);
             }
         } else {
             // console.log("Page load time measurement is not supported in this browser.");
         }
     }
-
-    // Call the function when the page has fully loaded
+    // call the function when the page has fully loaded
     window.addEventListener("load", showPageLoadTime);
 });
 
