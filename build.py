@@ -2,6 +2,7 @@
 
 import os
 import markdown
+from datetime import datetime
 
 ROOT_DIR = "dist"
 
@@ -61,23 +62,37 @@ with open(f"{ROOT_DIR}/index.html", "w+") as file:
 # posts
 with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
     write_header(html_posts, title="Posts")
+    posts_lst = []
     for root, dirs, posts in os.walk("posts"):
         for post in posts:
             if post.split(".")[1] == "md":
                 post_name = post.split(".")[0]
-                # html_posts.write(F"<p><a href='{post_name}.html'>{post_name.replace('-', ' ').title()}</a></p>")
                 # create page
                 with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
                     post_file = open(f"{root}/{post}")
                     post_content = post_file.read()
+                    # title (first line)
                     title = post_content.split("\n")[0].split("# ")[1]
-                    # create href
-                    html_posts.write(F"<p><a href='{post_name}.html'>{title}</a></p>")
+                    # date (third line)
+                    date = post_content.split("\n")[2].split("*")[1]
+                    # append to posts_lst
+                    posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                     # write
                     write_header(tmp_file, title=title)
                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code"]))
                     write_footer(tmp_file)
                     post_file.close()
+    # sort posts_lst by date then by name
+    def sort_by_date_and_title(item):
+        return (item["date"], item["title"])
+    sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+    # write posts
+    current_date = None
+    for post in sorted_posts_lst:
+        if current_date != post['date'].year:
+            html_posts.write(f"<p>{post['date'].year}</p>")
+            current_date = post['date'].year
+        html_posts.write(f"<p><a href='{post['url']}.html'>{post['title']}</a></p>")
     write_footer(html_posts)
 
 # minimize css
