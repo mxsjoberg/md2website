@@ -1,4 +1,11 @@
 # html static webpage builder
+
+# TODO
+#
+# - write generated files to /src
+# - implement sass to css generator from minimal python project
+# - define folders in dict or list to use as "pages" (i.e. posts, etc.), ignore other folders
+
 import os
 import markdown
 
