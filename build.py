@@ -26,16 +26,20 @@ def write_header(file, title="Built with Static Webpage Builder", root=0):
         nav_content = nav_file.read()
         if nav_content != "":
             file.write(markdown.markdown(nav_content))
+            # file.seek(file.tell() - 4, os.SEEK_SET)
+            # file.write(" [<a id='invert'>invert</a>]")
+            # file.write("</p>")
         else:
             raise
     except:
-        file.write(f"<p><a href='{'../'*root}index.html'>Home</a></p>")
+        file.write(f"<p><a href='{'../'*root}index.html'>Home</a> [<a id='invert'>invert</a>]</p>")
     file.write("</nav>")
     file.write("<div class='page'>")
 
 def write_footer(file):
     # invert
-    file.write(f"[<a id='invert'>invert</a>]")
+    file.write("[<a id='invert'>invert</a>]")
+    file.write(f"<p><span class='small'>Page loaded in <span id='load_time'></span></span></p>")
     file.write("</div>")
     file.write("</body>")
     file.write("</html>")
