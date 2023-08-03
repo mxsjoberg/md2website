@@ -10,7 +10,7 @@ ROOT_DIR = "dist"
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
 
-def write_header(file, title="Built with Static Webpage Builder", root=0):
+def write_header(file, title="Static website built with md2html", root=0):
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
@@ -52,7 +52,7 @@ def write_footer(file):
     file.write("</div>")
     file.write("<div id='footer'>")
     file.write("<p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p>")
-    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span> <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p>")
+    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p>")
     file.write("</div>")
     file.write("<script>hljs.highlightAll();</script>")
     file.write("</body>")
