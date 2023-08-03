@@ -1,4 +1,4 @@
-# html static webpage builder
+# md2html: static website builder
 
 import os
 import shutil
