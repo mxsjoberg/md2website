@@ -54,6 +54,7 @@ def write_footer(file):
     file.write("<p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p>")
     file.write(f"<p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p>")
     file.write("</div>")
+    file.write("<script>hljs.highlightAll();</script>")
     file.write("</body>")
     file.write("</html>")
 
@@ -165,6 +166,7 @@ with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
                     # write
                     write_header(tmp_file, title=title)
                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
+                    # tmp_file.write("<script>hljs.highlightAll();</script>")
                     write_footer(tmp_file)
                     post_file.close()
 
@@ -194,13 +196,21 @@ with open(f"{ROOT_DIR}/main.min.css", "w+") as file:
 with open(f"{ROOT_DIR}/main.min.js", "w+") as file:
     js_file = open("main.js")
     js_content = js_file.read()
+    # append highlight.min.js
+    highlight_file = open("highlight.min.js")
+    js_content += highlight_file.read()
+    highlight_file.close()
     # remove line comments
     js_content = js_content.replace("  ", "")
     js_content = "\n".join([line for line in js_content.split("\n") if not line.startswith("//")])
     js_content = js_content.replace("\n", "")
     js_content = js_content.replace("\t", "")
+    # write
     file.write(js_content)
     js_file.close()
+
+# copy highlight.min.js to dist/highlight.min.js
+# os.system("cp highlight.min.js dist/highlight.min.js")
 
 # copy fav.png to dist/fav.png
 os.system("cp fav.png dist/fav.png")
