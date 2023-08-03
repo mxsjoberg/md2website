@@ -76,6 +76,16 @@ with open(f"{ROOT_DIR}/index.html", "w+") as file:
     index_file.close()
     write_footer(file)
 
+# courses
+with open(f"{ROOT_DIR}/courses.html", "w+") as file:
+    courses_file = open("courses.md")
+    courses_content = courses_file.read()
+    title = courses_content.split("\n")[0].split("# ")[1]
+    write_header(file, title)
+    file.write(markdown.markdown(courses_content))
+    courses_file.close()
+    write_footer(file)
+
 # projects
 with open(f"{ROOT_DIR}/projects.html", "w+") as file:
     projects_file = open("projects.md")
@@ -115,9 +125,12 @@ with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
     current_date = None
     for post in sorted_posts_lst:
         if current_date != post['date'].year:
+            if current_date != None:
+                html_posts.write("</ul>")
             html_posts.write(f"<h1>{post['date'].year}</h1>")
             current_date = post['date'].year
-        html_posts.write(f"<p><a href='{post['url']}.html'>{post['title']}</a></p>")
+            html_posts.write("<ul>")
+        html_posts.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
     write_footer(html_posts)
 
 # programming
@@ -164,8 +177,10 @@ with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
         for category in programming_dict[language]:
             html_programming.write(f"<p id='{category}'>{category.title()}</p>")
             sorted_posts_lst = sorted(programming_dict[language][category], key=sort_by_date_and_title, reverse=True)
+            html_programming.write("<ul>")
             for post in sorted_posts_lst:
-                html_programming.write(f"<p><a href='{post['url']}.html'>{post['title']}</a></p>")
+                html_programming.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+            html_programming.write("</ul>")
     write_footer(html_programming)
 
 # minimize css
@@ -189,8 +204,6 @@ with open(f"{ROOT_DIR}/main.min.js", "w+") as file:
     js_content = js_content.replace("\t", "")
     file.write(js_content)
     js_file.close()
-
-
 
 # copy fav.png to dist/fav.png
 os.system("cp fav.png dist/fav.png")
