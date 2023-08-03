@@ -38,6 +38,11 @@ h1 {
 a {
   color: #6BF;
   cursor: pointer;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 pre {
