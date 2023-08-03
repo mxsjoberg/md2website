@@ -73,3 +73,43 @@ blockquote {
   padding: 0 2rem;
   margin-top: 0;
 }
+
+/* code highlight */
+.hljs-meta,
+.hljs-meta .hljs-meta-keyword,
+.hljs-meta .hljs-meta-string,
+.hljs-meta .hljs-keyword,
+.hljs-meta .hljs-string         { color: #6BF !important; }
+
+.hljs-params,
+.hljs-regexp                    { color: #D7D7D8 !important; }
+
+.hljs-params .hljs-type         { color: #D7D7D8 !important; }
+
+.hljs-string                    { color: #D7D7D8 !important; }
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst                     { color: #97979A !important; }
+
+.hljs-built_in                  { color: #6BF !important; }
+
+.hljs-comment,
+.hljs-doctag,
+.hljs-quote                     { color: #66666C !important; }
+
+.hljs-type                      { color: #D7D7D8 !important; }
+
+.hljs-number                    { color: #6BF !important; }
+
+.hljs-literal,
+.hljs-symbol                    { color: #6BF !important; }
+
+.hljs-title,
+.hljs-function,
+.hljs-class,
+.hljs-function .hljs-title,
+.hljs-class .hljs-title         { color: #6BF !important; }
+
+.hljs-function .hljs-keyword,
+.hljs-class .hljs-keyword       { color: #6BF !important; }
