@@ -1,6 +1,7 @@
 # html static webpage builder
 
 import os
+import shutil
 import markdown
 from datetime import datetime
 
@@ -43,7 +44,7 @@ def write_header(file, title="Built with Static Webpage Builder", root=0):
         else:
             raise
     except:
-        file.write(f"<p><a href='{'../'*root}index.html'>Home</a> [<a id='invert'>invert</a>]</p>")
+        file.write(f"<p><a href='{'../'*root}index.html'>home</a></p>")
     file.write("</nav>")
     file.write("<div class='page'>")
 
@@ -56,15 +57,11 @@ def write_footer(file):
     file.write("</body>")
     file.write("</html>")
 
-# create or clear dist folder
+# create dist folder
 if os.path.isdir(ROOT_DIR):
-    for root, dirs, files in os.walk(ROOT_DIR):
-        for file in files:
-            os.remove(f"{root}/{file}")
-        for dir in dirs:
-            os.rmdir(f"{root}/{dir}")
-else:
-    os.mkdir(ROOT_DIR)
+    shutil.rmtree(ROOT_DIR)
+os.mkdir(ROOT_DIR)
+# os.mkdir(f"{ROOT_DIR}/posts")
 
 # index
 with open(f"{ROOT_DIR}/index.html", "w+") as file:
