@@ -52,47 +52,32 @@ def write_footer(file):
     file.write("</div>")
     file.write("<div id='footer'>")
     file.write("<p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p>")
-    file.write(f"<p><span class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span></span></p>")
+    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span> <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p>")
     file.write("</div>")
     file.write("<script>hljs.highlightAll();</script>")
     file.write("</body>")
     file.write("</html>")
 
 # create dist folder
-if os.path.isdir(ROOT_DIR):
-    shutil.rmtree(ROOT_DIR)
+if os.path.isdir(ROOT_DIR): shutil.rmtree(ROOT_DIR)
 os.mkdir(ROOT_DIR)
-# os.mkdir(f"{ROOT_DIR}/posts")
 
-# index
-with open(f"{ROOT_DIR}/index.html", "w+") as file:
-    index_file = open("index.md")
-    index_content = index_file.read()
-    title = index_content.split("\n")[0].split("# ")[1]
-    write_header(file, title)
-    file.write(markdown.markdown(index_content))
-    index_file.close()
-    write_footer(file)
-
-# courses
-with open(f"{ROOT_DIR}/courses.html", "w+") as file:
-    courses_file = open("courses.md")
-    courses_content = courses_file.read()
-    title = courses_content.split("\n")[0].split("# ")[1]
-    write_header(file, title)
-    file.write(markdown.markdown(courses_content))
-    courses_file.close()
-    write_footer(file)
-
-# projects
-with open(f"{ROOT_DIR}/projects.html", "w+") as file:
-    projects_file = open("projects.md")
-    projects_content = projects_file.read()
-    title = projects_content.split("\n")[0].split("# ")[1]
-    write_header(file, title)
-    file.write(markdown.markdown(projects_content))
-    projects_file.close()
-    write_footer(file)
+# for each md file in pages, create html page
+for root, dirs, files in os.walk("pages"):
+    for file in files:
+        if file.split(".")[1] == "md":
+            file_name = file.split(".")[0]
+            print(file, file_name)
+            # create page
+            with open(f"{ROOT_DIR}/{file_name}.html", "w+") as tmp_file:
+                file = open(f"{root}/{file}")
+                file_content = file.read()
+                title = file_content.split("\n")[0].split("# ")[1]
+                # write
+                write_header(tmp_file, title)
+                tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
+                write_footer(tmp_file)
+                file.close()
 
 # posts
 with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
@@ -208,9 +193,6 @@ with open(f"{ROOT_DIR}/main.min.js", "w+") as file:
     # write
     file.write(js_content)
     js_file.close()
-
-# copy highlight.min.js to dist/highlight.min.js
-# os.system("cp highlight.min.js dist/highlight.min.js")
 
 # copy fav.png to dist/fav.png
 os.system("cp fav.png dist/fav.png")
