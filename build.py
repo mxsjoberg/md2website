@@ -67,7 +67,6 @@ for root, dirs, files in os.walk("pages"):
     for file in files:
         if file.split(".")[1] == "md":
             file_name = file.split(".")[0]
-            print(file, file_name)
             # create page
             with open(f"{ROOT_DIR}/{file_name}.html", "w+") as tmp_file:
                 file = open(f"{root}/{file}")
@@ -79,42 +78,81 @@ for root, dirs, files in os.walk("pages"):
                 write_footer(tmp_file)
                 file.close()
 
+# for each folder in root dir, create list page with content
+for dir_ in os.listdir("."):
+    if "." not in dir_ and dir_ != "dist" and dir_ != "pages" and dir_ != "programming":
+        with open(f"{ROOT_DIR}/{dir_}.html", "w+") as dir_page:
+            write_header(dir_page, title=dir_.title())
+            posts_lst = []
+            for root, dirs, posts in os.walk(dir_):
+                for post in posts:
+                    if post.split(".")[1] == "md":
+                        post_name = post.split(".")[0]
+                        # create page
+                        with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
+                            post_file = open(f"{root}/{post}")
+                            post_content = post_file.read()
+                            # title
+                            title = post_content.split("\n")[0].split("# ")[1]
+                            # date
+                            date = post_content.split("\n")[2].split("*")[1]
+                            # append to posts_lst
+                            posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                            # write
+                            write_header(tmp_file, title=title)
+                            tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
+                            write_footer(tmp_file)
+                            post_file.close()
+            # sort posts_lst by date then by name
+            sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+            # write posts
+            current_date = None
+            for post in sorted_posts_lst:
+                if current_date != post['date'].year:
+                    if current_date != None:
+                        dir_page.write("</ul>")
+                    dir_page.write(f"<h1>{post['date'].year}</h1>")
+                    current_date = post['date'].year
+                    dir_page.write("<ul>")
+                dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+            write_footer(dir_page)
+
 # posts
-with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
-    write_header(html_posts, title="Posts")
-    posts_lst = []
-    for root, dirs, posts in os.walk("posts"):
-        for post in posts:
-            if post.split(".")[1] == "md":
-                post_name = post.split(".")[0]
-                # create page
-                with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
-                    post_file = open(f"{root}/{post}")
-                    post_content = post_file.read()
-                    # title (first line)
-                    title = post_content.split("\n")[0].split("# ")[1]
-                    # date (third line)
-                    date = post_content.split("\n")[2].split("*")[1]
-                    # append to posts_lst
-                    posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
-                    # write
-                    write_header(tmp_file, title=title)
-                    tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
-                    write_footer(tmp_file)
-                    post_file.close()
-    # sort posts_lst by date then by name
-    sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
-    # write posts
-    current_date = None
-    for post in sorted_posts_lst:
-        if current_date != post['date'].year:
-            if current_date != None:
-                html_posts.write("</ul>")
-            html_posts.write(f"<h1>{post['date'].year}</h1>")
-            current_date = post['date'].year
-            html_posts.write("<ul>")
-        html_posts.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-    write_footer(html_posts)
+# with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
+#     write_header(html_posts, title="Posts")
+#     posts_lst = []
+#     for root, dirs, posts in os.walk("posts"):
+#         for post in posts:
+#             if post.split(".")[1] == "md":
+#                 post_name = post.split(".")[0]
+#                 # create page
+#                 with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
+#                     post_file = open(f"{root}/{post}")
+#                     post_content = post_file.read()
+#                     # title (first line)
+#                     title = post_content.split("\n")[0].split("# ")[1]
+#                     # date (third line)
+#                     date = post_content.split("\n")[2].split("*")[1]
+#                     # append to posts_lst
+#                     posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+#                     # write
+#                     write_header(tmp_file, title=title)
+#                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
+#                     write_footer(tmp_file)
+#                     post_file.close()
+#     # sort posts_lst by date then by name
+#     sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+#     # write posts
+#     current_date = None
+#     for post in sorted_posts_lst:
+#         if current_date != post['date'].year:
+#             if current_date != None:
+#                 html_posts.write("</ul>")
+#             html_posts.write(f"<h1>{post['date'].year}</h1>")
+#             current_date = post['date'].year
+#             html_posts.write("<ul>")
+#         html_posts.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+#     write_footer(html_posts)
 
 # programming
 with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
@@ -151,7 +189,6 @@ with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
                     # write
                     write_header(tmp_file, title=title)
                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
-                    # tmp_file.write("<script>hljs.highlightAll();</script>")
                     write_footer(tmp_file)
                     post_file.close()
 
