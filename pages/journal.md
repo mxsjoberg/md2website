@@ -1,6 +1,6 @@
 # Journal
 
-This page contains my notes.
+This page contains my day-to-day unstructured and unfiltered notes.
 
 ## Machine Learning Compilers
 
