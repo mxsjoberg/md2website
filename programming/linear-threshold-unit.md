@@ -1,6 +1,6 @@
 # Linear Threshold Unit (LTU)
 
-*May 2021* [Python](programming.html#python) [Machine Learning](programming.html#machine-learning)
+*May 2021* [Python](programming.html#python) [Machine Learning](programming.html#python-machine-learning)
 
 LTU is a simple model of an artificial neuron.
 

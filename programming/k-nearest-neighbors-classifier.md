@@ -1,6 +1,6 @@
 # K-Nearest Neighbors Classifier
 
-*May 2021* [Python](programming.html#python) [Machine Learning](programming.html#machine-learning)
+*May 2021* [Python](programming.html#python) [Machine Learning](programming.html#python-machine-learning)
 
 ```python
 # https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm

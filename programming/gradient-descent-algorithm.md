@@ -1,6 +1,6 @@
 # Gradient Descent Algorithm
 
-*October 2020* [Python](programming.html#python) [Machine Learning](programming.html#machine-learning)
+*October 2020* [Python](programming.html#python) [Machine Learning](programming.html#python-machine-learning)
 
 Gradient descent is a first-order iterative optimization algorithm for finding a local minimum of a differentiable function.
 

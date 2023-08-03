@@ -1,6 +1,6 @@
 # Pandas Series in Python
 
-*October 2020* [Python](programming.html#python) [Misc](programming.html#misc)
+*October 2020* [Python](programming.html#python) [Misc](programming.html#python-misc)
 
 ```python
 import pandas as pd

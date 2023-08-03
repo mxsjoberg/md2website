@@ -1,6 +1,6 @@
 # Date and Time in Python
 
-*June 2018* [Python](programming.html#python) [Misc](programming.html#misc)
+*June 2018* [Python](programming.html#python) [Misc](programming.html#python-misc)
 
 ```python
 from datetime import datetime
