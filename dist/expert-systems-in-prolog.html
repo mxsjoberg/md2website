@@ -1,0 +1,71 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Expert Systems in Prolog</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Michael Sjöberg'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Expert Systems in Prolog</h1>
+<p><em>October 2020</em> <a href="programming.html#prolog">Prolog</a> <a href="programming.html#prolog-misc">Misc</a></p>
+<p>An expert systems derive useful new information based on user-provided input.</p>
+<p>Animal identification:</p>
+<ul>
+<li>if it has fur and says woof, then the animal is dog</li>
+<li>if it has fur and says meow, then the animal is cat</li>
+<li>if it has feathers and says quack, then the animal is duck</li>
+</ul>
+<pre><code class="language-prolog">animal(dog) :- is_true('has fur'), is_true('says woof').
+animal(cat) :- is_true('has fur'), is_true('says meow').
+animal(duck) :- is_true('has feathers'), is_true('says quack').
+
+is_true(Q) :-
+    format('~w\n', [Q]),
+    read(yes).
+
+?- animal(A).
+% has fur
+% |: yes.
+% says woof
+% |: yes.
+% 
+% A = dog .
+
+% note that questions are asked more than once
+?- animal(B).
+% has fur
+% |: no.
+% has fur
+% |: yes.
+% says meow
+% |: yes.
+% 
+% B = cat .
+</code></pre>
+<pre><code class="language-prolog">% using a domain-specific-language/ binary tree
+
+tree(if_then_else('has fur',
+        if_then_else('says woof',
+            animal(dog),
+            if_then_else('says meow',
+                animal(cat),
+                false)),
+        if_then_else('has feathers',
+            if_then_else('says quack',
+                animal(duck),
+                false),
+            false))).
+
+animal(A) :-
+    tree(T),
+    tree_animal(T, A).
+
+tree_animal(animal(A), A).
+tree_animal(if_then_else(Condition, Then, Else), A) :-
+    (   is_true(Condition) -&gt;
+        tree_animal(Then, A)
+    ;   tree_animal(Else, A)
+    ).
+
+?- animal(A).
+% has fur
+% |: yes.
+% says woof
+% |: no.
+% says meow
+% |: yes.
+%
+% A = cat.
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

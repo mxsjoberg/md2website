@@ -1,0 +1,134 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Lecture notes on Security Engineering – Part 2: Programs and processes</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Michael Sjöberg'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Lecture notes on Security Engineering – Part 2: Programs and processes</h1>
+<p><em>August 2022</em></p>
+<h2><a name="1" class="anchor"></a> <a href="#1">File permissions</a></h2>
+<p>In UNIX-based systems, each process is assigned real UID/GID (user ID, group ID), which is the user initiating or owning the process, effective UID/GID, or EUID, which is used to determine permissions, and saved UID/GID, or SUID, which is used to drop and gain privileges.</p>
+<p>A program with the SUID bit set has the effective UID/GID changed to that of the program owner.</p>
+<p>File permissions are set using command, such as <code>-|rwx|r-x|r-x root root &lt;file&gt;</code>:</p>
+<ul>
+<li><code>-</code> is file type, where <code>-</code> is regular file, <code>d</code> is directory, and <code>l</code> is symbolic link</li>
+<li><code>rwx</code> set read-write-execute permissions for first root (file owner)</li>
+<li>first <code>r-x</code> set read-execute permission for second root (group owner)</li>
+<li>second <code>r-x</code> set read-execute permission for all others</li>
+</ul>
+<p>The kernel will check EUID when the user is trying to write to file (root is most privileged user), and changing EUID with <code>chmod 4755 &lt;file&gt;</code>, which replaces <code>rwx</code> with <code>rws</code> (set-UID), makes the file run with the privileges of the file owner instead of the user.</p>
+<h2><a name="2" class="anchor"></a> <a href="#2">Address space</a></h2>
+<p>An address space is the range of addresses available to some process.</p>
+<pre><code class="language-c">int z;
+int w = 10;
+int main() {
+    int x;
+    int y = 42;
+    char *p;
+    p = malloc(42);
+    *p = 42;
+}
+</code></pre>
+<p>Below are the locations in buffer (address space is based on Linux legacy VM layout where top-most is lower addresses and bottom is higher addresses).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"></td>
+<td><strong>user space</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>.text</code>, program code</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>.bss</code>, uninitialized global data</td>
+<td><code>z</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>.data</code>, initialized global data</td>
+<td><code>w</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>heap</strong>, growing from lower to higher addresses</td>
+<td><code>malloc(42)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">memory mapped region for large chunks of memory, such as shared libraries (text, data, <code>printf</code>)</td>
+<td>...</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td><code>x</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td><code>y</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td><code>*p</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td><code>p</code> (points to address in heap)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>stack</strong>, growing from higher to lower addresses</td>
+<td><code>*p = 42</code> (write 42 in address in heap)</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td><strong>kernel space</strong></td>
+</tr>
+</tbody>
+</table>
+<h2><a name="3" class="anchor"></a> <a href="#3">Application-level vulnerabilities</a></h2>
+<p>Application vulnerabilities are often due to overprivileged programs, such as mobile applications asking for all permissions, programs are read-write but should be read-only, or caused by unexpected inputs or errors:</p>
+<ul>
+<li><strong>local attack</strong> need an established presence on the host, such as an account or running program controlled by attacker, and would allow executing with elevated privileges of the host</li>
+<li><strong>remote attack</strong> involves manipulating some application via network-based interaction, it is unauthenticated so no need for authentication or permissions and would allow executing with privileges of the vulnerable application</li>
+</ul>
+<p>A typical local attack exploit vulnerabilities in SUID-root programs to obtain root privileges. A malicious input can be injected at startup via command line, environment, or during execution via dynamic-linked objects and files. An unintended interaction with environment can result in the creation of new files, accessing restricted files via the file system, or invoking commands and processes. Local attacks often result in memory corruption (control hijacking, data brainwashing), command injection, and information leaks.</p>
+<p>A remote attack is more difficult to perform but more powerful as there no need to require prior access to system.</p>
+<h3><a name="3.1" class="anchor"></a> <a href="#3.1">Environment attacks</a></h3>
+<p>An environment attack can occur when applications invoke external commands to carry out tasks, such as using <code>system()</code> to execute some command, <code>popen()</code> to open a process, or <code>execlp()</code> and <code>execvp()</code> to use the <code>PATH</code> environment variable to locate applications.</p>
+<p>A <code>PATH</code> substitution attack use commands without a complete path, where attacker modifies the <code>PATH</code> variable to run a script, or the <code>HOME</code> variable to control execution of commands, such as accessing files.</p>
+<h3><a name="3.2" class="anchor"></a> <a href="#3.2">Input argument attacks</a></h3>
+<p>An input argument attack can occur when applications are supplied arguments via some input (command-line, web forms). The user-provided input can be used to inject commands such as <code>./program "; rm -rf /"</code>, which would call <code>program</code> and then delete everything. It is also possible to traverse directories, such as <code>..</code>-attack, overflow buffer, and perform format string attacks.</p>
+<p>To avoid bad inputs:</p>
+<ul>
+<li>always check size when copied into buffers, use library functions such as <code>snprintf</code> to limit size to <code>n</code></li>
+<li>always sanitize user-provided input, such as excluding known bad inputs, defining allowed input, or escaping special characters</li>
+</ul>
+<h3><a name="3.3" class="anchor"></a> <a href="#3.3">File access attacks</a></h3>
+<p>A file access attack can occur when applications create or use files, so always check that file exist and that it is not a symbolic link.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Race_condition">race condition</a> such as <a href="https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use">time-of-check to time-of-use (TOCTTOU)</a> can occur when there is conflicting access to shared data and at least one is write.</p>
+<pre><code class="language-c">// access() check real UID and open() check effective UID
+
+/* real UID */
+if (access(&quot;file&quot;, W_OK) == 0) {
+    /* symlink(&quot;/etc/passwd&quot;, &quot;file&quot;); */
+
+    /* effective UID */
+    if((f = open(&quot;file&quot;, O_WRONLY)) &lt; 0) {
+        /* ... */
+    }
+    /* potentially writing to &quot;/etc/passwd&quot; */
+    write(f, buffer, count);
+}
+</code></pre>
+<h3><a name="3.4" class="anchor"></a> <a href="#3.4">Buffer overflow attacks</a></h3>
+<p>A buffer overflow attack can occur when applications try to store more elements in a buffer, which is a set of memory locations, than it can contain. Applications written in Java, Python, and C# are less likely to suffer from buffer overflow attacks as they have built-in overflow detection, but C and C++ do not.</p>
+<p>Below is an example program that is vulnerable to a buffer overflow attack, executing this program would result in overflow of <code>buffer_1</code> into <code>buffer_2</code>.</p>
+<pre><code class="language-c">int main() {
+    int i;
+    char buffer_2[4];
+    char buffer_1[6];
+
+    for(i=0; i &lt; 10; i++) {
+        buffer_1[i] = 'A';
+    }
+
+    return 0;
+}
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

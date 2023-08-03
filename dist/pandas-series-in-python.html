@@ -1,0 +1,114 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Pandas Series in Python</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Michael Sjöberg'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Pandas Series in Python</h1>
+<p><em>October 2020</em> <a href="programming.html#python">Python</a> <a href="programming.html#python-misc">Misc</a></p>
+<pre><code class="language-python">import pandas as pd
+
+# creating series (one-dimensional array)
+simple_series = pd.Series([42, 55, 73], dtype='f8')
+# 0     42.0
+# 1     55.0
+# 2     73.0
+# dtype: float64
+
+# creating series with specified index
+index_series = pd.Series([42, 55, 73], index=[&quot;electron&quot;, &quot;proton&quot;, &quot;neutron&quot;], dtype='f8')
+# electron      42.0
+# proton        55.0
+# neutron       73.0
+# dtype: float64
+
+# accessing value in series
+print(index_series[&quot;electron&quot;])
+# 42.0
+
+# accessing multiple values in series (range)
+print(index_series[&quot;electron&quot;:&quot;neutron&quot;])
+# electron      42.0
+# proton        55.0
+# neutron       73.0
+# dtype: float64
+
+# accessing multiple values in series using indexing
+print(index_series[1:])
+# proton        55.0
+# neutron       73.0
+# dtype: float64
+
+# creating series from dictionary
+dict_series = pd.Series({ &quot;electron&quot;: 6, &quot;neutron&quot;: 28, &quot;proton&quot;: 496, &quot;neutrino&quot;: 8128 })
+# electron      6
+# neutrino      8128
+# neutron       28
+# proton        496
+# dtype: int64
+
+# combining two series into one column
+print(index_series + dict_series)
+# electron      48.0
+# neutrino      NaN
+# neutron       101.0
+# proton        551.0
+# dtype: float64
+
+# combining two series as dataframe
+combined_series = pd.DataFrame({ &quot;A&quot;: index_series, &quot;B&quot;: dict_series })
+#               A       B
+# electron      42.0    6
+# neutrino      NaN     8128
+# neutron       73.0    28
+# proton        55.0    496
+
+# accessing columns as series
+print(combined_series[&quot;A&quot;])
+# electron      42.0
+# neutrino      NaN
+# neutron       73.0
+# proton        55.0
+# Name: A, dtype: float64
+
+# add new row with index
+append_series = combined_series._append(pd.DataFrame({ &quot;A&quot;: [-8128] }, index=[&quot;antineutrino&quot;]))
+#               A       B
+# electron      42.0    6.0
+# neutrino      NaN     8128.0
+# neutron       73.0    28.0
+# proton        55.0    496.0
+# antineutrino  -8128.0 NaN
+
+# drop row
+append_series = append_series.drop(&quot;neutron&quot;)
+#               A       B
+# electron      42.0    6.0
+# neutrino      NaN     8128.0
+# proton        55.0    496.0
+# antineutrino  -8128.0 NaN
+
+# transpose
+print(combined_series.T)
+#       electron    neutrino    neutron     proton
+# A     42.0        NaN         73.0        55.0
+# B     6.0         8128.0      28.0        496.0
+
+# masking
+print(combined_series &gt; 120)
+#               A       B
+# electron      False   False
+# neutrino      False   True
+# neutron       False   False
+# proton        False   True
+
+# add masking as column (e.g. larger than 120)
+combined_series[&quot;large&quot;] = (combined_series[&quot;A&quot;] &gt; 120) | (combined_series[&quot;B&quot;] &gt; 120)
+#               A       B       large
+# electron      42.0    6       False
+# neutrino      NaN     8128    True
+# neutron       73.0    28      False
+# proton        55.0    496     True
+
+# delete a column
+del combined_series[&quot;large&quot;]
+#               A       B
+# electron      42.0    6
+# neutrino      NaN     8128
+# neutron       73.0    28
+# proton        55.0    496
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

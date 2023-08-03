@@ -1,0 +1,29 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Bubble Sort in Pascal</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Michael Sjöberg'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Bubble Sort in Pascal</h1>
+<p><em>May 2021</em> <a href="programming.html#pascal">Pascal</a> <a href="programming.html#pascal-misc">Misc</a></p>
+<pre><code class="language-pascal">// https://en.wikipedia.org/wiki/Bubble_sort
+
+PROGRAM bubble_sort;
+VAR
+    i, j, tmp: integer;
+
+    // array of unsorted integers
+    numbers: array[0..4] of integer = (14, 33, 27, 35, 10);
+BEGIN
+    for i := LENGTH(numbers) - 1 DownTo 0 do
+        for j := LENGTH(numbers) - 2 DownTo 0 do
+            if (numbers[j] &gt; numbers[j + 1]) then
+                BEGIN
+                    tmp := numbers[j];
+                    // swap
+                    numbers[j] := numbers[j + 1];
+                    numbers[j + 1] := tmp;
+                END;
+    // sorted
+    for i := 0 to LENGTH(numbers) - 1 do WRITELN(numbers[i]);
+    // 10
+    // 14
+    // 27
+    // 33
+    // 35
+END.
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

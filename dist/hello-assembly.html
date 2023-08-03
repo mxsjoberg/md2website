@@ -1,0 +1,32 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Hello Assembly</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Michael Sjöberg'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Hello Assembly</h1>
+<p><em>May 2021</em> <a href="programming.html#assembly">Assembly</a> <a href="programming.html#assembly-misc">Misc</a></p>
+<pre><code class="language-x86asm">; program (intel syntax)
+section .text
+    ; start point for execution
+    global      start
+
+start:
+    ; write
+    mov         rax, 0x02000004
+    ; stdout
+    mov         rdi, 1
+    ; address of string to output
+    mov         rsi, message
+    ; bytes
+    mov         rdx, 12
+    ; invoke to write
+    syscall
+    ; exit
+    mov         rax, 0x02000001
+    ; 0
+    xor         rdi, rdi
+    ; invoke to exit
+    syscall
+
+; declare data used in program
+section .data
+
+message:
+    ; db -&gt; raw bytes, text + newline = 11 + 1 = 12, line feed = 0xa = 10 = \n
+    db          &quot;hello assembly&quot;, 10
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

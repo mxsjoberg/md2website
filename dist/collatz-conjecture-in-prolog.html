@@ -1,0 +1,41 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Collatz Conjecture in Prolog</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Michael Sjöberg'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Collatz Conjecture in Prolog</h1>
+<p><em>October 2020</em> <a href="programming.html#prolog">Prolog</a> <a href="programming.html#prolog-misc">Misc</a></p>
+<p>Collatz Conjecture is a sequence that no matter what value of <em>N</em> the specified sequence will always reach 1.</p>
+<p>For any positive integer <em>N</em>, to get next integer:</p>
+<ul>
+<li>if <em>N</em> is even, divide by 2</li>
+<li>if <em>N</em> is odd, multiply by 3 and add 1</li>
+</ul>
+<p>Repeat indefinitely to obtain the hailstone sequence.</p>
+<pre><code class="language-prolog">/* https://en.wikipedia.org/wiki/Collatz_conjecture */
+
+:- use_module(library(clpfd)).
+
+hailstone(N, N).
+
+hailstone(N_0, N) :-
+    N_0 #= 2 * N_1,
+    hailstone(N_1, N).
+
+hailstone(N_0, N) :-
+    N_0 #= 2 * _ + 1,
+    N_1 #= 3 * N_0 + 1,
+    hailstone(N_1, N).
+
+%:- hailstone(3, N), print(N), nl, N = 1.
+
+:- initialization main.
+
+main :- 
+    hailstone(3, N), print(N), nl, N = 1,
+    halt.
+
+% N = 3
+% N = 10
+% N = 5
+% N = 16
+% N = 8
+% N = 4
+% N = 2
+% N = 1
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>
