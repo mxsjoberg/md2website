@@ -196,7 +196,8 @@ with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
     for language in programming_dict:
         html_programming.write(f"<h1 id='{language}'>{language.title()}</h1>")
         for category in programming_dict[language]:
-            html_programming.write(f"<p id='{category}'>{category.title()}</p>")
+            if len(programming_dict[language].keys()) > 1:
+                html_programming.write(f"<p id='{language}-{category.replace(' ', '-')}'>{category.title()}</p>")
             sorted_posts_lst = sorted(programming_dict[language][category], key=sort_by_date_and_title, reverse=True)
             html_programming.write("<ul>")
             for post in sorted_posts_lst:
