@@ -180,5 +180,6 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
     # write
     file.write(js_content)
 
-# copy fav.png to dist/fav.png
-os.system(f"cp fav.png {DIST_PATH}/fav.png")
+# copy non-css and non-js assets
+for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
+    os.system(f"cp {asset} {DIST_PATH}/{asset}")
