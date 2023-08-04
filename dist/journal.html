@@ -1,14 +1,14 @@
 <html lang='en'><head><link rel='icon' href='fav.png'><title>Journal</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Journal'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Journal</h1>
 <p>This page contains my day-to-day unstructured and unfiltered notes.</p>
-<h2>Machine Learning Compilers</h2>
-<h3>General Theory</h3>
-<p><strong>Instruction selection</strong> [<a href="https://en.wikipedia.org/wiki/Instruction_selection">wikipedia</a>]</p>
+<h2><a name="machine-learning-compilers" class="anchor"></a> <a href="#machine-learning-compilers">Machine Learning Compilers</a></h2>
+<p><strong>General theory</strong></p>
+<p>Instruction selection [<a href="https://en.wikipedia.org/wiki/Instruction_selection">wikipedia</a>]:</p>
 <ul>
 <li>macro expansion (inefficient)</li>
 <li>graph covering</li>
 <li>output from instruction selection is pseudo-registers (temporaries) then register allocation</li>
 </ul>
-<p><strong>Primitive Tensor Functions</strong></p>
+<p>Primitive Tensor Functions:</p>
 <pre><code class="language-python">def add(a, b, c):
     for i in range(128):
         c[i] = a[i] + b[i]
@@ -32,14 +32,14 @@ def main(A: T.Buffer[128, &quot;float32&quot;], B: T.Buffer[128, &quot;float32&q
       vi = T.axis.spatial(128, i)
       C[vi] = A[vi] + B[vi]
 </code></pre>
-<h3>Deep Learning Compiler Stack</h3>
+<p><strong>Deep Learning compiler stack</strong></p>
 <p><a href="https://d3i71xaburhd42.cloudfront.net/69046519775ca6ac40c7d577887149525df2ee5d/10-Figure2-1.png">dl_compiler_stack.png</a></p>
 <p><a href="https://arxiv.org/pdf/2002.03794.pdf">The Deep Learning Compiler: A Comprehensive Survey</a></p>
 <p><a href="https://mlc.ai/index.html">Machine Learning Compilation (MLC)</a></p>
 <p><a href="https://mlc.ai/summer22/schedule">MLC notes and videos</a></p>
-<p><strong>Front-end</strong></p>
+<p>MLC front-end:</p>
 <ul>
-<li>"frontend": parsing models (ONNX, pytorch, tensorflow)<ul>
+<li>"DL frontend": parsing models (ONNX, pytorch, tensorflow)<ul>
 <li><a href="https://protobuf.dev/">Protocol Buffers</a></li>
 </ul>
 </li>
@@ -50,7 +50,7 @@ def main(A: T.Buffer[128, &quot;float32&quot;], B: T.Buffer[128, &quot;float32&q
 </ul>
 </li>
 </ul>
-<p><strong>Back-end</strong></p>
+<p>MLC back-end:</p>
 <ul>
 <li>kernel selection<ul>
 <li>pick best kernel for each operation</li>
@@ -68,5 +68,5 @@ def main(A: T.Buffer[128, &quot;float32&quot;], B: T.Buffer[128, &quot;float32&q
 <li><a href="https://tvm.apache.org/2020/05/14/compiling-machine-learning-to-webassembly-and-webgpu">Compiling Machine Learning to WASM and WebGPU with Apache TVM</a></li>
 </ul>
 </li>
-<li>"backend": runtime environment and hardware-specific details (CUDA, OpenCL)</li>
+<li>"DL backend": runtime environment and hardware-specific details (CUDA, OpenCL)</li>
 </ul></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>
