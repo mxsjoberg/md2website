@@ -9,6 +9,7 @@ DIST_PATH = "dist"
 ASSETS = ["main.css", "main.js", "highlight.min.js", "fav.png"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "My projects, posts, and programming notes."
+APP_NAME = "Michael Sjöberg"
 APP_THEME = "#161716"
 
 def sort_by_date_and_title(item):
@@ -27,8 +28,8 @@ def write_header(file, title="Static website built with md2html", root=0):
     file.write(f"<meta name='author' content='{AUTHOR}'>")
     file.write(f"<meta name='description' content='{DESCRIPTION}'>")
     file.write(f"<meta name='theme-color' content='{APP_THEME}'>")
-    file.write(f"<meta name='application-name' content='{AUTHOR}'>")
-    file.write(f"<meta name='apple-mobile-web-app-title' content='{AUTHOR}'>")
+    file.write(f"<meta name='application-name' content='{APP_NAME}'>")
+    file.write(f"<meta name='apple-mobile-web-app-title' content='{title}'>")
     file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
     file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
