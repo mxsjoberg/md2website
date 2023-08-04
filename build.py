@@ -80,10 +80,11 @@ for root, dirs, files in os.walk("pages"):
 
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
-    if "." not in dir_ and dir_ != "dist" and dir_ != "pages" and dir_ != "programming":
+    if "." not in dir_ and dir_ != "dist" and dir_ != "pages":
         with open(f"{ROOT_DIR}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
             posts_lst = []
+            posts_dict = {}
             for root, dirs, posts in os.walk(dir_):
                 for post in posts:
                     if post.split(".")[1] == "md":
@@ -96,8 +97,28 @@ for dir_ in os.listdir("."):
                             title = post_content.split("\n")[0].split("# ")[1]
                             # date
                             date = post_content.split("\n")[2].split("*")[1]
-                            # append to posts_lst
-                            posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                            # categories
+                            category = None
+                            subcategory = None
+                            try:
+                                category = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[0].split("]")[0][1:].lower()
+                                subcategory = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[1].split("]")[0][1:].lower()
+                            except:
+                                pass
+                            # category and subcategory
+                            if category and subcategory:
+                                if not category in posts_dict: posts_dict[category] = {}
+                                if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
+                                # append
+                                posts_dict[category][subcategory].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                            # category
+                            elif category:
+                                if not category in posts_dict: posts_dict[category] = []
+                                # append
+                                posts_dict[category].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                            else:
+                                # append to posts_lst
+                                posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                             # write
                             write_header(tmp_file, title=title)
                             tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
@@ -105,7 +126,7 @@ for dir_ in os.listdir("."):
                             post_file.close()
             # sort posts_lst by date then by name
             sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
-            # write posts
+            # write posts_lst (list by date)
             current_date = None
             for post in sorted_posts_lst:
                 if current_date != post['date'].year:
@@ -115,95 +136,18 @@ for dir_ in os.listdir("."):
                     current_date = post['date'].year
                     dir_page.write("<ul>")
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+            # write posts_dict (list by category and subcategory)
+            for category in posts_dict:
+                dir_page.write(f"<h1 id='{category}'>{category.title()}</h1>")
+                for subcategory in posts_dict[category]:
+                    if len(posts_dict[category].keys()) > 1:
+                        dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title()}</p>")
+                    sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
+                    dir_page.write("<ul>")
+                    for post in sorted_posts_dict:
+                        dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+                    dir_page.write("</ul>")
             write_footer(dir_page)
-
-# posts
-# with open(f"{ROOT_DIR}/posts.html", "w+") as html_posts:
-#     write_header(html_posts, title="Posts")
-#     posts_lst = []
-#     for root, dirs, posts in os.walk("posts"):
-#         for post in posts:
-#             if post.split(".")[1] == "md":
-#                 post_name = post.split(".")[0]
-#                 # create page
-#                 with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
-#                     post_file = open(f"{root}/{post}")
-#                     post_content = post_file.read()
-#                     # title (first line)
-#                     title = post_content.split("\n")[0].split("# ")[1]
-#                     # date (third line)
-#                     date = post_content.split("\n")[2].split("*")[1]
-#                     # append to posts_lst
-#                     posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
-#                     # write
-#                     write_header(tmp_file, title=title)
-#                     tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
-#                     write_footer(tmp_file)
-#                     post_file.close()
-#     # sort posts_lst by date then by name
-#     sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
-#     # write posts
-#     current_date = None
-#     for post in sorted_posts_lst:
-#         if current_date != post['date'].year:
-#             if current_date != None:
-#                 html_posts.write("</ul>")
-#             html_posts.write(f"<h1>{post['date'].year}</h1>")
-#             current_date = post['date'].year
-#             html_posts.write("<ul>")
-#         html_posts.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-#     write_footer(html_posts)
-
-# programming
-with open(f"{ROOT_DIR}/programming.html", "w+") as html_programming:
-    write_header(html_programming, title="Programming")
-    programming_dict = {}
-    for root, dirs, posts in os.walk("programming"):
-        for post in posts:
-            if post.split(".")[1] == "md":
-                post_name = post.split(".")[0]
-                # create page
-                with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
-                    post_file = open(f"{root}/{post}")
-                    post_content = post_file.read()
-                    # title (first line)
-                    title = post_content.split("\n")[0].split("# ")[1]
-                    # date (third line)
-                    date = post_content.split("\n")[2].split("*")[1]
-                    # meta
-                    language = None
-                    category = None
-                    try:
-                        language = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[0].split("]")[0][1:].lower()
-                        category = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[1].split("]")[0][1:].lower()
-                    except:
-                        pass
-                    if language and category:
-                        if not language in programming_dict:
-                            programming_dict[language] = {}
-                        if not category in programming_dict[language]:
-                            programming_dict[language][category] = []
-                        programming_dict[language][category].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
-                    else:
-                        pass
-                    # write
-                    write_header(tmp_file, title=title)
-                    tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
-                    write_footer(tmp_file)
-                    post_file.close()
-
-    # write programming
-    for language in programming_dict:
-        html_programming.write(f"<h1 id='{language}'>{language.title()}</h1>")
-        for category in programming_dict[language]:
-            if len(programming_dict[language].keys()) > 1:
-                html_programming.write(f"<p id='{language}-{category.replace(' ', '-')}'>{category.title()}</p>")
-            sorted_posts_lst = sorted(programming_dict[language][category], key=sort_by_date_and_title, reverse=True)
-            html_programming.write("<ul>")
-            for post in sorted_posts_lst:
-                html_programming.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-            html_programming.write("</ul>")
-    write_footer(html_programming)
 
 # minimize css
 with open(f"{ROOT_DIR}/main.min.css", "w+") as file:
