@@ -5,7 +5,8 @@ import shutil
 import markdown
 from datetime import datetime
 
-ROOT_DIR = "dist"
+DIST_PATH = "dist"
+ASSETS = ["main.css", "main.js", "highlight.min.js", "fav.png"]
 
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
@@ -37,7 +38,7 @@ def write_header(file, title="Static website built with md2html", root=0):
     # fixed nav
     file.write("<nav>")
     try:
-        nav_file = open("nav.md")
+        nav_file = open("nav.md", "r")
         nav_content = nav_file.read()
         if nav_content != "":
             file.write(markdown.markdown(nav_content))
@@ -59,8 +60,8 @@ def write_footer(file):
     file.write("</html>")
 
 # create dist folder
-if os.path.isdir(ROOT_DIR): shutil.rmtree(ROOT_DIR)
-os.mkdir(ROOT_DIR)
+if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
+os.mkdir(DIST_PATH)
 
 # for each md file in pages, create html page
 for root, dirs, files in os.walk("pages"):
@@ -68,8 +69,8 @@ for root, dirs, files in os.walk("pages"):
         if file.split(".")[1] == "md":
             file_name = file.split(".")[0]
             # create page
-            with open(f"{ROOT_DIR}/{file_name}.html", "w+") as tmp_file:
-                file = open(f"{root}/{file}")
+            with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
+                file = open(f"{root}/{file}", "r")
                 file_content = file.read()
                 title = file_content.split("\n")[0].split("# ")[1]
                 # write
@@ -81,7 +82,7 @@ for root, dirs, files in os.walk("pages"):
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
     if "." not in dir_ and dir_ != "dist" and dir_ != "pages":
-        with open(f"{ROOT_DIR}/{dir_}.html", "w+") as dir_page:
+        with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
             posts_lst = []
             posts_dict = {}
@@ -90,7 +91,7 @@ for dir_ in os.listdir("."):
                     if post.split(".")[1] == "md":
                         post_name = post.split(".")[0]
                         # create page
-                        with open(f"{ROOT_DIR}/{post_name}.html", "w+") as tmp_file:
+                        with open(f"{DIST_PATH}/{post_name}.html", "w+") as tmp_file:
                             post_file = open(f"{root}/{post}")
                             post_content = post_file.read()
                             # title
@@ -150,31 +151,30 @@ for dir_ in os.listdir("."):
             write_footer(dir_page)
 
 # minimize css
-with open(f"{ROOT_DIR}/main.min.css", "w+") as file:
-    css_file = open("main.css")
-    css_content = css_file.read()
+with open(f"{DIST_PATH}/main.min.css", "w+") as file:
+    css_content = ""
+    for css in [asset for asset in ASSETS if asset.split(".")[-1] == "css"]:
+        tmp_file = open(css, "r")
+        css_content += tmp_file.read()
+        tmp_file.close()
     css_content = css_content.replace("\n", "")
     css_content = css_content.replace("\t", "")
     css_content = css_content.replace("  ", "")
     file.write(css_content)
-    css_file.close()
 
 # minimize js
-with open(f"{ROOT_DIR}/main.min.js", "w+") as file:
-    js_file = open("main.js")
-    js_content = js_file.read()
-    # append highlight.min.js
-    highlight_file = open("highlight.min.js")
-    js_content += highlight_file.read()
-    highlight_file.close()
-    # remove line comments
+with open(f"{DIST_PATH}/main.min.js", "w+") as file:
+    js_content = ""
+    for js in [asset for asset in ASSETS if asset.split(".")[-1] == "js"]:
+        tmp_file = open(js, "r")
+        js_content += tmp_file.read()
+        tmp_file.close()
     js_content = js_content.replace("  ", "")
     js_content = "\n".join([line for line in js_content.split("\n") if not line.startswith("//")])
     js_content = js_content.replace("\n", "")
     js_content = js_content.replace("\t", "")
     # write
     file.write(js_content)
-    js_file.close()
 
 # copy fav.png to dist/fav.png
-os.system("cp fav.png dist/fav.png")
+os.system(f"cp fav.png {DIST_PATH}/fav.png")
