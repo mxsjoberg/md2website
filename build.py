@@ -141,8 +141,15 @@ for dir_ in os.listdir("."):
                     current_date = post['date'].year
                     dir_page.write("<ul>")
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+            # write links
+            if len(posts_dict.keys()) > 0:
+                dir_page.write("<p>")
+                for category in posts_dict.keys():
+                    dir_page.write(f"<a href='#{category}'>{category.title()}</a> ")
+                dir_page.write("</p>")
             # write posts_dict (list by category and subcategory)
             for category in posts_dict:
+                # write category
                 dir_page.write(f"<h1 id='{category}'>{category.title()}</h1>")
                 for subcategory in posts_dict[category]:
                     if len(posts_dict[category].keys()) > 1:
