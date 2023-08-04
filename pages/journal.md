@@ -2,17 +2,17 @@
 
 This page contains my day-to-day unstructured and unfiltered notes.
 
-## Machine Learning Compilers
+## <a name="machine-learning-compilers" class="anchor"></a> [Machine Learning Compilers](#machine-learning-compilers)
 
-### General Theory
+**General theory**
 
-**Instruction selection** [[wikipedia](https://en.wikipedia.org/wiki/Instruction_selection)]
+Instruction selection [[wikipedia](https://en.wikipedia.org/wiki/Instruction_selection)]:
 
 - macro expansion (inefficient)
 - graph covering
 - output from instruction selection is pseudo-registers (temporaries) then register allocation
 
-**Primitive Tensor Functions**
+Primitive Tensor Functions:
 
 ```python
 def add(a, b, c):
@@ -43,7 +43,7 @@ def main(A: T.Buffer[128, "float32"], B: T.Buffer[128, "float32"], C: T.Buffer[1
       C[vi] = A[vi] + B[vi]
 ```
 
-### Deep Learning Compiler Stack
+**Deep Learning compiler stack**
 
 [dl_compiler_stack.png](https://d3i71xaburhd42.cloudfront.net/69046519775ca6ac40c7d577887149525df2ee5d/10-Figure2-1.png)
 
@@ -53,16 +53,16 @@ def main(A: T.Buffer[128, "float32"], B: T.Buffer[128, "float32"], C: T.Buffer[1
 
 [MLC notes and videos](https://mlc.ai/summer22/schedule)
 
-**Front-end**
+MLC front-end:
 
-- "frontend": parsing models (ONNX, pytorch, tensorflow)
+- "DL frontend": parsing models (ONNX, pytorch, tensorflow)
 	- [Protocol Buffers](https://protobuf.dev/)
 - graph optimization
 	- constant folding, operator fusion, pruning (dead code elimination)
 	- [Graph Transform Tool](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/graph_transforms/README.md)
 	- [Computational Graph Optimization](https://mlc.ai/chapter_graph_optimization/index.html)
 
-**Back-end**
+MLC back-end:
 
 - kernel selection
 	- pick best kernel for each operation
@@ -74,6 +74,6 @@ def main(A: T.Buffer[128, "float32"], B: T.Buffer[128, "float32"], C: T.Buffer[1
 - code generation
 	- machine code or device-specific GPU instructions (LLVM, XLA, WASM, WebGPU)
 	- [Compiling Machine Learning to WASM and WebGPU with Apache TVM](https://tvm.apache.org/2020/05/14/compiling-machine-learning-to-webassembly-and-webgpu)
-- "backend": runtime environment and hardware-specific details (CUDA, OpenCL)
+- "DL backend": runtime environment and hardware-specific details (CUDA, OpenCL)
 
 
