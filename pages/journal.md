@@ -45,7 +45,7 @@ def main(A: T.Buffer[128, "float32"], B: T.Buffer[128, "float32"], C: T.Buffer[1
 
 ### Deep Learning Compiler Stack
 
-![dl_compiler_stack.png](https://d3i71xaburhd42.cloudfront.net/69046519775ca6ac40c7d577887149525df2ee5d/10-Figure2-1.png)
+[dl_compiler_stack.png](https://d3i71xaburhd42.cloudfront.net/69046519775ca6ac40c7d577887149525df2ee5d/10-Figure2-1.png)
 
 [The Deep Learning Compiler: A Comprehensive Survey](https://arxiv.org/pdf/2002.03794.pdf)
 
