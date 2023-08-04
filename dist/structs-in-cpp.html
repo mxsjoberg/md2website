@@ -1,0 +1,29 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Structs in C++</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Structs in C++'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Structs in C++</h1>
+<p><em>November 2020</em> <a href="programming.html#c++">C++</a> <a href="programming.html#c++-misc">Misc</a></p>
+<pre><code class="language-cpp">struct my_struct {
+    int x;
+    int y;
+};
+
+// or
+typedef struct {
+    int x;
+    int y;
+} my_struct;
+
+struct my_struct A;
+struct my_struct B;
+
+// assign values to A
+A.x = 2;
+A.y = 7;
+
+// assign values to B
+B.x = -4;
+B.y = 12;
+
+cout &lt;&lt; A.x &lt;&lt; &quot;,&quot; &lt;&lt; A.y &lt;&lt; endl;
+// 2,7
+cout &lt;&lt; B.x &lt;&lt; &quot;,&quot; &lt;&lt; B.y &lt;&lt; endl;
+// -4,12
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

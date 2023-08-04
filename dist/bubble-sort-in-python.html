@@ -1,0 +1,16 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Bubble Sort in Python</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Bubble Sort in Python'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Bubble Sort in Python</h1>
+<p><em>May 2021</em> <a href="programming.html#python">Python</a> <a href="programming.html#python-misc">Misc</a></p>
+<pre><code class="language-python"># https://en.wikipedia.org/wiki/Bubble_sort
+
+unsorted_list = [14, 33, 27, 35, 10]
+for i in range(len(unsorted_list)):
+    for j in range(len(unsorted_list) - 1):
+        if unsorted_list[j] &gt; unsorted_list[j + 1]:
+            temp = unsorted_list[j]
+            # swap
+            unsorted_list[j] = unsorted_list[j + 1]
+            unsorted_list[j + 1] = temp
+
+print(unsorted_list)
+# [10, 14, 27, 33, 35]
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

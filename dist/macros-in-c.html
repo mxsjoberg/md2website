@@ -1,0 +1,38 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Macros in C</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Macros in C'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Macros in C</h1>
+<p><em>August 2019</em> <a href="programming.html#c">C</a> <a href="programming.html#c-misc">Misc</a></p>
+<pre><code class="language-cpp">// built-in macros
+printf(&quot;%s\n&quot;, __FILE__);
+// filename.c
+printf(&quot;%s\n&quot;, __DATE__);
+// Aug 21 2019
+printf(&quot;%s\n&quot;, __TIME__);
+// 01:22:18
+printf(&quot;%d\n&quot;, __LINE__);
+// 16
+printf(&quot;%d\n&quot;, __STDC__);
+// 1
+</code></pre>
+<pre><code class="language-cpp">// stringize error message
+#define  error_message(e) \
+   printf(&quot;Error: &quot; #e &quot;\n&quot;)
+
+error_message(&quot;This is an error.&quot;);
+// Error: This is an error.
+
+// if not defined
+#if !defined (MESSAGE)
+   #define MESSAGE &quot;This is a message.&quot;
+#endif
+
+printf(&quot;%s\n&quot;, MESSAGE);
+// This is a message.
+
+// parameterized macros
+#define square(x) ((x) * (x))
+#define MAX(a,b) ((a) &gt; (b) ? (a) : (b))
+
+printf(&quot;%d\n&quot;, square(2));
+// 4
+printf(&quot;%d\n&quot;, MAX(4,5));
+// 5
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>

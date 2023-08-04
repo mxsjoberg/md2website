@@ -1,0 +1,46 @@
+<html lang='en'><head><link rel='icon' href='fav.png'><title>Multithreading in C++</title><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><meta name='author' content='Michael Sjöberg'><meta name='description' content='My projects, posts, and programming notes.'><meta name='theme-color' content='#161716'><meta name='application-name' content='Michael Sjöberg'><meta name='apple-mobile-web-app-title' content='Multithreading in C++'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='#161716'><link rel='stylesheet' href='main.min.css'><script src='main.min.js'></script></head><body><nav><p><a href="index.html">home</a> <a href="journal.html">journal</a> <a href="projects.html">projects</a> <a href="posts.html">posts</a> <a href="programming.html">programming</a></p></nav><div class='page'><h1>Multithreading in C++</h1>
+<p><em>November 2020</em> <a href="programming.html#c++">C++</a> <a href="programming.html#c++-misc">Misc</a></p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;pthread.h&gt;
+
+#define NUMBER_OF_THREADS 5
+
+void* print(void* thread_id) {
+    long tid;
+    tid = (long) thread_id;
+
+    std::cout &lt;&lt; &quot;hello multithreading, thread: &quot; &lt;&lt; tid &lt;&lt; std::endl;
+
+    // terminate
+    pthread_exit(NULL);
+};
+
+int main() {
+    pthread_t threads[NUMBER_OF_THREADS];
+
+    int rc;
+    for (int i = 0; i &lt; NUMBER_OF_THREADS; i++) {
+        std::cout &lt;&lt; &quot;creating thread: &quot; &lt;&lt; i &lt;&lt; std::endl;
+
+        // create thread
+        rc = pthread_create(&amp;threads[i], NULL, print, (void*) i);
+        if (rc) {
+            std::cout &lt;&lt; &quot;unable to create thread: &quot; &lt;&lt; rc &lt;&lt; std::endl;
+            exit(-1);
+        }
+    }
+
+    // terminate
+    pthread_exit(NULL);
+    // creating thread: 0
+    // creating thread: 1
+    // hello multithreading, thread: 0
+    // creating thread: 2
+    // hello multithreading, thread: 1
+    // creating thread: 3
+    // hello multithreading, thread: 2
+    // creating thread: 4
+    // hello multithreading, thread: 3
+    // hello multithreading, thread: 4
+}
+</code></pre></div><div id='footer'><p>[<a id='invert'>light|dark</a>]</p><p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p></div><script>hljs.highlightAll();</script></body></html>
