@@ -7,6 +7,9 @@ from datetime import datetime
 
 DIST_PATH = "dist"
 ASSETS = ["main.css", "main.js", "highlight.min.js", "fav.png"]
+AUTHOR = "Michael Sjöberg"
+DESCRIPTION = "My projects, posts, and programming notes."
+APP_THEME = "#161716"
 
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
@@ -21,14 +24,14 @@ def write_header(file, title="Static website built with md2html", root=0):
     # meta
     file.write("<meta charset='utf-8'>")
     file.write("<meta name='viewport' content='width=device-width, initial-scale=1'>")
-    file.write("<meta name='author' content='Michael Sjöberg'>")
-    file.write("<meta name='description' content='My projects, posts, and programming notes.'>")
-    file.write("<meta name='theme-color' content='#161716'>")
-    file.write("<meta name='application-name' content='Michael Sjöberg'>")
-    file.write("<meta name='apple-mobile-web-app-title' content='Michael Sjöberg'>")
+    file.write(f"<meta name='author' content='{AUTHOR}'>")
+    file.write(f"<meta name='description' content='{DESCRIPTION}'>")
+    file.write(f"<meta name='theme-color' content='{APP_THEME}'>")
+    file.write(f"<meta name='application-name' content='{AUTHOR}'>")
+    file.write(f"<meta name='apple-mobile-web-app-title' content='{AUTHOR}'>")
     file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
-    file.write("<meta name='apple-mobile-web-app-status-bar-style' content='#161716'>")
+    file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
     # css
     file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
     # js
@@ -52,8 +55,8 @@ def write_header(file, title="Static website built with md2html", root=0):
 def write_footer(file):
     file.write("</div>")
     file.write("<div id='footer'>")
-    file.write("<p>[<a id='invert'>light|dark</a>] [<a href='https://github.com/mixmaester/html_builder'>source</a>]</p>")
-    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Built with md2html</a></p>")
+    file.write("<p>[<a id='invert'>light|dark</a>]</p>")
+    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p>")
     file.write("</div>")
     file.write("<script>hljs.highlightAll();</script>")
     file.write("</body>")
