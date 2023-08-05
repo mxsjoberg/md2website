@@ -31,3 +31,7 @@ App name for meta tags.
 `APP_THEME = "#161716"`
 
 App theme for meta tags.
+
+## Watcher
+
+Run `watch.py` to automatically rebuild on file changes.
