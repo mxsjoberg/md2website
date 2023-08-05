@@ -65,11 +65,11 @@ MLC front-end:
 MLC back-end:
 
 - kernel selection
-	- pick best kernel for each operation
+	- pick best kernel for each operation (kernel refers to hardware-specific implementation of an operation)
 	- [cuDNN](https://developer.nvidia.com/cudnn)
 	- quantized kernels (computing on lower-precision data types)
 - auto-tuning
-	- find best kernel parameters for each operation (GA, RL)
+	- find best kernel/ kernel parameters (GA, RL)
 	- [GA tuner](https://github.com/apache/tvm/blob/main/python/tvm/autotvm/tuner/ga_tuner.py)
 - code generation
 	- machine code or device-specific GPU instructions (LLVM, XLA, WASM, WebGPU)
