@@ -4,7 +4,7 @@ html.invert {
 }
 nav {
   position: fixed;
-  width: 640px;
+  max-width: 640px;
   padding: 0 2rem;
   background: #161716;
 }
@@ -59,7 +59,7 @@ blockquote {
   color: #66666C;
 }
 #footer p {
-  width: 640px;
+  max-width: 640px;
   padding: 0 2rem;
   margin-top: 0;
 }
