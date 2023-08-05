@@ -55,13 +55,13 @@ def main(A: T.Buffer[128, &quot;float32&quot;], B: T.Buffer[128, &quot;float32&q
 <p>MLC back-end:</p>
 <ul>
 <li>kernel selection<ul>
-<li>pick best kernel for each operation</li>
+<li>pick best kernel for each operation (kernel refers to hardware-specific implementation of an operation)</li>
 <li><a href="https://developer.nvidia.com/cudnn">cuDNN</a></li>
 <li>quantized kernels (computing on lower-precision data types)</li>
 </ul>
 </li>
 <li>auto-tuning<ul>
-<li>find best kernel parameters for each operation (GA, RL)</li>
+<li>find best kernel/ kernel parameters (GA, RL)</li>
 <li><a href="https://github.com/apache/tvm/blob/main/python/tvm/autotvm/tuner/ga_tuner.py">GA tuner</a></li>
 </ul>
 </li>
