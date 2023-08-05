@@ -1,9 +1,9 @@
 html.invert {
-  background: #000000;
   filter: invert(1);
 }
 nav {
   position: fixed;
+  width: 100%;
   max-width: 640px;
   padding: 0 2rem;
   background: #161716;
