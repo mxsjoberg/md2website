@@ -2,7 +2,7 @@
 
 This page contains my day-to-day unstructured and unfiltered notes.
 
-## <a name="machine-learning-compilers" class="anchor"></a> [Machine Learning Compilers](#machine-learning-compilers)
+## Machine Learning Compilers
 
 **General theory**
 
