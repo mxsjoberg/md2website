@@ -16,8 +16,8 @@ def sort_by_date_and_title(item):
     return (item["date"], item["title"])
 
 def write_header(file, title="Static website built with md2html", root=0):
-    file.write("<!DOCTYPE html>")
-    file.write("<!-- This static website was built with github.com/mixmaester/md2html by Michael Sjöberg -->")
+    file.write("<!DOCTYPE html>\n")
+    file.write("<!-- This static website was built with github.com/mixmaester/md2html by Michael Sjöberg -->\n")
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
@@ -52,6 +52,7 @@ def write_header(file, title="Static website built with md2html", root=0):
     try:
         nav_file = open("nav.md", "r")
         nav_content = nav_file.read()
+        nav_file.close()
         if nav_content != "":
             file.write(markdown.markdown(nav_content))
         else:
