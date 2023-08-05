@@ -4,13 +4,7 @@ This page contains my day-to-day unstructured and unfiltered notes.
 
 ## Machine Learning Compilers
 
-**General theory**
-
-Instruction selection [[wikipedia](https://en.wikipedia.org/wiki/Instruction_selection)]:
-
-- macro expansion (inefficient)
-- graph covering
-- output from instruction selection is pseudo-registers (temporaries) then register allocation
+**Tensors**
 
 Primitive Tensor Functions:
 
@@ -76,4 +70,10 @@ MLC back-end:
 	- [Compiling Machine Learning to WASM and WebGPU with Apache TVM](https://tvm.apache.org/2020/05/14/compiling-machine-learning-to-webassembly-and-webgpu)
 - "DL backend": runtime environment and hardware-specific details (CUDA, OpenCL)
 
+**General theory**
 
+Instruction selection [[wikipedia](https://en.wikipedia.org/wiki/Instruction_selection)]:
+
+- macro expansion (inefficient)
+- graph covering
+- output from instruction selection is pseudo-registers (temporaries) then register allocation
