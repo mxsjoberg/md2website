@@ -36,6 +36,9 @@ a {
 a:hover {
   text-decoration: underline;
 }
+li {
+  margin-bottom: 0.25rem;
+}
 pre {
   white-space: break-spaces;
   word-break: break-all;
