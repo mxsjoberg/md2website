@@ -36,8 +36,6 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 setTimeout(showPageLoadTime, 100);
             }
-        } else {
-            // console.log("Page load time measurement is not supported in this browser.");
         }
     }
     // call the function when the page has fully loaded
@@ -45,4 +43,3 @@ document.addEventListener("DOMContentLoaded", function() {
     // highlight.js
     hljs.highlightAll();
 });
-
