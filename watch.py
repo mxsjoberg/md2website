@@ -17,7 +17,7 @@ def md_modified(event):
     if event.src_path.endswith(".md"):
         print(f"detected change in file: {event.src_path}")
         subprocess.run(COMMAND_TO_RUN, shell=True)
-        time.sleep(2)
+        time.sleep(1)
 
 def start_watching():
     event_handler = FileSystemEventHandler()
