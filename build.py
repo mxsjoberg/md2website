@@ -66,7 +66,7 @@ def write_footer(file):
     file.write("</div>")
     file.write("<div id='footer'>")
     file.write("<p>[<a id='invert'>light|dark</a>]</p>")
-    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p>")
+    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a> on {datetime.now().strftime('%B %d, %Y')}</p>")
     file.write("</div>")
     file.write("<script>")
     js_file = open(f"{DIST_PATH}/main.min.js", "r")
