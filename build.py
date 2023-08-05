@@ -197,7 +197,11 @@ for dir_ in os.listdir("."):
                     sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
                     dir_page.write("<ul>")
                     for post in sorted_posts_dict:
-                        dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+                        # if date is current or last month
+                        if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                            dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
+                        else:    
+                            dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
             write_footer(dir_page)
 
