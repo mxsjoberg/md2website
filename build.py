@@ -16,10 +16,12 @@ def sort_by_date_and_title(item):
     return (item["date"], item["title"])
 
 def write_header(file, title="Static website built with md2html", root=0):
+    file.write("<!DOCTYPE html>")
+    file.write("<!-- This static website was built with github.com/mixmaester/md2html by Michael Sjöberg -->")
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
-    file.write("<link rel='icon' href='fav.png'>")
+    # file.write("<link rel='icon' href='fav.png'>")
     # title
     file.write(f"<title>{title}</title>")
     # meta
@@ -34,9 +36,15 @@ def write_header(file, title="Static website built with md2html", root=0):
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
     file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
     # css
-    file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
+    # file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
+    file.write("<style>")
+    css_file = open(f"{DIST_PATH}/main.min.css", "r")
+    css_content = css_file.read()
+    css_file.close()
+    file.write(css_content)
+    file.write("</style>")
     # js
-    file.write(f"<script src='{'../'*root}main.min.js'></script>")
+    # file.write(f"<script src='{'../'*root}main.min.js'></script>")
     file.write("</head>")
     file.write("<body>")
     # fixed nav
@@ -59,13 +67,44 @@ def write_footer(file):
     file.write("<p>[<a id='invert'>light|dark</a>]</p>")
     file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a></p>")
     file.write("</div>")
-    file.write("<script>hljs.highlightAll();</script>")
+    file.write("<script>")
+    js_file = open(f"{DIST_PATH}/main.min.js", "r")
+    js_content = js_file.read()
+    js_file.close()
+    file.write(js_content)
+    file.write("</script>")
     file.write("</body>")
     file.write("</html>")
 
 # create dist folder
 if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
 os.mkdir(DIST_PATH)
+
+# minimize css
+with open(f"{DIST_PATH}/main.min.css", "w+") as file:
+    css_content = ""
+    for css in [asset for asset in ASSETS if asset.split(".")[-1] == "css"]:
+        tmp_file = open(css, "r")
+        css_content += tmp_file.read()
+        tmp_file.close()
+    css_content = css_content.replace("\n", "")
+    css_content = css_content.replace("\t", "")
+    css_content = css_content.replace("  ", "")
+    file.write(css_content)
+
+# minimize js
+with open(f"{DIST_PATH}/main.min.js", "w+") as file:
+    js_content = ""
+    for js in [asset for asset in ASSETS if asset.split(".")[-1] == "js"]:
+        tmp_file = open(js, "r")
+        js_content += tmp_file.read()
+        tmp_file.close()
+    js_content = js_content.replace("  ", "")
+    js_content = "\n".join([line for line in js_content.split("\n") if not line.startswith("//")])
+    js_content = js_content.replace("\n", "")
+    js_content = js_content.replace("\t", "")
+    # write
+    file.write(js_content)
 
 # for each md file in pages, create html page
 for root, dirs, files in os.walk("pages"):
@@ -161,32 +200,32 @@ for dir_ in os.listdir("."):
                     dir_page.write("</ul>")
             write_footer(dir_page)
 
-# minimize css
-with open(f"{DIST_PATH}/main.min.css", "w+") as file:
-    css_content = ""
-    for css in [asset for asset in ASSETS if asset.split(".")[-1] == "css"]:
-        tmp_file = open(css, "r")
-        css_content += tmp_file.read()
-        tmp_file.close()
-    css_content = css_content.replace("\n", "")
-    css_content = css_content.replace("\t", "")
-    css_content = css_content.replace("  ", "")
-    file.write(css_content)
+# # minimize css
+# with open(f"{DIST_PATH}/main.min.css", "w+") as file:
+#     css_content = ""
+#     for css in [asset for asset in ASSETS if asset.split(".")[-1] == "css"]:
+#         tmp_file = open(css, "r")
+#         css_content += tmp_file.read()
+#         tmp_file.close()
+#     css_content = css_content.replace("\n", "")
+#     css_content = css_content.replace("\t", "")
+#     css_content = css_content.replace("  ", "")
+#     file.write(css_content)
 
-# minimize js
-with open(f"{DIST_PATH}/main.min.js", "w+") as file:
-    js_content = ""
-    for js in [asset for asset in ASSETS if asset.split(".")[-1] == "js"]:
-        tmp_file = open(js, "r")
-        js_content += tmp_file.read()
-        tmp_file.close()
-    js_content = js_content.replace("  ", "")
-    js_content = "\n".join([line for line in js_content.split("\n") if not line.startswith("//")])
-    js_content = js_content.replace("\n", "")
-    js_content = js_content.replace("\t", "")
-    # write
-    file.write(js_content)
+# # minimize js
+# with open(f"{DIST_PATH}/main.min.js", "w+") as file:
+#     js_content = ""
+#     for js in [asset for asset in ASSETS if asset.split(".")[-1] == "js"]:
+#         tmp_file = open(js, "r")
+#         js_content += tmp_file.read()
+#         tmp_file.close()
+#     js_content = js_content.replace("  ", "")
+#     js_content = "\n".join([line for line in js_content.split("\n") if not line.startswith("//")])
+#     js_content = js_content.replace("\n", "")
+#     js_content = js_content.replace("\t", "")
+#     # write
+#     file.write(js_content)
 
 # copy non-css and non-js assets
-for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
-    os.system(f"cp {asset} {DIST_PATH}/{asset}")
+# for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
+#     os.system(f"cp {asset} {DIST_PATH}/{asset}")
