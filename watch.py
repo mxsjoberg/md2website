@@ -15,7 +15,7 @@ COMMAND_TO_RUN = "python3 build.py"
 def md_modified(event):
     # if event.is_directory(): return
     if event.src_path.endswith(".md"):
-        print(f"detected change in file: {event.src_path}")
+        # print(f"detected change in file: {event.src_path}")
         subprocess.run(COMMAND_TO_RUN, shell=True)
         time.sleep(1)
 
@@ -27,7 +27,7 @@ def start_watching():
     observer.schedule(event_handler, path=DIR_TO_WATCH, recursive=False)
     observer.start()
 
-    print(f"watching for changes in {DIR_TO_WATCH}")
+    # print(f"watching for changes in {DIR_TO_WATCH}")
 
     try:
         while True:
