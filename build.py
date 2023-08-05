@@ -187,8 +187,17 @@ for dir_ in os.listdir("."):
             #     for category in posts_dict.keys():
             #         dir_page.write(f"<a href='#{category}'>{category.title()}</a> ")
             #     dir_page.write("</p>")
-            # write posts_dict (list by category and subcategory)
-            for category in posts_dict:
+            # create list with categories for ordering
+            category_list = sorted(posts_dict.keys())
+            # list newest posts on top
+            all_posts = [post for category in category_list for subcategory in posts_dict[category] for post in posts_dict[category][subcategory]]
+            sorted_all_posts = sorted(all_posts, key=sort_by_date_and_title, reverse=True)
+            for post in sorted_all_posts:
+                # if date is current or last month
+                if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                    dir_page.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
+            # write posts in posts_dict (list by category and subcategory)
+            for category in category_list:
                 # write category
                 dir_page.write(f"<h1 id='{category}'>{category.title()}</h1>")
                 for subcategory in posts_dict[category]:
