@@ -107,6 +107,10 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
     # write
     file.write(js_content)
 
+# copy non-css and non-js assets
+# for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
+#     os.system(f"cp {asset} {DIST_PATH}/{asset}")
+
 # for each md file in pages, create html page
 for root, dirs, files in os.walk("pages"):
     for file in files:
@@ -213,33 +217,3 @@ for dir_ in os.listdir("."):
                             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
             write_footer(dir_page)
-
-# # minimize css
-# with open(f"{DIST_PATH}/main.min.css", "w+") as file:
-#     css_content = ""
-#     for css in [asset for asset in ASSETS if asset.split(".")[-1] == "css"]:
-#         tmp_file = open(css, "r")
-#         css_content += tmp_file.read()
-#         tmp_file.close()
-#     css_content = css_content.replace("\n", "")
-#     css_content = css_content.replace("\t", "")
-#     css_content = css_content.replace("  ", "")
-#     file.write(css_content)
-
-# # minimize js
-# with open(f"{DIST_PATH}/main.min.js", "w+") as file:
-#     js_content = ""
-#     for js in [asset for asset in ASSETS if asset.split(".")[-1] == "js"]:
-#         tmp_file = open(js, "r")
-#         js_content += tmp_file.read()
-#         tmp_file.close()
-#     js_content = js_content.replace("  ", "")
-#     js_content = "\n".join([line for line in js_content.split("\n") if not line.startswith("//")])
-#     js_content = js_content.replace("\n", "")
-#     js_content = js_content.replace("\t", "")
-#     # write
-#     file.write(js_content)
-
-# copy non-css and non-js assets
-# for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
-#     os.system(f"cp {asset} {DIST_PATH}/{asset}")
