@@ -1,6 +1,7 @@
 # md2html: static website builder
 
 import os
+import re
 import shutil
 import markdown
 from datetime import datetime
@@ -121,6 +122,8 @@ for root, dirs, files in os.walk("pages"):
                 file = open(f"{root}/{file}", "r")
                 file_content = file.read()
                 title = file_content.split("\n")[0].split("# ")[1]
+                # generate anchors
+                file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
                 # write
                 write_header(tmp_file, title)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
