@@ -42,5 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     // call the function when the page has fully loaded
     window.addEventListener("load", showPageLoadTime);
+    // highlight.js
+    hljs.highlightAll();
 });
 
