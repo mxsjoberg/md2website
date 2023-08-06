@@ -17,18 +17,18 @@ c_mm_relu = np.maximum(a_np @ b_np, 0)
 
 # implementation
 def mm_relu(A: np.ndarray, B: np.ndarray, C: np.ndarray):
-	# A, B, C: 128x128
-	Y = np.empty((128, 128), dtype=dtype)
-	# matmul
-	for i in range(128):
-		for j in range(128):
-			for k in range(128):
-				if k == 0: Y[i, j] = 0
-				Y[i, j] += A[i, k] * B[k, j]
-	# relu
-	for i in range(128):
-		for j in range(128):
-			C[i, j] = max(Y[i, j], 0)
+    # A, B, C: 128x128
+    Y = np.empty((128, 128), dtype=dtype)
+    # matmul
+    for i in range(128):
+        for j in range(128):
+            for k in range(128):
+                if k == 0: Y[i, j] = 0
+                Y[i, j] += A[i, k] * B[k, j]
+    # relu
+    for i in range(128):
+        for j in range(128):
+            C[i, j] = max(Y[i, j], 0)
 ```
 
 ```python
