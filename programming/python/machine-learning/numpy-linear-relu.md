@@ -35,6 +35,6 @@ def mm_relu(A: np.ndarray, B: np.ndarray, C: np.ndarray):
 # test
 c_np = np.empty((128, 128), dtype=dtype)
 mm_relu(a_np, b_np, c_np)
-# check
+# check within tolerance
 np.testing.assert_allclose(c_mm_relu, c_np, rtol=1e-5)
 ```
