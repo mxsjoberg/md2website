@@ -24,17 +24,17 @@ void add(float* a, float* b, float* c) {
 
 - linear, add, relu, softmax
 - implemented in low-level languages (C/C++) or assembly
-  - can be hardware-specific to utilize parallelism
+    - can be hardware-specific to utilize parallelism
 
 Primitive tensor function in `tvm.script` (tensor program abstraction):
 
 ```python
 @T.prim_func
 def main(A: T.Buffer[128, "float32"], B: T.Buffer[128, "float32"], C: T.Buffer[128, "float32"]):
-  for i in range(128):
-    with T.block("C"):
-      vi = T.axis.spatial(128, i)
-      C[vi] = A[vi] + B[vi]
+    for i in range(128):
+        with T.block("C"):
+            vi = T.axis.spatial(128, i)
+            C[vi] = A[vi] + B[vi]
 ```
 
 **Deep Learning compiler stack**
@@ -50,24 +50,24 @@ def main(A: T.Buffer[128, "float32"], B: T.Buffer[128, "float32"], C: T.Buffer[1
 MLC front-end:
 
 - "DL frontend": parsing models (ONNX, pytorch, tensorflow)
-	- [Protocol Buffers](https://protobuf.dev/)
+    - [Protocol Buffers](https://protobuf.dev/)
 - graph optimization
-	- constant folding, operator fusion, pruning (dead code elimination)
-	- [Graph Transform Tool](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/graph_transforms/README.md)
-	- [Computational Graph Optimization](https://mlc.ai/chapter_graph_optimization/index.html)
+    - constant folding, operator fusion, pruning (dead code elimination)
+    - [Graph Transform Tool](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/graph_transforms/README.md)
+    - [Computational Graph Optimization](https://mlc.ai/chapter_graph_optimization/index.html)
 
 MLC back-end:
 
 - kernel selection
-	- pick best kernel for each operation (kernel refers to hardware-specific implementation of an operation)
-	- [cuDNN](https://developer.nvidia.com/cudnn)
-	- quantized kernels (computing on lower-precision data types)
+    - pick best kernel for each operation (kernel refers to hardware-specific implementation of an operation)
+    - [cuDNN](https://developer.nvidia.com/cudnn)
+    - quantized kernels (computing on lower-precision data types)
 - auto-tuning
-	- find best kernel/ kernel parameters (GA, RL)
-	- [GA tuner](https://github.com/apache/tvm/blob/main/python/tvm/autotvm/tuner/ga_tuner.py)
+    - find best kernel/ kernel parameters (GA, RL)
+    - [GA tuner](https://github.com/apache/tvm/blob/main/python/tvm/autotvm/tuner/ga_tuner.py)
 - code generation
-	- machine code or device-specific GPU instructions (LLVM, XLA, WASM, WebGPU)
-	- [Compiling Machine Learning to WASM and WebGPU with Apache TVM](https://tvm.apache.org/2020/05/14/compiling-machine-learning-to-webassembly-and-webgpu)
+    - machine code or device-specific GPU instructions (LLVM, XLA, WASM, WebGPU)
+    - [Compiling Machine Learning to WASM and WebGPU with Apache TVM](https://tvm.apache.org/2020/05/14/compiling-machine-learning-to-webassembly-and-webgpu)
 - "DL backend": runtime environment and hardware-specific details (CUDA, OpenCL)
 
 **General theory**
