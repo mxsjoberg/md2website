@@ -4,6 +4,49 @@ This page contains my day-to-day unstructured and unfiltered notes.
 
 ## Machine Learning Compilers
 
+**TVMScript**
+
+[Blitz Course to TensorIR](https://tvm.apache.org/docs/tutorial/tensor_ir_blitz_course.html)
+
+`mm_relu` implemented in `tvm.script` (TensorIR):
+
+```python
+# IRModule
+@tmv.script.ir_module
+class MyModule:
+    # primitive tensor function
+    @T.prim_func
+    def mm_relu(A: T.Buffer((128, 128), "float32"), B: T.Buffer((128, 128), "float32"), C: T.Buffer((128, 128), "float32")):
+        T.func_attr({ "global_symbol": "mm_relu", "tir.noalias": True })
+        # intermediate tensor
+        Y = T.alloc_buffer((128, 128), dtype="float32")
+        # matmul
+        for i, j, k in T.grid(128, 128, 128):
+            # computational unit
+            with T.block("Y"):
+                # vi = T.axis.spatial(128, i)
+                # vj = T.axis.spatial(128, j)
+                # vk = T.axis.reduce(128, k)
+                vi, vj, vk = T.axis.remap("SSR", [i, j, k])
+                with T.init():
+                    Y[vi, vj] = T.float32(0)
+                Y[vi, vj] += A[vi, vk] * B[vk, vj]
+        # relu
+        for i, j in T.grid(128, 128):
+            # computational unit
+            with T.block("C"):
+                # vi = T.axis.spatial(128, i)
+                # vj = T.axis.spatial(128, j)
+                vi, vj = T.axis.remap("SS", [i, j])
+                C[vi, vj] = T.max(Y[vi, vj], T.float32(0))
+```
+
+- `IRModule` is a collection of `prim_func`s
+- `T.Buffer` is a tensor with shape and data type arguments
+- `T.alloc_buffer` allocates tensor
+- `T.grid` iterates over tensor indices (nested iterators)
+- `T.block` defines a computation block (basic unit of computation in TensorIR)
+
 **Tensor Functions**
 
 Linear transformation followed relu can be combined:
