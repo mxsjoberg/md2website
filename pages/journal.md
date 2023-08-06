@@ -4,7 +4,23 @@ This page contains my day-to-day unstructured and unfiltered notes.
 
 ## Machine Learning Compilers
 
-**Tensors**
+**Tensor Functions**
+
+Linear transformation followed relu can be combined:
+
+```python
+# input tensor: (1, 3072)
+# output tensor: (1, 200)
+def linear_relu(x, w, out):
+    for i in range(1):
+        for j in range(200):
+            out[i, j] = 0
+            for k in range(3072):
+                # linear                
+                out[i, j] += x[i, k] * w[j, k]
+            # relu
+            out[i, j] = max(out[i, j], 0)
+```
 
 Primitive Tensor Functions:
 
