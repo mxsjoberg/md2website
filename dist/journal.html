@@ -17,16 +17,18 @@
 </code></pre>
 <ul>
 <li>linear, add, relu, softmax</li>
-<li>implemented in low-level languages (C/C++) or assembly</li>
+<li>implemented in low-level languages (C/C++) or assembly<ul>
 <li>can be hardware-specific to utilize parallelism</li>
+</ul>
+</li>
 </ul>
 <p>Primitive tensor function in <code>tvm.script</code> (tensor program abstraction):</p>
 <pre><code class="language-python">@T.prim_func
 def main(A: T.Buffer[128, &quot;float32&quot;], B: T.Buffer[128, &quot;float32&quot;], C: T.Buffer[128, &quot;float32&quot;]):
-  for i in range(128):
-    with T.block(&quot;C&quot;):
-      vi = T.axis.spatial(128, i)
-      C[vi] = A[vi] + B[vi]
+    for i in range(128):
+        with T.block(&quot;C&quot;):
+            vi = T.axis.spatial(128, i)
+            C[vi] = A[vi] + B[vi]
 </code></pre>
 <p><strong>Deep Learning compiler stack</strong></p>
 <p><a href="https://d3i71xaburhd42.cloudfront.net/69046519775ca6ac40c7d577887149525df2ee5d/10-Figure2-1.png">dl_compiler_stack.png</a></p>
