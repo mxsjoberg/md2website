@@ -8,7 +8,7 @@ This page contains my day-to-day unstructured and unfiltered notes.
 
 [Blitz Course to TensorIR](https://tvm.apache.org/docs/tutorial/tensor_ir_blitz_course.html)
 
-`mm_relu` implemented in `tvm.script` (TensorIR):
+`mm_relu` [[programming](numpy-linear-relu.html)] implemented in `tvm.script` (TensorIR):
 
 ```python
 # IRModule
@@ -30,7 +30,7 @@ class MyModule:
                 vi, vj, vk = T.axis.remap("SSR", [i, j, k])
                 with T.init():
                     Y[vi, vj] = T.float32(0)
-                Y[vi, vj] += A[vi, vk] * B[vk, vj]
+                Y[vi, vj] = Y[vi, vj] + A[vi, vk] * B[vk, vj]
         # relu
         for i, j in T.grid(128, 128):
             # computational unit
