@@ -1,6 +1,6 @@
 # Journal
 
-This page contains my day-to-day unstructured and unfiltered notes.
+This page contains my day-to-day unstructured and unfiltered notes. I might consolidate parts into posts later.
 
 ## Machine Learning Compilers
 
