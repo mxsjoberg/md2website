@@ -7,6 +7,27 @@ This page contains my day-to-day unstructured and unfiltered notes. I might cons
 **Abstract interpretation** [[wikipedia](https://en.wikipedia.org/wiki/Abstract_interpretation)]: generalized answers to questions without precise answers
 
 - e.g. answering `yes` or `no` to "is this program correct?"
+- or, answering "what is the value of this variable?" without running the program
+
+```python
+import ast
+import inspect
+
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+# abstract interpretation analysis
+def abstract_analysis(func):
+    if any(isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mult) for node in ast.walk(ast.parse(inspect.getsource(func)))):
+        return "function involves multiplication"
+    return "function do not involve multiplication"
+
+result = abstract_analysis(factorial)
+print(result)
+```
 
 **Kolmogorov complexity** [[wikipedia](https://en.wikipedia.org/wiki/Kolmogorov_complexity)]: length of shortest program that outputs some string
 
