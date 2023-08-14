@@ -27,6 +27,7 @@ def abstract_analysis(func):
 
 result = abstract_analysis(factorial)
 print(result)
+# function involves multiplication
 ```
 
 **Kolmogorov complexity** [[wikipedia](https://en.wikipedia.org/wiki/Kolmogorov_complexity)]: length of shortest program that outputs some string
