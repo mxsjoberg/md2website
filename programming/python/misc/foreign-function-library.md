@@ -31,3 +31,12 @@ result = square_lib.square(num)
 print(f"the square of {num} is {result}")
 # the square of 5 is 25
 ```
+
+Using `C` standard library functions.
+
+```python
+# libc -> https://gist.github.com/PewZ/8b473c2a6888c5c528635550d07c6186
+libc = ctypes.CDLL('libc.dylib')
+libc.printf(b"hello world\n")
+# hello world
+```
