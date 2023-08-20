@@ -2,6 +2,8 @@
 
 *August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
 
+A partial function is a function with some arguments already filled in. This is useful for creating new functions from existing functions. 
+
 ```python
 from functools import partial
 
