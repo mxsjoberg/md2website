@@ -43,8 +43,8 @@ class LinkedList:
                 # remove element if found
                 if current.next.value == value:
                     current.next = current.next.next
-                else:
-                    current = current.next
+                    return
+                current = current.next
 ```
 
 ```python
