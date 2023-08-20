@@ -2,7 +2,7 @@
 
 *August 2023* [Python](programming.html#python) [Compilers](programming.html#python-compilers)
 
-Constant folding is a technique used by compilers to evaluate expressions at compile-time instead of run-time. It is a form of [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation) that can be applied to [constant expressions](https://en.wikipedia.org/wiki/Constant_expression) to reduce the number of instructions.
+Constant folding is a form of [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation) that can be applied to [constant expressions](https://en.wikipedia.org/wiki/Constant_expression) to reduce the number of instructions.
 
 ```python
 import ast
