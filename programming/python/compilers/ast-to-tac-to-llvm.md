@@ -2,6 +2,8 @@
 
 *July 2023* [Python](programming.html#python) [Compilers](programming.html#python-compilers)
 
+AST is a tree representation of the source code. TAC is a linear representation of the AST. LLVM IR is a linear representation of the TAC.
+
 ```python
 from mako.template import Template
 
