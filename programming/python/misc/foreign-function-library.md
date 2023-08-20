@@ -2,6 +2,7 @@
 
 *August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
 
+A foreign function library is a library that is written in a language other than the language it is being called from. For example, a `Python` program can call a function from a `C` library.
 
 ```c
 // square.c
