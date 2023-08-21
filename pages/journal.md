@@ -44,6 +44,17 @@ print(result)
 
 ## Machine Learning Compilers
 
+**pyopencl**
+
+Testing on Macbook Pro 2019 (AMD):
+
+```bash
+>>> import pyopencl
+>>> from pyopencl.tools import get_test_platforms_and_devices
+>>> get_test_platforms_and_devices()
+[(<pyopencl.Platform 'Apple' at 0x7fff0000>, [<pyopencl.Device 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz' on 'Apple' at 0xffffffff>, <pyopencl.Device 'Intel(R) UHD Graphics 630' on 'Apple' at 0x1024500>, <pyopencl.Device 'AMD Radeon Pro 5500M Compute Engine' on 'Apple' at 0x1021e00>])]
+```
+
 **CUDA**
 
 CUDA kernel to add two arrays:
