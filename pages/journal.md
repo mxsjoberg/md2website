@@ -44,6 +44,19 @@ print(result)
 
 ## Machine Learning Compilers
 
+**CUDA**
+
+CUDA kernel to add two arrays:
+
+```cpp
+__global__ void add(float* a, float* b, float* result, int size) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < size) {
+        result[idx] = a[idx] + b[idx];
+    }
+}
+```
+
 **TVMScript**
 
 [Blitz Course to TensorIR](https://tvm.apache.org/docs/tutorial/tensor_ir_blitz_course.html)
