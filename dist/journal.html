@@ -42,6 +42,13 @@ print(result)
 <li>output from instruction selection is pseudo-registers (temporaries) then register allocation</li>
 </ul>
 <h2><a name='Machine Learning Compilers' class='anchor'></a> <a href="#Machine Learning Compilers">Machine Learning Compilers</a></h2>
+<p><strong>pyopencl</strong></p>
+<p>Testing on Macbook Pro 2019 (AMD):</p>
+<pre><code class="language-bash">&gt;&gt;&gt; import pyopencl
+&gt;&gt;&gt; from pyopencl.tools import get_test_platforms_and_devices
+&gt;&gt;&gt; get_test_platforms_and_devices()
+[(&lt;pyopencl.Platform 'Apple' at 0x7fff0000&gt;, [&lt;pyopencl.Device 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz' on 'Apple' at 0xffffffff&gt;, &lt;pyopencl.Device 'Intel(R) UHD Graphics 630' on 'Apple' at 0x1024500&gt;, &lt;pyopencl.Device 'AMD Radeon Pro 5500M Compute Engine' on 'Apple' at 0x1021e00&gt;])]
+</code></pre>
 <p><strong>CUDA</strong></p>
 <p>CUDA kernel to add two arrays:</p>
 <pre><code class="language-cpp">__global__ void add(float* a, float* b, float* result, int size) {
