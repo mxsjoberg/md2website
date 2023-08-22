@@ -18,7 +18,17 @@ def sort_by_date_and_title(item):
 
 def write_header(file, title="Static website built with md2html", root=0):
     file.write("<!DOCTYPE html>\n")
-    file.write("<!-- This static website was built with github.com/mixmaester/md2html by Michael Sjöberg -->\n")
+    file.write("""
+<!--
+████████████████████████████████████████████
+█▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█─█─█─▄─▄─█▄─▀█▀─▄█▄─▄███
+██─█▄█─███─██─██▀▄██─▄─███─████─█▄█─███─██▀█
+▀▄▄▄▀▄▄▄▀▄▄▄▄▀▀▄▄▄▄▀▄▀▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▄▄▄▄▄▀
+This static website was built with
+github.com/mrsjoberg/md2html
+by Michael Sjöberg
+-->
+""")
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
