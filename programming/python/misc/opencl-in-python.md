@@ -2,6 +2,7 @@
 
 *August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
 
+OpenCL is used to run code on GPUs and other accelerators. It is a C API (so kernel code looks like C code) and `pyopencl` is a Python wrapper.
 
 ```python
 import pyopencl as cl
@@ -56,9 +57,7 @@ numpy_result = np.zeros(size).astype(np.float32)
 def run_numpy():
     global numpy_result
     numpy_result = a + b
-```
 
-```python
 print(timeit.timeit('run_numpy', globals=globals(), number=1))
 # 1.0561197996139526e-06
 print(timeit.timeit('run_opencl', globals=globals(), number=1))
