@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("████████████████████████████████████████████");
+    console.log("█▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█─█─█─▄─▄─█▄─▀█▀─▄█▄─▄███");
+    console.log("██─█▄█─███─██─██▀▄██─▄─███─████─█▄█─███─██▀█");
+    console.log("▀▄▄▄▀▄▄▄▀▄▄▄▄▀▀▄▄▄▄▀▄▀▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▄▄▄▄▄▀");
     // toggle invert
     var invert = document.querySelector("#invert");
     invert.addEventListener("click", function() {
