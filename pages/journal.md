@@ -6,7 +6,7 @@ This page contains my day-to-day unstructured and unfiltered notes. I might cons
 
 **pyopencl**
 
-Testing on Macbook Pro 2019 (AMD):
+Testing on Macbook Pro (2019):
 
 ```bash
 >>> import pyopencl
@@ -14,6 +14,8 @@ Testing on Macbook Pro 2019 (AMD):
 >>> get_test_platforms_and_devices()
 [(<pyopencl.Platform 'Apple' at 0x7fff0000>, [<pyopencl.Device 'Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz' on 'Apple' at 0xffffffff>, <pyopencl.Device 'Intel(R) UHD Graphics 630' on 'Apple' at 0x1024500>, <pyopencl.Device 'AMD Radeon Pro 5500M Compute Engine' on 'Apple' at 0x1021e00>])]
 ```
+
+OpenCL via `pyopencl` seems to work fine on Macbook using AMD [[Sobel Filter using OpenCL in Python](sobel-filter-using-opencl-in-python.html)].
 
 **CUDA**
 
@@ -32,7 +34,7 @@ __global__ void add(float* a, float* b, float* result, int size) {
 
 [Blitz Course to TensorIR](https://tvm.apache.org/docs/tutorial/tensor_ir_blitz_course.html)
 
-`mm_relu` [[programming](numpy-linear-relu.html)] implemented in `tvm.script` (TensorIR):
+`mm_relu` [[Numpy Linear Relu](numpy-linear-relu.html)] implemented in `tvm.script` (TensorIR):
 
 ```python
 # IRModule
