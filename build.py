@@ -26,7 +26,6 @@ def write_header(file, title="Static website built with md2html", root=0):
 ▀▄▄▄▀▄▄▄▀▄▄▄▄▀▀▄▄▄▄▀▄▀▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▄▄▄▄▄▀
 This static website was built with
 github.com/mrsjoberg/md2html
-by Michael Sjöberg
 -->
 """)
     file.write("<html lang='en'>")
