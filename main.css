@@ -14,7 +14,9 @@ html.invert nav {
 body {
   background: #161716;
   color: #D7D7D8;
-  font-family: 'Lucida Console', monospace;
+  font-size: 16px;
+  /*font-family: 'Lucida Console', monospace;*/
+  font-family: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace !important;
   margin: 0;
 }
 html.invert body {
@@ -46,7 +48,7 @@ pre {
   padding: 1rem;
 }
 code {
-  font-family: 'Lucida Console', monospace;
+  font-family: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace !important;
   font-size: 80%;
   color: #97979A;
 }
