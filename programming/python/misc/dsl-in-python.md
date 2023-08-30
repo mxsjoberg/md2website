@@ -2,33 +2,40 @@
 
 *August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
 
+A simple domain-specific language (DSL) in Python.
+
 ```python
 import sys
+
+"""
+simple domain-specific language
+    functions
+        add     : sum all arguments
+        sub     : subtract tail from head
+    types
+        int
+        float
+    arguments
+        out     : stdin to use previous output as input
+                : stdout to print
+"""
+program = """
+Module add 1 2 3 type=float out=stdin
+Module sub stdin 1 2 type=int out=stdout
+"""
 
 # Module definition
 class Module:
     # Add function
     def add(*args, **kwargs):
-        type_ = globals()['__builtins__'].getattr(globals()['__builtins__'], kwargs['type'])
+        type_ = globals()["__builtins__"].getattr(globals()["__builtins__"], kwargs["type"])
         return sum(map(type_, args))
     # Sub function
     def sub(*args, **kwargs):
-        type_ = globals()['__builtins__'].getattr(globals()['__builtins__'], kwargs['type'])
+        type_ = globals()["__builtins__"].getattr(globals()["__builtins__"], kwargs["type"])
         return float(args[0]) if type_ == 'float' else int(args[0]) - sum(map(type_, args[1:]))
 
-# simple domain-specific language
-#   add: sum all arguments
-#   sub: subtract tail from head
-program = """
-Module add 1 2 3 type=float
-Module sub 4 1 2 type=float
-"""
-
-lines = [line for line in program.splitlines() if line]
-# print(lines)
-# ['Module add 1 2 3 type=float', 'Module sub 4 1 2 type=float']
-
-def get_args(tokens):
+def get_args(tokens, STDIN):
     args = []
     kwargs = {}
     for token in tokens:
@@ -38,27 +45,43 @@ def get_args(tokens):
             kwargs[k] = v
         # args
         else:
-            args.append(token)
+            # replace stdin with previous output
+            if token == "stdin":
+                if STDIN != "": args.append(STDIN)
+                else: raise Exception("no previous output")
+            else:
+                args.append(token)
     return args, kwargs
 
-for line in lines:
-    tokens = line.split()
-    # print(tokens)
-    # ['Module', 'add', '1', '2', '3', 'type=float']
+def interpret(program):
+    STDIN = ""
+    STDOUT = ""
 
-    args, kwargs = get_args(tokens[2:])
+    lines = [line for line in program.splitlines() if line]
+    # print(lines)
+    # ['Module add 1 2 3 type=float out=stdin', 'Module sub stdin 1 2 type=int out=stdout']
 
-    # print(args, kwargs)
-    # ['1', '2', '3'] {'type': 'float'}
+    for line in lines:
+        tokens = line.split()
+        args, kwargs = get_args(tokens[2:], STDIN)
 
-    # print(getattr(sys.modules[__name__], tokens[0]))
-    # <class '__main__.Module'>
+        # print(args, kwargs)
+        # ['1', '2', '3'] {'type': 'float', 'out': 'stdin'}
+        # [6.0, '1', '2'] {'type': 'int', 'out': 'stdout'}
 
-    # print(getattr(getattr(sys.modules[__name__], tokens[0]), tokens[1]))
-    # <function Module.add at 0x1024545e0>
+        # print(getattr(sys.modules[__name__], tokens[0]))
+        # <class '__main__.Module'>
+        # <class '__main__.Module'>
 
-    result = getattr(getattr(sys.modules[__name__], tokens[0]), tokens[1])(*args, **kwargs)
-    print(result)
-    # 6.0
-    # 1.0
+        # print(getattr(getattr(sys.modules[__name__], tokens[0]), tokens[1]))
+        # <function Module.add at 0x1024545e0>
+        # <function Module.sub at 0x108ed9620>
+
+        result = getattr(getattr(sys.modules[__name__], tokens[0]), tokens[1])(*args, **kwargs)
+        if "out" in kwargs:
+            if kwargs["out"] == "stdin": STDIN = result
+            if kwargs["out"] == "stdout": print(result)
+
+interpret(program)
+# 3
 ```
