@@ -55,8 +55,6 @@ def get_args(tokens, STDIN):
 
 def interpret(program):
     STDIN = ""
-    STDOUT = ""
-
     lines = [line for line in program.splitlines() if line]
     # print(lines)
     # ['Module add 1 2 3 type=float out=stdin', 'Module sub stdin 1 2 type=int out=stdout']
