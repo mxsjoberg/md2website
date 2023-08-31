@@ -32,7 +32,11 @@ __global__ void add(float* a, float* b, float* result, int size) {
 
 **TVMScript**
 
-[Blitz Course to TensorIR](https://tvm.apache.org/docs/tutorial/tensor_ir_blitz_course.html)
+<mark>Ignore TVM. Too many dependencies and not easy to build. Development efforts will likely move elsewhere.</mark>
+
+<mark>Not even the Google Colab tutorial work.</mark>
+
+[Blitz Course to TensorIR](https://tvm.apache.org/docs/tutorial/tensor_ir_blitz_course.html) (not working?)
 
 `mm_relu` [[Numpy Linear Relu](numpy-linear-relu.html)] implemented in `tvm.script` (TensorIR):
 
