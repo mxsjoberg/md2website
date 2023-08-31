@@ -2,6 +2,25 @@
 
 This page contains my day-to-day unstructured and unfiltered notes. I might consolidate notes into posts later.
 
+## LLVM/MLIR
+
+[MLIR](https://mlir.llvm.org/)
+
+LLVM CPU-focused backend used by `clang` and `rustc` [[Code generation](https://rustc-dev-guide.rust-lang.org/backend/codegen.html)]:
+
+- LLVM input is LLVM IR [[AST to TAC to LLVM](ast-to-tac-to-llvm.html)] (LLVM IR is basically annotated assembly)
+
+MLIR have IR at different abstraction levels (dialects):
+
+- Tensor operators [[TOSA](https://mlir.llvm.org/docs/Dialects/TOSA/)]
+- linear algebra [[linalg](https://mlir.llvm.org/docs/Dialects/Linalg/)]
+- low-level control flow [[cf](https://mlir.llvm.org/docs/Dialects/ControlFlowDialect/)]
+
+In MLIR, multiple lowering passes incrementally translate higher-level IRs to lower-level IRs until reaching LLVM IR (or machine code).
+
+- optimization can be applied at different levels
+- higher-level dialects mainly useful to make it easier to write "optimization passes" (IR-rewriting modules, same as lowerings)
+
 ## Machine Learning Compilers
 
 **pyopencl**
