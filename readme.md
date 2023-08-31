@@ -1,6 +1,6 @@
 # md2html: static website builder
 
-[Example website (my personal)](https://michaelsjoberg.com/)
+[Example website built with md2html (my personal)](https://michaelsjoberg.com/)
 
 ## Usage
 
