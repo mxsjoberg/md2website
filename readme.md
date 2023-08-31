@@ -1,5 +1,7 @@
 # md2html: static website builder
 
+[Example website (my personal)](https://michaelsjoberg.com/)
+
 ## Usage
 
 Running `build.py` in root turns `.md` files in pages-folder into `.html` pages and any other folders into collections of pages (e.g. posts, articles, links).
