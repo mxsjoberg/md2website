@@ -2,6 +2,8 @@
 
 This page contains my day-to-day unstructured and unfiltered notes. I might consolidate notes into posts later.
 
+*August 31, 2023*
+
 ## LLVM/MLIR
 
 [MLIR](https://mlir.llvm.org/)
@@ -20,6 +22,31 @@ In MLIR, multiple lowering passes incrementally translate higher-level IRs to lo
 
 - optimization can be applied at different levels
 - higher-level dialects mainly useful to make it easier to write "optimization passes" (IR-rewriting modules, same as lowerings)
+
+**polyhedral optimizations**
+
+A polyhedral optimization is a loop transformation that maps a loop nest to another loop nest (nested loops). The name "polyhedral" comes from the fact that the loop nest can be represented as a polyhedron in the iteration space.
+
+- MLIR `linalg` dialect can be used for tiling optimizations (data locality, cache utilization)
+
+**MLIR operations**
+
+In MLIR, `@` is used to denote a function (operation) and `%` is used to denote a variable (value). All values are typed. `func` is dialect for function abstractions [[func](https://mlir.llvm.org/docs/Dialects/Func/)].
+
+```llvm
+func.func @main(%arg0: i32) -> i32 {
+    %0 = math.ctlz %arg0 : i32
+    func.return %0 : i32
+}
+```
+
+In the expression `math.ctlz`, `math` is a dialect [[math](https://mlir.llvm.org/docs/Dialects/MathOps/)] and `ctlz` is an operation to count leading zeros [[math.ctlz](https://mlir.llvm.org/docs/Dialects/MathOps/#mathctlz-mathcountleadingzerosop)]-
+
+- `%arg0` is the integer argument to count leading zeroes on and `%0` is the result
+- set of operations within braces is called "region"
+- multiple dialects can be used in a single program (progressively lowered to backend target)
+
+*Pre-August 31, 2023 and older*
 
 ## Machine Learning Compilers
 
