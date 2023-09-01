@@ -4,14 +4,12 @@ This page contains my day-to-day unstructured and unfiltered notes. I might cons
 
 ## Interpreter types
 
-Example source code to interpret:
+**AST interpreter**: interpret AST directly (tree walker)
 
 ```
 x = 15
 x + 10 - 5
 ```
-
-**AST interpreter**: interpret AST directly (tree walker)
 
 ```
 [program, [
@@ -26,7 +24,6 @@ x + 10 - 5
 **Bytecode interpreter** (VM): translate AST to bytecode then interpret bytecode
 
 - stack-based VM is stack of operands and operators with result is on top of stack (no registers)
-- register-based VM is virtual registers with result in accumulator register (virtual registers are mapped to real registers via register allocation)
 
 ```
 push    $15     ; push 15 to stack
@@ -36,6 +33,14 @@ push    $10     ; push 10 to stack
 add             ; add top two elements of stack (15 + 10)
 push    $5      ; push 5 to stack
 sub             ; subtract top two elements of stack (25 - 5)
+```
+
+- register-based VM is virtual registers with result in accumulator register (virtual registers are mapped to real registers via register allocation)
+
+```
+mov     r1, $15 ; move 15 to register 1
+add     r1, $10 ; add 10 to register 1 (15 + 10)
+sub     r1, $5  ; subtract 5 from register 1 (25 - 5)
 ```
 
 Using `dis` in Python:
@@ -59,6 +64,35 @@ dis.dis(f)
 #            14 LOAD_CONST               3 (5)
 #            16 BINARY_OP               10 (-)
 #            20 RETURN_VALUE
+```
+
+Compilers delegate interpretation via code generation (translate AST to IR or machine code):
+
+- ahead-of-time (AOT) compile to machine code then run
+- just-in-time (JIT) 
+
+Note that compiler frontend refers to everything before code generation (parsing, type checking, AST transformations). Compiler backend refers to code generation, IR optimizations, and target-specific optimizations. LLVM is a compiler backend (translate AST to LLVM IR instead of bytecode).
+
+Using `clang++ emit_llvm.cpp -S -emit-llvm` in C++ to generate LLVM IR:
+
+```cpp
+int main() {
+    int x = 15;
+    return x + 10 - 5;
+}
+```
+
+```llvm
+define i32 @main() #0 {
+    %1 = alloca i32, align 4
+    %2 = alloca i32, align 4
+    store i32 0, i32* %1, align 4
+    store i32 15, i32* %2, align 4
+    %3 = load i32, i32* %2, align 4
+    %4 = add nsw i32 %3, 10
+    %5 = sub nsw i32 %4, 5
+    ret i32 %5
+}
 ```
 
 ## LLVM/MLIR
