@@ -65,9 +65,10 @@ dis.dis(f)
 <p>Compilers delegate interpretation via code generation (translate AST to IR or machine code):</p>
 <ul>
 <li>ahead-of-time (AOT) compile to machine code then run</li>
-<li>just-in-time (JIT) </li>
+<li>just-in-time (JIT) generate machine code at runtime (e.g. cached functions for future calls)</li>
+<li>AST transformer (transpiler) translates AST to AST (e.g. translate Python to JavaScript)</li>
 </ul>
-<p>Note that compiler frontend refers to everything before code generation (parsing, type checking, AST transformations). Compiler backend refers to code generation, IR optimizations, and target-specific optimizations. LLVM is a compiler backend (translate AST to LLVM IR instead of bytecode).</p>
+<p>Note on terminology: compiler frontend refers to everything before code generation (parsing, type checking, AST transformations). Compiler backend refers to code generation, IR optimizations, and target-specific optimizations. LLVM is a compiler backend (translate AST to LLVM IR instead of bytecode).</p>
 <p>Using <code>clang++ emit_llvm.cpp -S -emit-llvm</code> in C++ to generate LLVM IR:</p>
 <pre><code class="language-cpp">int main() {
     int x = 15;
