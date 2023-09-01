@@ -2,7 +2,64 @@
 
 This page contains my day-to-day unstructured and unfiltered notes. I might consolidate notes into posts later.
 
-*August 31, 2023*
+## Interpreter types
+
+Example source code to interpret:
+
+```
+x = 15
+x + 10 - 5
+```
+
+**AST interpreter**: interpret AST directly (tree walker)
+
+```
+[program, [
+    [assign, x, 15],
+    [sub,
+        [add, x, 10],
+        5
+    ]
+]]
+```
+
+**Bytecode interpreter** (VM): translate AST to bytecode then interpret bytecode
+
+- stack-based VM is stack of operands and operators with result is on top of stack (no registers)
+- register-based VM is virtual registers with result in accumulator register (virtual registers are mapped to real registers via register allocation)
+
+```
+push    $15     ; push 15 to stack
+set     %0      ; set register 0 to top of stack (15 is popped from stack)
+push    %0      ; push register 0 to stack (15 is pushed to stack again)
+push    $10     ; push 10 to stack
+add             ; add top two elements of stack (15 + 10)
+push    $5      ; push 5 to stack
+sub             ; subtract top two elements of stack (25 - 5)
+```
+
+Using `dis` in Python:
+
+```python
+import dis
+
+def f(x):
+    x = 15
+    return x + 10 -5
+
+dis.dis(f)
+# 3           0 RESUME                   0
+
+# 4           2 LOAD_CONST               1 (15)
+#             4 STORE_FAST               0 (x)
+
+# 5           6 LOAD_FAST                0 (x)
+#             8 LOAD_CONST               2 (10)
+#            10 BINARY_OP                0 (+)
+#            14 LOAD_CONST               3 (5)
+#            16 BINARY_OP               10 (-)
+#            20 RETURN_VALUE
+```
 
 ## LLVM/MLIR
 
@@ -45,8 +102,6 @@ In the expression `math.ctlz`, `math` is a dialect [[math](https://mlir.llvm.org
 - `%arg0` is the integer argument to count leading zeroes on and `%0` is the result
 - set of operations within braces is called "region"
 - multiple dialects can be used in a single program (progressively lowered to backend target)
-
-*Pre-August 31, 2023 and older*
 
 ## Machine Learning Compilers
 
