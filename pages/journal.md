@@ -2,7 +2,7 @@
 
 This page contains my day-to-day unstructured and unfiltered notes. I might consolidate notes into posts later.
 
-## Interpreter types
+## Interpreters
 
 **AST interpreter**: interpret AST directly (tree walker)
 
@@ -19,6 +19,64 @@ x + 10 - 5
         5
     ]
 ]]
+```
+
+AST with type information transformed to simple array:
+
+```
+x = y + 15
+```
+
+```
+{
+    type: "assign",
+    left: {
+        type: "identifier",
+        value: "x",
+    },
+    right: {
+        type: "add",
+        left: {
+            type: "identifier",
+            value: "y",
+        },
+        right: {
+            type: "number",
+            value: 15,
+        },
+    },
+}
+```
+
+```
+[
+    "assign",
+    [
+        "identifier",
+        "x",
+    ],
+    [
+        "add",
+        [
+            "identifier",
+            "y",
+        ],
+        [
+            "number",
+            15,
+        ],
+    ],
+]
+```
+
+```
+["set", "x", ["+", "y", 10]]
+```
+
+Transform to S-expression (no need for parser):
+
+```
+(set x (+ y 10))
 ```
 
 **Bytecode interpreter** (VM): translate AST to bytecode then interpret bytecode
@@ -66,7 +124,7 @@ dis.dis(f)
 #            20 RETURN_VALUE
 ```
 
-Compilers delegate interpretation via code generation (translate AST to IR or machine code):
+Compilers delegates interpretation via code generation (translate AST to IR or machine code):
 
 - ahead-of-time (AOT) compile to machine code then run
 - just-in-time (JIT) generate machine code at runtime (e.g. cached functions for future calls)
