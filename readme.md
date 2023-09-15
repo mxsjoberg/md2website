@@ -4,7 +4,7 @@
 
 ## Usage
 
-Running `build.py` in root turns `.md` files in pages-folder into `.html` pages and any other folders into collections of pages (e.g. posts). Page navigation is generated based on `nav.md`.
+Running `build.py` in root turns `.md` files in pages-folder into `.html` pages and any other folders into collections of pages (e.g. posts). Page navigation is generated based on `nav.md`. Page anchors are automatically generated from `##` and `###` tags. Page index is injected right before the first `##` tag.
 
 ## Configuration
 
