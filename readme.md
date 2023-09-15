@@ -4,7 +4,7 @@
 
 ## Usage
 
-Running `build.py` in root turns `.md` files in pages-folder into `.html` pages and any other folders into collections of pages (e.g. posts, articles, links). Page navigation is generated based on `nav.md`.
+Running `build.py` in root turns `.md` files in pages-folder into `.html` pages and any other folders into collections of pages (e.g. posts). Page navigation is generated based on `nav.md`.
 
 ## Configuration
 
@@ -19,6 +19,8 @@ Running `build.py` in root turns `.md` files in pages-folder into `.html` pages 
 - `APP_NAME = "Michael Sjöberg"` - set app name for meta tags
 
 - `APP_THEME = "#161716"` - set app theme for meta tags
+
+- `SHOW_RECENT_POSTS = True` - set to `False` to hide recent posts on index page
 
 ## Watcher
 
