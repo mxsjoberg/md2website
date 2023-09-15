@@ -12,6 +12,10 @@ AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "My projects, posts, and programming notes."
 APP_NAME = "Michael Sjöberg"
 APP_THEME = "#161716"
+SHOW_RECENT_POSTS = True
+
+# for listing all posts on index page
+GLOBAL_POSTS = [] # [ { title, date, url } ]
 
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
@@ -19,14 +23,14 @@ def sort_by_date_and_title(item):
 def write_header(file, title="Static website built with md2website", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
-<!--
-████████████████████████████████████████████████████████████████
-█▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█▄─█▀▀▀█─▄█▄─▄▄─█▄─▄─▀█─▄▄▄▄█▄─▄█─▄─▄─█▄─▄▄─█
-██─█▄█─███─██─██▀▄███─█─█─█─███─▄█▀██─▄─▀█▄▄▄▄─██─████─████─▄█▀█
-█▄▄▄█▄▄▄█▄▄▄▄██▄▄▄▄██▄▄▄█▄▄▄██▄▄▄▄▄█▄▄▄▄██▄▄▄▄▄█▄▄▄██▄▄▄██▄▄▄▄▄█
-This static website was built by github.com/mrsjoberg/md2website
--->
-""")
+    <!--
+    ████████████████████████████████████████████████████████████████
+    █▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█▄─█▀▀▀█─▄█▄─▄▄─█▄─▄─▀█─▄▄▄▄█▄─▄█─▄─▄─█▄─▄▄─█
+    ██─█▄█─███─██─██▀▄███─█─█─█─███─▄█▀██─▄─▀█▄▄▄▄─██─████─████─▄█▀█
+    █▄▄▄█▄▄▄█▄▄▄▄██▄▄▄▄██▄▄▄█▄▄▄██▄▄▄▄▄█▄▄▄▄██▄▄▄▄▄█▄▄▄██▄▄▄██▄▄▄▄▄█
+    This static website was built by github.com/mrsjoberg/md2website
+    -->
+    """.replace("    ", ""))
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
@@ -55,9 +59,10 @@ This static website was built by github.com/mrsjoberg/md2website
     # js
     # file.write(f"<script src='{'../'*root}main.min.js'></script>")
     file.write("</head>")
+    # -------------------------------------------
     file.write("<body>")
     # fixed nav
-    file.write("<nav>")
+    file.write("<div class='nav'>")
     try:
         nav_file = open("nav.md", "r")
         nav_content = nav_file.read()
@@ -68,7 +73,7 @@ This static website was built by github.com/mrsjoberg/md2website
             raise
     except:
         file.write(f"<p><a href='{'../'*root}index.html'>home</a></p>")
-    file.write("</nav>")
+    file.write("</div>")
     file.write("<div class='page'>")
 
 def write_footer(file):
@@ -120,31 +125,14 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
 # for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
 #     os.system(f"cp {asset} {DIST_PATH}/{asset}")
 
-# for each md file in pages, create html page
-for root, dirs, files in os.walk("pages"):
-    for file in files:
-        if file.split(".")[1] == "md":
-            file_name = file.split(".")[0]
-            # create page
-            with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
-                file = open(f"{root}/{file}", "r")
-                file_content = file.read()
-                title = file_content.split("\n")[0].split("# ")[1]
-                # generate anchors
-                file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
-                # write
-                write_header(tmp_file, title)
-                tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
-                write_footer(tmp_file)
-                file.close()
-
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
     if "." not in dir_ and dir_ != "dist" and dir_ != "pages":
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
-            posts_lst = []
-            posts_dict = {}
+            posts_lst = [] # [ { title, date, url } ]
+            posts_dict = {} # { category: { subcategory: [ { title, date, url } ] } }
+            # for each md file in dir_, create html page and append to posts_lst or posts_dict
             for root, dirs, posts in os.walk(dir_):
                 for post in posts:
                     if post.split(".")[1] == "md":
@@ -179,6 +167,8 @@ for dir_ in os.listdir("."):
                             else:
                                 # append to posts_lst
                                 posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                            # finally, append to global
+                            GLOBAL_POSTS.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                             # write
                             write_header(tmp_file, title=title)
                             tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
@@ -196,12 +186,6 @@ for dir_ in os.listdir("."):
                     current_date = post['date'].year
                     dir_page.write("<ul>")
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-            # write links
-            # if len(posts_dict.keys()) > 0:
-            #     dir_page.write("<p>")
-            #     for category in posts_dict.keys():
-            #         dir_page.write(f"<a href='#{category}'>{category.title()}</a> ")
-            #     dir_page.write("</p>")
             # create list with categories for ordering
             category_list = sorted(posts_dict.keys())
             # list newest posts on top
@@ -228,3 +212,30 @@ for dir_ in os.listdir("."):
                             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
             write_footer(dir_page)
+
+# for each md file in pages, create html page
+for root, dirs, files in os.walk("pages"):
+    for file in files:
+        if file.split(".")[1] == "md":
+            file_name = file.split(".")[0]
+            # create page
+            with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
+                file = open(f"{root}/{file}", "r")
+                file_content = file.read()
+                title = file_content.split("\n")[0].split("# ")[1]
+                # generate anchors
+                file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
+                # write
+                write_header(tmp_file, title)
+                tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
+                # list recent posts
+                if SHOW_RECENT_POSTS and file_name == "index":
+                    # tmp_file.write("<h1>Recent</h1>")
+                    # list newest posts on top
+                    sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
+                    for post in sorted_global_posts:
+                        # if date is current or last month
+                        if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                            tmp_file.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
+                write_footer(tmp_file)
+                file.close()
