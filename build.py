@@ -6,7 +6,7 @@ import shutil
 import markdown
 from datetime import datetime
 
-DIST_PATH = "dist"
+DIST_PATH = "../michaelsjoberg.com/dist"
 ASSETS = ["main.css", "main.js", "highlight.min.js", "fav.png"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "My projects, posts, and programming notes."
