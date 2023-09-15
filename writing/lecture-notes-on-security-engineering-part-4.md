@@ -2,7 +2,7 @@
 
 *August 2022*
 
-## <a name="1" class="anchor"></a> [Stack layout](#1)
+## Stack layout
 
 The stack grows towards lower memory addresses. The stack pointer `%esp` points to top of stack, which is the lowest valid address and last pushed to stack.
 
@@ -46,7 +46,7 @@ Layout after `pop %eax` to decrement pointer and store value in `%eax` (note tha
 | ------ | - |
 | `%eax` | f |
 
-## <a name="2" class="anchor"></a> [Stack frames](#2)
+## Stack frames
 
 A stack is composed of frames that are pushed to the stack on function calls. The address to the current frame is stored in frame pointer `%ebp`.
 
@@ -54,7 +54,7 @@ A frame contains function parameters, which are pushed to stack by caller, retur
 
 The epilogue is executed by the callee to deallocate local variables, `%esp = %ebp`, save result in some register, such as `%eax`, restore frame pointer of caller function, and then resume execution from saved return address.
 
-### <a name="2.1" class="anchor"></a> [Function calls and stack layout](#2.1)
+### Function calls and stack layout
 
 ```c
 int convert(char *str) {
@@ -97,7 +97,7 @@ Frame pushed by `convert`.
 | `result` | `0xbfff7fdc` |
 | paramater to `atoi` | `0xbfff7fd8` |
 
-### <a name="2.2" class="anchor"></a> [Function calls in assembly](#2.2)
+### Function calls in assembly
 
 Below is a function call and its assembly code. The assembly code is generated with [Compiler Explorer](https://godbolt.org/) using `x86-64 gcc 4.1.2` and flag `-m32` for 32-bit, AT&T syntax).
 
@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
 
 Generated assembly instructions for `func`, `leave` is same as `mov %ebp, %esp` followed by `pop %ebp`, operand size suffix is omitted for clarity.
     
-```x86asm
+```asm
 .LCO
     .string "argument: %d;\n"
 
@@ -136,7 +136,7 @@ func:
 
 Generated assembly instructions for `main`.
 
-```x86asm
+```asm
 main:
     ; int main(int argc, char **argv) {
     lea     4(%esp), %ecx
@@ -159,17 +159,17 @@ main:
     ret
 ```
 
-## <a name="3" class="anchor"></a> [Stack-based overflow](#3)
+## Stack-based overflow
 
 A stack overflow, or stack smashing, is a special case of buffer overflow on the stack or heap, where data can overflow allocated buffer and overwrite other memory locations, such as return address.
 
-### <a name="3.1" class="anchor"></a> [NOP slide](#3.1)
+### NOP slide
 
 A [NOP slide](https://en.wikipedia.org/wiki/NOP_slide), or `nop`-sled, is a sequence of do-nothing instructions used to fill stack and eventually reach a jump to some injected shellcode.
 
 Shellcode is any code used to start a shell, such as `execve("/bin/sh")`.
 
-### <a name="3.2" class="anchor"></a> [Stack-based buffer overflow attacks](#3.2)
+### Stack-based buffer overflow attacks
 
 Below is a program vulnerable to a buffer overflow attack using `nop`-sled and injected shellcode.
 

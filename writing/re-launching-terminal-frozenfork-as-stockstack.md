@@ -1,4 +1,4 @@
-# Terminal reborn as Stockstack
+# Re-launching terminal.frozenfork as Stockstack
 
 *July 2023*
 

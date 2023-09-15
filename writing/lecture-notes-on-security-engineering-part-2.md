@@ -2,7 +2,7 @@
 
 *August 2022*
 
-## <a name="1" class="anchor"></a> [File permissions](#1)
+## File permissions
 
 In UNIX-based systems, each process is assigned real UID/GID (user ID, group ID), which is the user initiating or owning the process, effective UID/GID, or EUID, which is used to determine permissions, and saved UID/GID, or SUID, which is used to drop and gain privileges.
 
@@ -17,7 +17,7 @@ File permissions are set using command, such as `-|rwx|r-x|r-x root root <file>`
 
 The kernel will check EUID when the user is trying to write to file (root is most privileged user), and changing EUID with `chmod 4755 <file>`, which replaces ``rwx`` with ``rws`` (set-UID), makes the file run with the privileges of the file owner instead of the user.
 
-## <a name="2" class="anchor"></a> [Address space](#2)
+## Address space
 
 An address space is the range of addresses available to some process.
 
@@ -50,7 +50,7 @@ Below are the locations in buffer (address space is based on Linux legacy VM lay
 | **stack**, growing from higher to lower addresses | `*p = 42` (write 42 in address in heap) |
 | | **kernel space** |
 
-## <a name="3" class="anchor"></a> [Application-level vulnerabilities](#3)
+## Application-level vulnerabilities
 
 Application vulnerabilities are often due to overprivileged programs, such as mobile applications asking for all permissions, programs are read-write but should be read-only, or caused by unexpected inputs or errors:
 
@@ -61,13 +61,13 @@ A typical local attack exploit vulnerabilities in SUID-root programs to obtain r
 
 A remote attack is more difficult to perform but more powerful as there no need to require prior access to system.
 
-### <a name="3.1" class="anchor"></a> [Environment attacks](#3.1)
+### Environment attacks
 
 An environment attack can occur when applications invoke external commands to carry out tasks, such as using `system()` to execute some command, `popen()` to open a process, or `execlp()` and `execvp()` to use the `PATH` environment variable to locate applications.
 
 A `PATH` substitution attack use commands without a complete path, where attacker modifies the `PATH` variable to run a script, or the `HOME` variable to control execution of commands, such as accessing files.
 
-### <a name="3.2" class="anchor"></a> [Input argument attacks](#3.2)
+### Input argument attacks
 
 An input argument attack can occur when applications are supplied arguments via some input (command-line, web forms). The user-provided input can be used to inject commands such as `./program "; rm -rf /"`, which would call `program` and then delete everything. It is also possible to traverse directories, such as `..`-attack, overflow buffer, and perform format string attacks.
 
@@ -76,7 +76,7 @@ To avoid bad inputs:
 - always check size when copied into buffers, use library functions such as `snprintf` to limit size to `n`
 - always sanitize user-provided input, such as excluding known bad inputs, defining allowed input, or escaping special characters
 
-### <a name="3.3" class="anchor"></a> [File access attacks](#3.3)
+### File access attacks
 
 A file access attack can occur when applications create or use files, so always check that file exist and that it is not a symbolic link.
 
@@ -98,7 +98,7 @@ if (access("file", W_OK) == 0) {
 }
 ```
 
-### <a name="3.4" class="anchor"></a> [Buffer overflow attacks](#3.4)
+### Buffer overflow attacks
 
 A buffer overflow attack can occur when applications try to store more elements in a buffer, which is a set of memory locations, than it can contain. Applications written in Java, Python, and C# are less likely to suffer from buffer overflow attacks as they have built-in overflow detection, but C and C++ do not.
 

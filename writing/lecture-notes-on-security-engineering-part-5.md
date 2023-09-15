@@ -2,7 +2,7 @@
 
 *September 2022*
 
-## <a name="1" class="anchor"></a> [Hardware and software solutions](#1)
+## Hardware and software solutions
 
 A system design involves both hardware and software, where software is easy to change, which is good for functionality but bad for security and generally bad for performance, and hardware is hard to change, which is bad for functionality but good for security:
 
@@ -14,7 +14,7 @@ A secure system design favor simplicity, such as fail-safe defaults (key lengths
 
 Layers of security can be used to further secure systems, such as firewall, encrypting data at rest, using type-safe programming languages, and logging relevant operational information.
 
-### <a name="1.1" class="anchor"></a> [Tainted flow analysis](#1.1)
+### Tainted flow analysis
 
 Trusting unvalidated inputs is the root cause of many attacks, such as a program getting unsafe input, or tainted data, from a user and assuming it is safe, or untainted:
 
@@ -45,7 +45,7 @@ tainted int a = /* ... */ ;
 f(a); /* function assume untainted, and input is tainted, so illegal flow */
 ```
 
-### <a name="1.2" class="anchor"></a> [Tracking tainted data in programs](#1.2)
+### Tracking tainted data in programs
 
 Below is an example tainted flow analysis on vulnerable program at each line of execution (`tainted` label can be introduced as type or annotation).
     
@@ -61,7 +61,7 @@ void copy(tainted char *src, untainted char *dst, int len) {
 }
 ```
 
-## <a name="2" class="anchor"></a> [Preventing buffer overflows](#2)
+## Preventing buffer overflows
 
 Buffer overflow attacks can sometimes be prevented using programming languages with boundary checking, such as Java or Python, or contained using virtualization. Here are a few other common methods:
 

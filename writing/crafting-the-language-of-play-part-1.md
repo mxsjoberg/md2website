@@ -4,18 +4,7 @@
 
 This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available [here](https://github.com/mrsjoberg/playcode).
 
-- [What is PlayCode?](#what-is-playcode)
-    - [Implementation language and method](#implementation-language-and-method)
-- [Operator precedence](#operator-precedence)
-- [Lexer](#lexer)
-- [Parser](#parser)
-    - [Program](#program)
-    - [Expression](#expression)
-    - [Term](#term)
-    - [Factor](#factor)
-- [Interpreter](#interpreter)
-
-## <a name="what-is-playcode" class="anchor"></a> [What is PlayCode?](#what-is-playcode)
+## What is PlayCode?
 
 The general idea behind PlayCode is to make a playful programmig language and to function as a testbed for experimental programming language features. It is not really meant to be used for anything serious, but rather as a playground for new ideas. So, the implementation need to be easy to manage, change, and build on.
 
@@ -61,7 +50,7 @@ print x -> 2
 
 There are two ways to include comments, `--` and `->`, which also can be used as helpers in source for more readable code.
 
-### <a name="implementation-language-and-method" class="anchor"></a> [Implementation language and method](#implementation-language-and-method)
+### Implementation language and method
 
 I started working on PlayCode before writing this post and managed to implement a basic but working structure for lexer and parser in C++ (mainly to refresh my knowledge of C++ programming). The code is available [here](https://github.com/mrsjoberg/playcode/blob/main/fpc.cpp). However, having to refresh it in the first place is probably due to its insane complexity. It is not a very fun language to work with, so decided to start over in Python. I could always rewrite in C++, C, or something like Zig later if performance is important. 
 
@@ -69,7 +58,7 @@ Python is my go-to language to express ideas, and since Python 3.4+ there is sup
 
 The method is to start with a subset of the language as per [an incremental approach](http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf). Not necessary the smallest subset or adding a single operator at a time, but managable pieces. This means there will be a working interpreter in each post. I will probably look at code generation later, but interpreting is good enough to get started with exploring programming language features.
 
-## <a name="operator-precedence" class="anchor"></a> [Operator precedence](#operator-precedence)
+## Operator precedence
 
 In this post, the goal is to implement this subset:
 
@@ -132,7 +121,7 @@ print 4 + 2 -> 6
 print 1 + (2 * 4) - (6 / 2) -> 6
 ```
 
-## <a name="lexer" class="anchor"></a> [Lexer](#lexer)
+## Lexer
 
 Building a lexer is fairly straightforward. It is just the usual read-each-char in source routine and match with defined tokens.
 
@@ -254,7 +243,7 @@ for token in tokens: print(token)
 # Token(TokenType.RPAR, ')')
 ```
 
-## <a name="parser" class="anchor"></a> [Parser](#parser)
+## Parser
 
 The parser is predictive and recursive descent. It starts with `parse`, which takes the flat list of tokens and returns a nested list of tokens (representing a tree structure for a valid program).
 
@@ -273,7 +262,7 @@ def parse(tokens):
     return tree
 ```
 
-### <a name="program" class="anchor"></a> [Program](#program)
+### Program
 
 The program production rule is the starting point in the grammar, so `parse_program` is the first non-terminal called. It matches the current token with `PRINT`, which is currently the only acceptable statement in the language. It then calls `parse_expression` to parse the expression as per the grammar rule.
 
@@ -296,7 +285,7 @@ def parse_program(tokens, current_token_index):
     return program, current_token_index
 ```
 
-### <a name="expression" class="anchor"></a> [Expression](#expression)
+### Expression
 
 The expression, term, and factor rules are primarily there to enforce operator precedence, where the expression rule is the highest precedence, followed by term, and then factor.
 
@@ -331,7 +320,7 @@ def parse_expression(tokens, current_token_index):
     return expression, current_token_index
 ```
 
-### <a name="term" class="anchor"></a> [Term](#term)
+### Term
 
 The term rule is similar to the expression rule but matches `MULTIPLY` or `DIVIDE` instead of `PLUS` or `MINUS`. It first calls `parse_factor`, which is non-optional, then the optional part zero or more times.
 
@@ -364,7 +353,7 @@ def parse_term(tokens, current_token_index):
     return term, current_token_index
 ```
 
-### <a name="factor" class="anchor"></a> [Factor](#factor)
+### Factor
 
 The factor rule has the lowest precedence and matches either an `INTEGER` or `LPAR`, which indicates the start of another expression. If `LPAR` is matched, then it calls `parse_expression` and the process starts all over again. It finally matches `RPAR` or raises an error (no closing parantheses).
 
@@ -426,7 +415,7 @@ print_tree(tree)
 
 ```
 
-## <a name="interpreter" class="anchor"></a> [Interpreter](#interpreter)
+## Interpreter
 
 The interpreter is the final step. It takes the tree, recursively evaluates it, and returns the result. Nothing more than that as of yet. It works by matching the left-most node, which should be a keyword, operator, or number, and evaluating the right (children).
 
@@ -473,4 +462,3 @@ interpret(tree)
 ```
 
 It prints `6`, which is the correct behaviour.
-

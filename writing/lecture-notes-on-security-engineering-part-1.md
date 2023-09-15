@@ -4,26 +4,13 @@
 
 This is the first post in a series of lecture notes on security engineering, based on the postgraduate-level course with the same name at King's College London. These notes cover most of the topics, but not as deep and without assignments, and are primarily intended as a reference for myself.
 
-- [Computer programs](#computer-programs)
-    - [Compilation](#compilation)
-    - [Tools](#tools)
-- [Computer organisation](#computer-organisation)
-    - [CPU](#cpu)
-- [Cache memory](#cache-memory)
-- [Operating system](#operating-system)
-    - [Shell](#shell)
-    - [System calls](#system-calls)
-    - [Processes](#processes)
-    - [Virtual memory](#virtual-memory)
-    - [Files](#files)
-
-## <a name="computer-programs" class="anchor"></a> [Computer programs](#computer-programs)
+## Computer programs
 
 A computer program is a sequence of bits, and organized as 8-bit bytes, where one byte is 8-bits and each byte represent some text character (ASCII standard). Most programs are developed in a high-level programming language, then compiled, or translated, into an object file, which is executed by a process, and finally terminated.
 
 An object file contains application and libraries, such as program code in binary format, relocation information, which are things that need to be fixed once loaded into memory, symbol information as defined by object or imported, and optional debugging information. Interpreted languages are typically translated into an intermediate format.
 
-### <a name="compilation" class="anchor"></a> [Compilation](#compilation)
+### Compilation
 
 
 ```c
@@ -44,7 +31,7 @@ The compilation process (note that most program code in this post refer to progr
 
 - **compiler**, translates the intermediate file into an assembly program with `.s` suffix, where each line describe one instruction, use flag `-S` to generate assembly program (note that below assembly is generated on 64-bit mac, operand size suffix and special directives for assembler is omitted for clarity)
 
-```x86asm
+```asm
 .section __TEXT
     .globl  _main
 
@@ -71,7 +58,7 @@ _main:
 
 A linker is used to resolve references to external objects, such as variables and functions (e.g. `printf`). Static linking is performed at compile-time and dynamic linking is performed at run-time.
 
-### <a name="tools" class="anchor"></a> [Tools](#tools)
+### Tools
 
 Useful tools for working with programs from a systems perspective:
 
@@ -83,7 +70,7 @@ Useful tools for working with programs from a systems perspective:
 - `hexdump` to display content in binary file
 - `/proc/pid/maps` to show memory layout for process
 
-## <a name="computer-organisation" class="anchor"></a> [Computer organisation](#computer-organisation)
+## Computer organisation
 
 A modern computer is organized as an assemble of buses, I/O devices, main memory, and processor:
 
@@ -95,7 +82,7 @@ A modern computer is organized as an assemble of buses, I/O devices, main memory
 - main memory is a temporary storage device that holds program and data when executed by the processor, physically, it is a collection of dynamic random-access memory (DRAM) chips, and logically, it is a linear array of bytes with its own unique address (array index)
 - processor, or central processing unit (CPU), is the engine that interprets and executes the machine-level instructions stored in the main memory
 
-### <a name="cpu" class="anchor"></a> [CPU](#cpu)
+### CPU
 
 The CPU has a word size storage device (register) called program counter (PC) that points at some instruction in main memory. Instructions are executed in a strict sequence, which is to read and interpret the instruction as pointed to by program counter, perform operation (as per the instruction), and then update the counter to point to next instruction (note that each instruction has its own unique address).
 
@@ -106,7 +93,7 @@ An operation, as performed by the CPU, use main memory, register file, which is 
 - **operate**, copy content of two registers to ALU, perform arithmetic operation on the two words and store result in register, overwriting previous content in register
 - **jump**, extract word from instruction and copy that word into counter, overwriting previous value in counter
 
-## <a name="cache-memory" class="anchor"></a> [Cache memory](#cache-memory)
+## Cache memory
 
 A cache memory is memory devices at different levels of accessibility, or sizes, where smaller sizes are faster. The different levels of cache memory is typically used to make programs run faster.
 
@@ -122,11 +109,11 @@ A cache memory is memory devices at different levels of accessibility, or sizes,
 
 The different levels of memory is also referred to as [memory hierarchy](https://en.wikipedia.org/wiki/Memory_hierarchy), and is often measured in response time. Each level act as cache memory for the level below, and top-most levels are reserved for information that the processor might need in the near future.
 
-## <a name="operating-systems" class="anchor"></a> [Operating systems](#operating-systems)
+## Operating systems
 
 An operating system provides services to programs. The services are used via abstractions to make it easier to manipulate low-level devices and protect the hardware.
 
-### <a name="shell" class="anchor"></a> [Shell](#shell)
+### Shell
 
 A shell provides an interface to the operating system via the command-line (or library functions):
 
@@ -149,19 +136,19 @@ int main() {
 
 For more shell commands, see [List of Unix commands](https://en.wikipedia.org/wiki/List_of_Unix_commands).
 
-### <a name="system-calls" class="anchor"></a> [System calls](#system-calls)
+### System calls
 
 A system call is a function executed by the operating system, such as accessing hard drive and creating processes. System calls use shell commands to implement functions and used by programs to request services from the operating system.
 
 In the C programming language, system commands such as `write`, is wrapped in some other function, such as `printf`.
 
-### <a name="processes" class="anchor"></a> [Processes](#processes)
+### Processes
 
 A process is an abstraction for processor, main memory, or I/O devices, and represent a running program. Its context is the state information the process needs to run. The processor switch between multiple running programs such as shell and some program using context switching, which saves the state of current process and restores the state of some new process. A thread is multiple execution units within a process with access to the same code and global data. 
 
 A **kernel** is a collection of code and data structures that is always in memory. It is used to manage all processes and called using system call instructions, or `syscall`, which transfers control to the kernel when the program need some action done by the operating system, such as read or write to file.
 
-### <a name="virtual-memory" class="anchor"></a> [Virtual memory](#virtual-memory)
+### Virtual memory
 
 A virtual memory is an abstraction for main memory and local disks. It provides each program with a virtual address space to make it seem as programs have exclusive use of memory:
 
@@ -171,6 +158,6 @@ A virtual memory is an abstraction for main memory and local disks. It provides 
 - **stack** is at top of user-section of the virtual address space and used by compiler to implement function calls, it expands and contracts its size dynamically at run-time so that stack grows with each function call and contracts on return
 - **kernel virtual memory** is at top of the virtual memory space and reserved for kernel, programs must call kernel to read or write in this space
 
-### <a name="files" class="anchor"></a> [Files](#files)
+### Files
 
 A file is an abstraction for I/O devices and provides a uniform view of devices. Most input and output in a system is reading and writing to files.
