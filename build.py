@@ -98,6 +98,22 @@ def write_footer(file):
     file.write("</body>")
     file.write("</html>")
 
+# helpers
+def generate_and_inject_index(file_content):
+    # generate anchors
+    file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
+    # find anchors and generate index
+    index = []
+    for line in file_content.split("\n"):
+        if line.startswith("## "):
+            index.append("- " + line.split("## ")[1].split("</a>")[1].strip())
+        if line.startswith("### "):
+            index.append("    - " + line.split("### ")[1].split("</a>")[1].strip())
+    if len(index) > 0:
+        # inject index as list just before first line starting with ##
+        file_content = re.sub(r"## (.*)", r"\n".join([f"{item}" for item in index]) + r"\n## \1", file_content, count=1)
+    return file_content
+
 # create dist folder
 if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
 os.mkdir(DIST_PATH)
@@ -176,6 +192,8 @@ for dir_ in os.listdir("."):
                                 posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                             # finally, append to global
                             GLOBAL_POSTS.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                            # generate anchors and inject index
+                            post_content = generate_and_inject_index(post_content)
                             # write
                             write_header(tmp_file, title=title)
                             html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
@@ -248,8 +266,8 @@ for root, dirs, files in os.walk("pages"):
                 file = open(f"{root}/{file}", "r")
                 file_content = file.read()
                 title = file_content.split("\n")[0].split("# ")[1]
-                # generate anchors
-                file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
+                # generate anchors and inject index
+                file_content = generate_and_inject_index(file_content)
                 # write
                 write_header(tmp_file, title)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
