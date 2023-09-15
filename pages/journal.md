@@ -9,7 +9,6 @@ Note on class-based OOP vs prototype-based OOP:
 - class-based OOP: class is blueprint for creating objects (instances)
 - prototype-based OOP: object serves as prototype for creating other objects (instances)
 
-
 **AST interpreter**: interpret AST directly (tree walker)
 
 ```
