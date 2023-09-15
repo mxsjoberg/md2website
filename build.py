@@ -5,14 +5,20 @@ import re
 import shutil
 import markdown
 from datetime import datetime
+# syntax highlight
+from bs4 import BeautifulSoup
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
 
 DIST_PATH = "../michaelsjoberg.com/dist"
-ASSETS = ["main.css", "main.js", "highlight.min.js", "fav.png"]
+ASSETS = ["main.css", "main.js"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "My projects, posts, and programming notes."
 APP_NAME = "Michael Sjöberg"
 APP_THEME = "#161716"
 SHOW_RECENT_POSTS = True
+NO_JS = False 
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
@@ -82,12 +88,13 @@ def write_footer(file):
     file.write("<p>[<a id='invert'>light|dark</a>]</p>")
     file.write(f"<p class='small'>This static website was built by <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
-    file.write("<script>")
-    js_file = open(f"{DIST_PATH}/main.min.js", "r")
-    js_content = js_file.read()
-    js_file.close()
-    file.write(js_content)
-    file.write("</script>")
+    if not NO_JS:
+        file.write("<script>")
+        js_file = open(f"{DIST_PATH}/main.min.js", "r")
+        js_content = js_file.read()
+        js_file.close()
+        file.write(js_content)
+        file.write("</script>")
     file.write("</body>")
     file.write("</html>")
 
@@ -171,7 +178,24 @@ for dir_ in os.listdir("."):
                             GLOBAL_POSTS.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                             # write
                             write_header(tmp_file, title=title)
-                            tmp_file.write(markdown.markdown(post_content, extensions=["fenced_code", "tables"]))
+                            html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
+                            # syntax highlight
+                            soup = BeautifulSoup(html_content, "html.parser")
+                            code_blocks = soup.find_all("code")
+                            if code_blocks:
+                                for code_block in code_blocks:
+                                    try:
+                                        code_content = code_block.get_text()
+                                        code_language = code_block.get('class')[0].split("-")[1]
+                                        lexer = get_lexer_by_name(code_language, stripall=True)
+                                        formatter = HtmlFormatter(linenos=False, cssclass="highlight")
+                                        highlighted_code = highlight(code_content, lexer, formatter)
+                                        code_block.parent.unwrap()
+                                        code_block.replace_with(BeautifulSoup(highlighted_code, "html.parser"))
+                                    except:
+                                        pass
+                                html_content = str(soup)
+                            tmp_file.write(html_content)
                             write_footer(tmp_file)
                             post_file.close()
             # sort posts_lst by date then by name
