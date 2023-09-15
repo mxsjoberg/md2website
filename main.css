@@ -1,8 +1,11 @@
 html.invert {
   filter: invert(1);
 }
-nav {
+nav,
+.nav {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   max-width: 640px;
   padding: 0 2rem;
@@ -23,7 +26,8 @@ html.invert body {
 }
 div.page {
   max-width: 640px;
-  padding: 4rem 2rem;
+  padding: 1rem 2rem;
+  margin-top: 51px;
 }
 h1 {
   font-size: 1.5em;
@@ -62,7 +66,6 @@ blockquote {
 #footer p {
   max-width: 640px;
   padding: 0 2rem;
-  margin-top: 0;
 }
 /* code highlight */
 .hljs-meta,
