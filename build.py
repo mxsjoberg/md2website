@@ -34,7 +34,7 @@ def write_header(file, title="Static website built with md2website", root=0):
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
-    file.write("<link rel='icon' href=''>")
+    file.write("<link rel='icon' href='data:,'>")
     # title
     file.write(f"<title>{title}</title>")
     # meta
