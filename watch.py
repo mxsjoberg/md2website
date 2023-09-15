@@ -8,7 +8,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from livereload import Server
 
-DIST_PATH = "dist"
+DIST_PATH = "../michaelsjoberg.com/dist"
 DIR_TO_WATCH = "pages"
 COMMAND_TO_RUN = "python3 build.py"
 
