@@ -1,4 +1,4 @@
-# md2html: static website builder
+# md2website: markdown to static website builder
 
 import os
 import re
@@ -16,16 +16,15 @@ APP_THEME = "#161716"
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
 
-def write_header(file, title="Static website built with md2html", root=0):
+def write_header(file, title="Static website built with md2website", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
 <!--
-████████████████████████████████████████████
-█▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█─█─█─▄─▄─█▄─▀█▀─▄█▄─▄███
-██─█▄█─███─██─██▀▄██─▄─███─████─█▄█─███─██▀█
-▀▄▄▄▀▄▄▄▀▄▄▄▄▀▀▄▄▄▄▀▄▀▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▄▄▄▄▄▀
-This static website was built with
-github.com/mrsjoberg/md2html
+████████████████████████████████████████████████████████████████
+█▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█▄─█▀▀▀█─▄█▄─▄▄─█▄─▄─▀█─▄▄▄▄█▄─▄█─▄─▄─█▄─▄▄─█
+██─█▄█─███─██─██▀▄███─█─█─█─███─▄█▀██─▄─▀█▄▄▄▄─██─████─████─▄█▀█
+█▄▄▄█▄▄▄█▄▄▄▄██▄▄▄▄██▄▄▄█▄▄▄██▄▄▄▄▄█▄▄▄▄██▄▄▄▄▄█▄▄▄██▄▄▄██▄▄▄▄▄█
+This static website was built by github.com/mrsjoberg/md2website
 -->
 """)
     file.write("<html lang='en'>")
@@ -76,7 +75,7 @@ def write_footer(file):
     file.write("</div>")
     file.write("<div id='footer'>")
     file.write("<p>[<a id='invert'>light|dark</a>]</p>")
-    file.write(f"<p class='small'>DOM loaded in <span id='dom_time'></span>, page loaded in <span id='load_time'></span>. <a href='https://github.com/mixmaester/md2html'>Static website built with md2html</a> on {datetime.now().strftime('%B %d, %Y')}</p>")
+    file.write(f"<p class='small'>This static website was built by <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
     file.write("<script>")
     js_file = open(f"{DIST_PATH}/main.min.js", "r")
