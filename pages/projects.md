@@ -4,7 +4,7 @@
 
 Starter packages for webapp development (Python, Render)
 
-# [md2html](https://github.com/mixmaester/md2html)
+# [md2website](https://github.com/mrsjoberg/md2website)
 
 Static website builder (Python)
 
@@ -16,15 +16,15 @@ Level up your coding skills with AI-generated programs (Python, Render)
 
 Distraction-free stock market research (Python, Vue.js, MongoDB, AWS)
 
-# [PlayCode](https://github.com/mixmaester/playcode)
+# [PlayCode](https://github.com/mrsjoberg/playcode)
 
 Programming language for testing experimental programming language features (Python, C++)
 
-# [raknalang](https://github.com/mixmaester/raknalang)
+# [raknalang](https://github.com/mrsjoberg/raknalang)
 
 REPL for arithmetics in native natural languages (Python)
 
-# [pas2wat](https://github.com/mixmaester/pas2wat)
+# [pas2wat](https://github.com/mrsjoberg/pas2wat)
 
 Pascal to WebAssembly text format translator (Rust)
 
