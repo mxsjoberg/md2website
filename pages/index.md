@@ -2,7 +2,7 @@
 
 [[github](https://github.com/mrsjoberg)] [[twitter](https://twitter.com/mrsjobergx)] [[soundcloud](https://soundcloud.com/mrsjoberg)] [[linkedin](https://www.linkedin.com/in/micsjo)]
 
-# Now: Building [Stockstack](https://trystockstack.com) and [Hackerman.AI](https://hackerman.ai)
+**Now: Building [Stockstack](https://trystockstack.com) and [Hackerman.AI](https://hackerman.ai)**
 
 I build web applications and interested in programming languages, computational intelligence, and financial analysis. I speak Swedish, Norwegian, and English.
 
