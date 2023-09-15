@@ -50,10 +50,14 @@ pre {
   background: #1B1B1B;
   padding: 1rem;
 }
-code {
+code,
+.highlight pre {
   font-family: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace !important;
   font-size: 80%;
   color: #97979A;
+}
+.highlight {
+  line-height: 1.4;
 }
 img {
   max-width: 100%;
@@ -73,25 +77,46 @@ blockquote {
 .hljs-meta .hljs-meta-string,
 .hljs-meta .hljs-keyword,
 .hljs-meta .hljs-string         { color: #6BF !important; }
+
 .hljs-params,
-.hljs-regexp                    { color: #D7D7D8 !important; }
+.hljs-regexp,
+.highlight .n                   { color: #D7D7D8 !important; }
+
 .hljs-params .hljs-type         { color: #D7D7D8 !important; }
-.hljs-string                    { color: #D7D7D8 !important; }
+
+.hljs-string,
+.highlight .s1,
+.highlight .si                  { color: #D7D7D8 !important; }
+
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-subst                     { color: #97979A !important; }
+
 .hljs-built_in                  { color: #6BF !important; }
+
 .hljs-comment,
 .hljs-doctag,
-.hljs-quote                     { color: #66666C !important; }
+.hljs-quote,
+.highlight .c1                  { color: #66666C !important; }
+
 .hljs-type                      { color: #D7D7D8 !important; }
-.hljs-number                    { color: #6BF !important; }
+
+.hljs-number,
+.highlight .mi                  { color: #6BF !important; }
+
 .hljs-literal,
 .hljs-symbol                    { color: #6BF !important; }
+
 .hljs-title,
 .hljs-function,
 .hljs-class,
 .hljs-function .hljs-title,
 .hljs-class .hljs-title         { color: #6BF !important; }
+
 .hljs-function .hljs-keyword,
-.hljs-class .hljs-keyword       { color: #6BF !important; }
+.hljs-class .hljs-keyword,
+.highlight .nf,
+.highlight .nb                  { color: #6BF !important; }
+
+.highlight .nc { color: #6BF !important; font-weight: bold; }
+
