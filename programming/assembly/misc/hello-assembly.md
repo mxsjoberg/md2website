@@ -2,7 +2,7 @@
 
 *May 2021* [Assembly](programming.html#assembly) [Misc](programming.html#assembly-misc)
 
-```x86asm
+```asm
 ; program (intel syntax)
 section .text
 	; start point for execution
