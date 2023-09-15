@@ -188,13 +188,14 @@ for dir_ in os.listdir("."):
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
             # create list with categories for ordering
             category_list = sorted(posts_dict.keys())
-            # list newest posts on top
-            all_posts = [post for category in category_list for subcategory in posts_dict[category] for post in posts_dict[category][subcategory]]
-            sorted_all_posts = sorted(all_posts, key=sort_by_date_and_title, reverse=True)
-            for post in sorted_all_posts:
-                # if date is current or last month
-                if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
-                    dir_page.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
+            # list newest posts on top (unless already listed in index)
+            if not SHOW_RECENT_POSTS:
+                all_posts = [post for category in category_list for subcategory in posts_dict[category] for post in posts_dict[category][subcategory]]
+                sorted_all_posts = sorted(all_posts, key=sort_by_date_and_title, reverse=True)
+                for post in sorted_all_posts:
+                    # if date is current or last month
+                    if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                        dir_page.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
             # write posts in posts_dict (list by category and subcategory)
             for category in category_list:
                 # write category
