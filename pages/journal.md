@@ -4,10 +4,12 @@ This page contains my day-to-day unstructured and unfiltered notes. I might cons
 
 ## Runtimes
 
-Note on class-based OOP vs prototype-based OOP:
+Note on class-based OOP vs prototype-based OOP (instances is an environment):
 
 - class-based OOP: class is blueprint for creating objects (instances)
 - prototype-based OOP: object serves as prototype for creating other objects (instances)
+
+In some languages, `module` objects are named environments, e.g. `Math` module with `PI` constant and `sin` function.
 
 **AST interpreter**: interpret AST directly (tree walker)
 
