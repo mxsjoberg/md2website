@@ -1,1 +1,1 @@
-[home](index.html) [journal](journal.html) [projects](projects.html) [writing](writing.html) [programming](programming.html)
+[/index](index.html) [/about](about.html) [/work](work.html) [/notes](notes.html)
