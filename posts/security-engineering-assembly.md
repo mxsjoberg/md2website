@@ -1,6 +1,6 @@
-# Lecture notes on Security Engineering – Part 3: Assembly
+# Security Engineering: Assembly
 
-*August 2022*
+<mark>August 15, 2022</mark> by [Michael Sjöberg](/about.html)
 
 ## Assembly basics
 

@@ -1,6 +1,6 @@
 # Re-launching terminal.frozenfork as Stockstack
 
-*July 2023*
+<mark>July 5, 2023</mark> by [Michael Sjöberg](/about.html)
 
 I recently launched my Yahoo Finance alternative previously named "Terminal" as Stockstack, available here: [trystockstack.com](https://www.trystockstack.com/).
 

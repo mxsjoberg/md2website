@@ -1,6 +1,6 @@
-# Crafting the Language of Play – Part 1: Introduction and operator precedence
+# PlayCode: Introduction and operator precedence
 
-*May 2023*
+<mark>May 12, 2023</mark> by [Michael Sjöberg](/about.html)
 
 This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available [here](https://github.com/mrsjoberg/playcode).
 

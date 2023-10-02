@@ -1,6 +1,6 @@
-# Lecture notes on Security Engineering – Part 4: The stack
+# Security Engineering: The stack
 
-*August 2022*
+<mark>August 27, 2022</mark> by [Michael Sjöberg](/about.html)
 
 ## Stack layout
 

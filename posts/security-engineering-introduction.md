@@ -1,6 +1,6 @@
-# Lecture notes on Security Engineering – Part 1: Introduction
+# Security Engineering: Introduction
 
-*August 2022*
+<mark>August 7, 2022</mark> by [Michael Sjöberg](/about.html)
 
 This is the first post in a series of lecture notes on security engineering, based on the postgraduate-level course with the same name at King's College London. These notes cover most of the topics, but not as deep and without assignments, and are primarily intended as a reference for myself.
 

@@ -1,6 +1,6 @@
-# Lecture notes on Security Engineering – Part 5: Secure system design
+# Security Engineering: Secure system design
 
-*September 2022*
+<mark>September 2, 2022</mark> by [Michael Sjöberg](/about.html)
 
 ## Hardware and software solutions
 
