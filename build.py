@@ -54,6 +54,7 @@ def write_header(file, title="Static website built with md2website", root=0):
     file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
     file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
+    file.write("<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>")
     # css
     # file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
     file.write("<style>")
@@ -67,7 +68,8 @@ def write_header(file, title="Static website built with md2website", root=0):
     file.write("</head>")
     # -------------------------------------------
     file.write("<body>")
-    # fixed nav
+    file.write("<div class='page'>")
+    # nav
     file.write("<div class='nav'>")
     try:
         nav_file = open("nav.md", "r")
@@ -80,14 +82,12 @@ def write_header(file, title="Static website built with md2website", root=0):
     except:
         file.write(f"<p><a href='{'../'*root}index.html'>home</a></p>")
     file.write("</div>")
-    file.write("<div class='page'>")
 
 def write_footer(file):
-    file.write("</div>")
     file.write("<div id='footer'>")
-    file.write("<p>[<a id='invert'>light|dark</a>]</p>")
-    file.write(f"<p class='small'>This static website was built by <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
+    file.write(f"<p class='small'>Page config: <a id='invert'>dark</a> <a id='styling'>styling</a>. This static website was built by <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
+    file.write("</div>") # ./page
     if not NO_JS:
         file.write("<script>")
         js_file = open(f"{DIST_PATH}/main.min.js", "r")
