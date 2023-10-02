@@ -25,6 +25,10 @@ html.styling div.page {
   max-width: 900px;
   margin: 0 auto;
 }
+html.styling div.page p {
+  margin: 2rem 0;
+  line-height: 2rem;
+}
 html.styling .nav {
   padding: 1rem 0;
 }
@@ -46,6 +50,9 @@ html.styling a {
 }
 html.styling a:hover {
   text-decoration: underline;
+}
+html.styling dl {
+  list-style: none;
 }
 html.styling li {
   margin-bottom: 0.25rem;
@@ -76,6 +83,8 @@ html.styling blockquote {
 html.styling hr {
   border-color: #66666C;
   border-style: dashed;
+  margin: 2rem 0;
+  max-width: 10%;
 }
 /*html.styling em {
   font-size: 80%;
