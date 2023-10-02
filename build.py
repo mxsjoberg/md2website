@@ -14,10 +14,10 @@ from pygments.formatters import HtmlFormatter
 DIST_PATH = "../michaelsjoberg.com/dist"
 ASSETS = ["main.css", "main.js"]
 AUTHOR = "Michael Sjöberg"
-DESCRIPTION = "My projects, posts, and programming notes."
-APP_NAME = "Michael Sjöberg"
+DESCRIPTION = "I write about programming, projects, and finance."
+APP_NAME = "Michael's Page"
 APP_THEME = "#161716"
-SHOW_RECENT_POSTS = True
+POSTS_ON_INDEX = True
 NO_JS = False 
 
 # for listing all posts on index page
@@ -167,7 +167,10 @@ for dir_ in os.listdir("."):
                             # title
                             title = post_content.split("\n")[0].split("# ")[1]
                             # date
-                            date = post_content.split("\n")[2].split("*")[1]
+                            try:
+                                date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
+                            except:
+                                date = post_content.split("\n")[2].split("*")[1]
                             # categories
                             category = None
                             subcategory = None
@@ -189,9 +192,8 @@ for dir_ in os.listdir("."):
                                 posts_dict[category].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
                             else:
                                 # append to posts_lst
-                                posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
-                            # finally, append to global
-                            GLOBAL_POSTS.append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                                posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %d, %Y"), "url": post_name })
+                                GLOBAL_POSTS.append({ "title": title, "date": datetime.strptime(date, "%B %d, %Y"), "url": post_name })
                             # generate anchors and inject index
                             post_content = generate_and_inject_index(post_content)
                             # write
@@ -228,16 +230,17 @@ for dir_ in os.listdir("."):
                     current_date = post['date'].year
                     dir_page.write("<ul>")
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+            dir_page.write("</ul>")
             # create list with categories for ordering
             category_list = sorted(posts_dict.keys())
             # list newest posts on top (unless already listed in index)
-            if not SHOW_RECENT_POSTS:
-                all_posts = [post for category in category_list for subcategory in posts_dict[category] for post in posts_dict[category][subcategory]]
-                sorted_all_posts = sorted(all_posts, key=sort_by_date_and_title, reverse=True)
-                for post in sorted_all_posts:
-                    # if date is current or last month
-                    if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
-                        dir_page.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
+            # if not SHOW_RECENT_POSTS:
+            #     all_posts = [post for category in category_list for subcategory in posts_dict[category] for post in posts_dict[category][subcategory]]
+            #     sorted_all_posts = sorted(all_posts, key=sort_by_date_and_title, reverse=True)
+            #     for post in sorted_all_posts:
+            #         # if date is current or last month
+            #         if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+            #             dir_page.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
             # write posts in posts_dict (list by category and subcategory)
             for category in category_list:
                 # write category
@@ -272,13 +275,13 @@ for root, dirs, files in os.walk("pages"):
                 write_header(tmp_file, title)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
                 # list recent posts
-                if SHOW_RECENT_POSTS and file_name == "index":
-                    # tmp_file.write("<h1>Recent</h1>")
-                    # list newest posts on top
+                if POSTS_ON_INDEX and file_name == "index":
+                    tmp_file.write("<hr>")
+                    # list posts
                     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
+                    tmp_file.write("<dl>")
                     for post in sorted_global_posts:
-                        # if date is current or last month
-                        if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
-                            tmp_file.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
+                        tmp_file.write(f"<li>{datetime.date(post['date'])} – <a href='{post['url']}.html'>{post['title']}</a></li>")
+                    tmp_file.write("</dl>")
                 write_footer(tmp_file)
                 file.close()
