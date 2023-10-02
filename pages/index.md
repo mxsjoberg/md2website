@@ -1,4 +1,4 @@
-# Michael Sjöberg
+# 👋 Hey! I'm Michael
 
 [[github](https://github.com/mrsjoberg)] [[twitter](https://twitter.com/mrsjobergx)] [[soundcloud](https://soundcloud.com/mixmaester)] [[linkedin](https://www.linkedin.com/in/micsjo)]
 
