@@ -36,7 +36,7 @@ html.styling .nav p a {
   justify-content: center;
 }
 html.styling h1 {
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
 }
 html.styling a {
@@ -73,6 +73,24 @@ html.styling blockquote {
   font-size: 80%;
   color: #66666C;
 }
+html.styling hr {
+  border-color: #66666C;
+  border-style: dashed;
+}
+/*html.styling em {
+  font-size: 80%;
+  background: #66666C;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-style: normal !important;
+  float: right;
+}*/
+html.styling mark {
+  background-color: #e3e463;
+  color: #161716;
+  padding: 4px 6px;
+  font-size: 80%;
+}
 html.styling #footer {
   padding: 1rem 0;
 }
@@ -85,7 +103,7 @@ html.styling .highlight .n      { color: #D7D7D8 !important; }
 html.styling .highlight .s1,
 html.styling .highlight .si     { color: #D7D7D8 !important; }
 
-html.styling  .highlight .c1    { color: #66666C !important; }
+html.styling .highlight .c1     { color: #66666C !important; }
 
 html.styling .highlight .mi     { color: #6BF !important; }
 
