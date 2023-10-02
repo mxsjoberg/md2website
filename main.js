@@ -10,9 +10,23 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("invert", "false");
         }
     });
+    // toggle styling
+    var styling = document.querySelector("#styling");
+    styling.addEventListener("click", function() {
+        document.querySelector("html").classList.toggle("styling");
+        // save to local storage
+        if (document.querySelector("html").classList.contains("styling")) {
+            localStorage.setItem("styling", "true");
+        } else {
+            localStorage.setItem("styling", "false");
+        }
+    });
     // check local storage
     if (localStorage.getItem("invert") == "true") {
         document.querySelector("html").classList.add("invert");
+    }
+    if (localStorage.getItem("styling") == "true") {
+        document.querySelector("html").classList.add("styling");
     }
     // loading time
     function showPageLoadTime() {
