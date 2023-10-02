@@ -2,6 +2,8 @@
 
 This page contains my day-to-day unstructured and unfiltered notes. I might consolidate notes into posts later.
 
+---
+
 ## Runtime implementations
 
 Note on class-based OOP vs prototype-based OOP (instances is an environment):
