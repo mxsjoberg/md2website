@@ -1,61 +1,125 @@
 # Projects
 
-# [Frozenfork](https://frozenfork.com)
+---
 
-Starter packages for webapp development (Python, Render)
+**Frozenfork** <mark>For profit</mark>
 
-# [md2website](https://github.com/mrsjoberg/md2website)
+Starter packages for web application developers
 
-Static website builder (Python)
+Website: [frozenfork.com](https://frozenfork.com)
 
-# [Hackerman.AI](https://hackerman.ai)
+Technologies: Python (Flask), Render
 
-Level up your coding skills with AI-generated programs (Python, Render)
+---
 
-# [Stockstack](https://trystockstack.com)
+**md2website**
 
-Distraction-free stock market research (Python, Vue.js, MongoDB, AWS)
+Static website builder
 
-# [PlayCode](https://github.com/mrsjoberg/playcode)
+Repo: [github.com/mrsjoberg/md2website](https://github.com/mrsjoberg/md2website)
 
-Programming language for testing experimental programming language features (Python, C++)
+---
 
-# [raknalang](https://github.com/mrsjoberg/raknalang)
+**Hackerman** <mark>For profit</mark>
 
-REPL for arithmetics in native natural languages (Python)
+Online code editor and program generator
 
-# [pas2wat](https://github.com/mrsjoberg/pas2wat)
+Website: [hackerman.ai](https://hackerman.ai)
 
-Pascal to WebAssembly text format translator (Rust)
+Technologies: Python (Flask), JavaScript (Ace.js, CodeMirror), Render
 
-# EQZEN
+---
 
-Collaborative portfolio tracker application (Python, AWS)
+**Stockstack** <mark>For profit</mark>
 
-# GiveTrees
+Distraction-free stock market data dashboard
 
-Mobile application to plant trees (Lua)
+Website: [trystockstack.com](https://trystockstack.com)
 
-# LearnHub
+Technologies: Python (Flask), JavaScript (Vue.js), MongoDB, AWS
 
-Community of self-learners (Python)
+---
 
-# [AnonChat](https://anonchat.sjoberg.dev/)
+**PlayCode**
 
-Text-based chat application with no login (JavaScript, PHP)
+Programming language for testing experimental features and language design
 
-# Doolio
+Repo: [github.com/mrsjoberg/playcode](https://github.com/mrsjoberg/playcode)
 
-Interactive online resume (PHP, LAMP)
+---
 
-# Adventures of Puffy
+**raknalang**
 
-Mobile game for iOS (Lua)
+REPL for learning arithmetic in native languages
 
-# formul.as
+Repo: [github.com/mrsjoberg/raknalang](https://github.com/mrsjoberg/raknalang)
 
-Cheatsheet for mathematics and physics (HTMl, CSS)
+---
 
-# räkna.nu
+**pas2wat**
 
-Q&A website for homework help (PHP)
+Pascal to WebAssembly text-format compiler
+
+Repo: [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat)
+
+---
+
+**EQZEN** [discontinued] <mark>For profit</mark>
+
+Collaborative portfolio tracker
+
+Technologies: Python (Flask), MongoDB, AWS
+
+---
+
+**GiveTrees** [discontinued] <mark>For profit</mark>
+
+Mobile application to plant trees
+
+Technologies: Lua (Corona SDK), PHP
+
+---
+
+**LearnHub.io** [discontinued]
+
+Online educational platform and community for self-learners
+
+Archive: [github.com/mrsjoberg/learnhub.io](https://github.com/mrsjoberg/learnhub.io)
+
+---
+
+**AnonChat**
+
+Text-based chat application with no login to learn JavaScript
+
+Demo: [anonchat.sjoberg.dev](https://anonchat.sjoberg.dev/)
+
+---
+
+**Doolio.co**
+
+Online interactive resume to learn PHP
+
+Archive: [github.com/mrsjoberg/doolio.co](https://github.com/mrsjoberg/doolio.co)
+
+---
+
+**Adventures of Puffy**
+
+Mobile game for iOS
+
+Technologies: Lua (Corona SDK)
+
+---
+
+**formul.as**
+
+Website with formulas for mathematics and physics to learn HTML and CSS
+
+---
+
+**räkna.nu**
+
+Q&A website for getting help with homework
+
+---
