@@ -1,6 +1,8 @@
+-* toc
+
 # Journal
 
-This page contains my day-to-day unstructured and unfiltered notes. I might consolidate notes into posts later.
+This journal contains my unstructured and unfiltered notes. I might consolidate parts and add to [/notes](/notes.html) or as blog post later.
 
 ---
 
