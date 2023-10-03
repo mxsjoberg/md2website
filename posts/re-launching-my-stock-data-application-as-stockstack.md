@@ -1,8 +1,8 @@
-# Re-launching terminal.frozenfork as Stockstack
+# Re-launching my stock data application as Stockstack
 
 <mark>July 5, 2023</mark> by [Michael Sjöberg](/about.html)
 
-I recently launched my Yahoo Finance alternative previously named "Terminal" as Stockstack, available here: [trystockstack.com](https://www.trystockstack.com/).
+I recently re-launched my Yahoo Finance alternative previously named "Terminal" as Stockstack, available here: [trystockstack.com](https://www.trystockstack.com/).
 
 Stockstack is a slimmed down version of Terminal with a more narrow focus on distraction-free stock market data. The goal is to beat Yahoo Finance in data coverage and user experience. To hone in on this goal (and to reduce workload!), I removed several features, including portfolio tracker, batch requests, and query.
 
