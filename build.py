@@ -337,6 +337,7 @@ for root, dirs, files in os.walk("pages"):
                     file_content = generate_and_inject_index(file_content)
                 # write
                 write_header(tmp_file, title)
+                # TODO: fix for multi columns on regular pages? below title
                 # columns
                 # if FLAG_COL:
                 #     tmp_file.write(f"<div style='column-count:{FLAG_COL};'>")
