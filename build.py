@@ -351,7 +351,7 @@ for root, dirs, files in os.walk("pages"):
                     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
                     tmp_file.write("<dl>")
                     for post in sorted_global_posts:
-                        tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='{post['url']}.html'>{post['title']}</a></li>")
+                        tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
                     tmp_file.write("</dl>")
                 if FLAG_COL: tmp_file.write("</div>")
                 write_footer(tmp_file)
