@@ -68,8 +68,8 @@ html.styling a:hover {
 }
 html.styling ul {
   list-style: square;
-  padding: 2rem;
-  border: 1px dashed #66666C;
+  /*padding: 2rem;
+  border: 1px dashed #66666C;*/
 }
 html.styling ul span {
   margin-bottom: 1rem;
