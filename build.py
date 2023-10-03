@@ -179,11 +179,12 @@ for dir_ in os.listdir("."):
             posts_dict = {} # { category: { subcategory: [ { title, date, url } ] } }
             # for each md file in dir_, create html page and append to posts_lst or posts_dict
             for root, dirs, posts in os.walk(dir_):
+                os.mkdir(f"{DIST_PATH}/{root}")
                 for post in posts:
                     if post != "__flags" and post.split(".")[1] == "md":
                         post_name = post.split(".")[0]
                         # create page
-                        with open(f"{DIST_PATH}/{post_name}.html", "w+") as tmp_file:
+                        with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
                             post_file = open(f"{root}/{post}")
                             post_content = post_file.read()
                             # title
@@ -194,13 +195,16 @@ for dir_ in os.listdir("."):
                             except:
                                 date = post_content.split("\n")[2].split("*")[1]
                             # categories
-                            category = None
-                            subcategory = None
+                            category, subcategory = None, None
                             try:
-                                category = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[0].split("]")[0][1:].lower()
-                                subcategory = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[1].split("]")[0][1:].lower()
+                                # category = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[0].split("]")[0][1:].lower()
+                                # subcategory = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[1].split("]")[0][1:].lower()
+                                category, subcategory = root.split("/")[1], root.split("/")[2]
                             except:
-                                pass
+                                try:
+                                    category = root.split("/")[1]
+                                except:
+                                    pass
                             # category and subcategory
                             if category and subcategory:
                                 if not category in posts_dict: posts_dict[category] = {}
@@ -275,17 +279,28 @@ for dir_ in os.listdir("."):
             for category in category_list:
                 # write category
                 dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
-                for subcategory in posts_dict[category]:
-                    if len(posts_dict[category].keys()) > 1:
-                        dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title()}</p>")
-                    sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
+                if isinstance(posts_dict[category], dict):
+                    for subcategory in posts_dict[category]:
+                        if len(posts_dict[category].keys()) > 1:
+                            dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
+                        sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
+                        dir_page.write("<ul>")
+                        for post in sorted_posts_dict:
+                            # if date is current or last month
+                            if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                                dir_page.write(f"<li><mark>new</mark> <a href='{dir_}/{category}/{subcategory}/{post['url']}.html'>{post['title']}</a></li>")
+                            else:    
+                                dir_page.write(f"<li><a href='{dir_}/{category}/{subcategory}/{post['url']}.html'>{post['title']}</a></li>")
+                        dir_page.write("</ul>")
+                else:
+                    sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
                     dir_page.write("<ul>")
                     for post in sorted_posts_dict:
                         # if date is current or last month
                         if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
-                            dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
+                            dir_page.write(f"<li><mark>new</mark> <a href='{dir_}/{category}/{post['url']}.html'>{post['title']}</a></li>")
                         else:    
-                            dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+                            dir_page.write(f"<li><a href='{dir_}/{category}/{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
             if FLAG_COL: dir_page.write("</div>")
             write_footer(dir_page)
