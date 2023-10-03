@@ -1,33 +1,35 @@
 # Domains
 
-List of domains for sale.
+This is a list with domain names for sale
 
-# [afksend.com](http://afksend.com/)
+---
 
-# [alexalm.com](https://alexalm.com/)
+[afksend.com](http://afksend.com/)
 
-# [bumpost.com](https://bumpost.com/)
+[alexalm.com](https://alexalm.com/)
 
-# [delaio.com](https://delaio.com/)
+[bumpost.com](https://bumpost.com/)
 
-# [eqzen.com](https://eqzen.com/)
+[delaio.com](https://delaio.com/)
 
-# [langstadt.com](https://langstadt.com/)
+[eqzen.com](https://eqzen.com/)
 
-# [stockance.com](https://stockance.com/)
+[langstadt.com](https://langstadt.com/)
 
-# [stockingly.com](https://stockingly.com/)
+[stockance.com](https://stockance.com/)
 
-# [trydebugme.com](http://trydebugme.com/)
+[stockingly.com](https://stockingly.com/)
 
-# [trypaste.me](http://trypaste.me/)
+[trydebugme.com](http://trydebugme.com/)
 
-# [trypasteme.com](http://trypasteme.com/)
+[trypaste.me](http://trypaste.me/)
 
-# [vargfin.com](https://vargfin.com/)
+[trypasteme.com](http://trypasteme.com/)
 
-# [vetisa.com](https://vetisa.com/)
+[vargfin.com](https://vargfin.com/)
 
-# [watchmebuild.tv](http://watchmebuild.tv/)
+[vetisa.com](https://vetisa.com/)
 
-# [yuumio.com](https://yuumio.com/)
+[watchmebuild.tv](http://watchmebuild.tv/)
+
+[yuumio.com](https://yuumio.com/)
