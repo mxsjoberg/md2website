@@ -1,6 +1,6 @@
 # Headers in C
 
-*November 2020* [C](programming.html#c) [Misc](programming.html#c-misc)
+<mark>November 2020</mark>
 
 ```cpp
 // program.h

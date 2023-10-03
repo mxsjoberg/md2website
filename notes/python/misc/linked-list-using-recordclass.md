@@ -1,8 +1,8 @@
 # Linked List using Recordclass
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-A linked list is a linear data structure where each element is the data and a reference to the next element. The last element has a reference to `None` and an empty linked list has a `None` head.
+A linked list is a linear data structure where each element is the data and reference to next element. The last element reference to `None` and an empty linked list has a `None` head.
 
 ```python
 from recordclass import recordclass

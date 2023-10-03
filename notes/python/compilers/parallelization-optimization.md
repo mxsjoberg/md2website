@@ -1,8 +1,8 @@
 # Parallelization Optimization
 
-*July 2023* [Python](programming.html#python) [Compilers](programming.html#python-compilers)
+<mark>July 2023</mark>
 
-Parallelization optimization is a form of optimization that aims to improve the performance of a program by parallelizing it, i.e. by splitting the program into smaller parts that can be executed simultaneously.
+Parallelization optimization is a form of optimization that aims to improve program performance by parallelizing it, i.e. by splitting the program into smaller parts that can be executed at the same time.
 
 ```python
 import multiprocessing as mp

@@ -1,6 +1,6 @@
 # Numpy Primer
 
-*October 2020* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>October 2020</mark>
 
 Numpy array basics.
 

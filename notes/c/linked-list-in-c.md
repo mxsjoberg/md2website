@@ -1,6 +1,6 @@
 # Linked List in C
 
-*August 2023* [C](programming.html#c) [Misc](programming.html#c-misc)
+<mark>August 2023</mark>
 
 A linked list implementation in C.
 

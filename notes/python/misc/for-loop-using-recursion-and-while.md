@@ -1,6 +1,6 @@
 # For-loop using recursion and while
 
-*September 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>September 2023</mark>
 
 ```python
 import timeit

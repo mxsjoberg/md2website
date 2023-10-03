@@ -1,8 +1,8 @@
 # Sobel Filter using OpenCL in Python
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-Sobel filter is an edge detection filter. It is a 3x3 convolution used in image processing.
+A Sobel filter is an edge detection filter. It's a 3x3 convolution commonly used in image processing.
 
 ```python
 import numpy as np

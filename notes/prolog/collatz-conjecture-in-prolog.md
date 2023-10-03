@@ -1,6 +1,6 @@
 # Collatz Conjecture in Prolog
 
-*October 2020* [Prolog](programming.html#prolog) [Misc](programming.html#prolog-misc)
+<mark>October 2020</mark>
 
 Collatz Conjecture is a sequence that no matter what value of *N* the specified sequence will always reach 1.
 

@@ -1,6 +1,6 @@
 # Expert Systems in Prolog
 
-*October 2020* [Prolog](programming.html#prolog) [Misc](programming.html#prolog-misc)
+<mark>October 2020</mark>
 
 An expert systems derive useful new information based on user-provided input.
 

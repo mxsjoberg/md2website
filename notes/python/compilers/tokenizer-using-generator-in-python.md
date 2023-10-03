@@ -1,7 +1,6 @@
 # Tokenizer using generator in Python
 
-*September 2023* [Python](programming.html#python) [Compilers](programming.html#python-compilers)
-
+<mark>September 2023</mark>
 
 ```python
 import re

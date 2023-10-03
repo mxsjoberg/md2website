@@ -1,6 +1,6 @@
 # Delta Learning Algorithm
 
-*October 2020* [Python](programming.html#python) [Machine Learning](programming.html#python-machine-learning)
+<mark>October 2020</mark>
 
 Delta learning algorithm is a method used in artificial neural networks to adjust weights.
 

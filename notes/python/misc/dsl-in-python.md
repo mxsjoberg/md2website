@@ -1,8 +1,8 @@
 # DSL in Python
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-A simple domain-specific language (DSL) in Python.
+This is how to design and use embedded domain-specific languages in Python.
 
 ```python
 import sys

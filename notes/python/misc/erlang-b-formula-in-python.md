@@ -1,6 +1,6 @@
 # Erlang B Formula in Python
 
-*May 2021* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>May 2021</mark>
 
 ```python
 # https://en.wikipedia.org/wiki/Erlang_(unit)#Erlang_B_formula

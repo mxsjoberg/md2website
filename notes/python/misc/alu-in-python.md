@@ -1,6 +1,6 @@
 # ALU in Python
 
-*April 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>April 2023</mark>
 
 An ALU is a combinational logic circuit that performs arithmetic and bitwise operations on input bits.
 

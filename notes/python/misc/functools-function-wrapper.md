@@ -1,8 +1,10 @@
 # Functools Function Wrapper
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-Function wrappers are used to modify the behavior of a function or method. The `wraps` decorator copies over the function name, docstring, and arguments list to the wrapper function. This is particularly useful for debugging and logging.
+Function wrappers can be used to modify behavior of function or method. The `wraps` decorator copies over the function name, docstring, and arguments list to the wrapper function.
+
+This is very useful for debugging and logging.
 
 ```python
 from functools import wraps

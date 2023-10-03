@@ -1,6 +1,6 @@
 # Enumerate List in Python
 
-*June 2018* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>June 2018</mark>
 
 ```python
 my_list = ["Zero", "One", "Two", "Three", "Four", "Five"]

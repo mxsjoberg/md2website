@@ -1,6 +1,6 @@
 # AST Constant Folding
 
-*August 2023* [Python](programming.html#python) [Compilers](programming.html#python-compilers)
+<mark>August 2023</mark>
 
 Constant folding is a form of [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation) that can be applied to [constant expressions](https://en.wikipedia.org/wiki/Constant_expression) to reduce the number of instructions.
 

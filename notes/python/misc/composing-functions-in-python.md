@@ -1,6 +1,6 @@
 # Composing Functions in Python
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
 ```python
 import functools

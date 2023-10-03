@@ -1,8 +1,10 @@
 # Functools Cache
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-The [lru_cache](https://docs.python.org/3/library/functools.html#functools.lru_cache) decorator caches the results of a function call with a given set of arguments. This is useful for functions that are computationally expensive and have a limited set of arguments.
+The [lru_cache](https://docs.python.org/3/library/functools.html#functools.lru_cache) decorator caches the results of a function call with a given set of arguments.
+
+This is useful for functions that are computationally expensive and have a limited set of arguments.
 
 ```python
 from functools import lru_cache

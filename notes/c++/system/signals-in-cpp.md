@@ -1,6 +1,6 @@
 # Signals in C++
 
-*November 2020* [C++](programming.html#c++) [Systems](programming.html#c++-systems)
+<mark>November 2020</mark>
 
 ```cpp
 #include <iostream>

@@ -1,8 +1,8 @@
 # OpenCL in Python
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-OpenCL is used to run code on GPUs and other accelerators. It is a C API (so kernel code looks like C code) and `pyopencl` is a Python wrapper.
+OpenCL can be used to run code on GPUs and other accelerators. It's a `C` API (kernel code looks like C code) and `pyopencl` is a Python wrapper.
 
 ```python
 import pyopencl as cl

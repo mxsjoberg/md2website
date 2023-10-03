@@ -1,6 +1,6 @@
 # Numpy Linear Relu
 
-*August 2023* [Python](programming.html#python) [Machine Learning](programming.html#python-machine-learning)
+<mark>August 2023</mark>
 
 A simple implementation of linear layer followed by a ReLU activation function.
 

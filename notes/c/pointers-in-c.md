@@ -1,6 +1,6 @@
 # Pointers in C
 
-*August 2019* [C](programming.html#c) [Misc](programming.html#c-misc)
+<mark>August 2019</mark>
 
 ```cpp
 int a = 5;

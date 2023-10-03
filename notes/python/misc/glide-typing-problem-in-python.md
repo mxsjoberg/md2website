@@ -1,8 +1,8 @@
 # Glide Typing Problem in Python
 
-*August 2023* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>August 2023</mark>
 
-Glide typing is a feature on mobile devices that allows the user to type by swiping across the keyboard. The keyboard will predict the word based on the path of the swipe. The user can then select the word from the predicted list.
+Glide typing is the feature on mobile devices that allows users to type by swiping across the keyboard. The keyboard will predict the word based on the path of the swipe.
 
 ```python
 input_ = "hgferyjkllkop"

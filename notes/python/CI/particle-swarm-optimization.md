@@ -1,8 +1,10 @@
 # Particle Swarm Optimization (PSO)
 
-*January 2023* [Python](programming.html#python) [Computational Intelligence](programming.html#python-computational-intelligence)
+<mark>January 2023</mark>
 
-PSO is a population-based stochastic optimization technique inspired by social behavior of bird flocking or fish schooling. It is used to find an optimal solution to a problem by iteratively moving particles through the solution space.
+PSO is a population-based optimization algorithm inspired by social behavior of some animals, such as birds or fish.
+
+It finds an optimal solution to a problem by iteratively moving "particles" through the solution space.
 
 ```python
 # https://en.wikipedia.org/wiki/Particle_swarm_optimization

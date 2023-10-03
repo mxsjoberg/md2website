@@ -1,8 +1,8 @@
 # Loop Tiling Optimization
 
-*July 2023* [Python](programming.html#python) [Compilers](programming.html#python-compilers)
+<mark>July 2023</mark>
 
-Loop tiling optimization is a technique used to improve cache efficiency and reduce memory access latency in nested loops.
+Loop tiling optimization is a technique used to improve cache efficiency in nested loops.
 
 ```python
 import random

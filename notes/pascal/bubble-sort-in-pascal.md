@@ -1,6 +1,6 @@
 # Bubble Sort in Pascal
 
-*May 2021* [Pascal](programming.html#pascal) [Misc](programming.html#pascal-misc)
+<mark>May 2021</mark>
 
 ```pascal
 // https://en.wikipedia.org/wiki/Bubble_sort

@@ -1,6 +1,6 @@
 # Combinatorial Optimization in Prolog
 
-*October 2020* [Prolog](programming.html#prolog) [Misc](programming.html#prolog-misc)
+<mark>October 2020</mark>
 
 A farmer have chickens and cows for a total of 30 animals, the animals have 74 legs in total. 
 

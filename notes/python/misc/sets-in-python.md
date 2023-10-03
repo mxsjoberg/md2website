@@ -1,6 +1,6 @@
 # Sets in Python
 
-*June 2018* [Python](programming.html#python) [Misc](programming.html#python-misc)
+<mark>June 2018</mark>
 
 ```python
 # sets are unordered collections
