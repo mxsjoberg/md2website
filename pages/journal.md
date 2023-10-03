@@ -1,4 +1,4 @@
--* toc
+-* toc=true
 
 # Journal
 
