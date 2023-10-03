@@ -84,7 +84,7 @@ def write_header(file, title="Static website built with md2website", root=0):
 
 def write_footer(file):
     file.write("<div id='footer'>")
-    file.write(f"<p class='small'>Page config: <a id='invert'>dark</a> <a id='styling'>styling</a>. This static website was built by <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
+    file.write(f"<p class='small'>Page config: <a id='invert'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
     if not NO_JS:
@@ -150,6 +150,20 @@ for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
     if "." not in dir_ and dir_ != "dist" and dir_ != "pages":
+        FLAG_TOC = None
+        FLAG_COL = None
+        FLAG_DESC = None
+        # check if __flags file in dir_
+        if os.path.exists(os.path.join(dir_, "__flags")):
+            flag_file = open(f"{dir_}/__flags")
+            flag_content = flag_file.read()
+            # parse flags
+            flags_raw = flag_content[3:].split(",")
+            for flag in flags_raw:
+                key, value = flag.split("=")
+                if key == "toc": FLAG_TOC = True
+                if key == "col": FLAG_COL = int(value)
+                if key == "desc": FLAG_DESC = str(value)
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
             posts_lst = [] # [ { title, date, url } ]
@@ -157,7 +171,7 @@ for dir_ in os.listdir("."):
             # for each md file in dir_, create html page and append to posts_lst or posts_dict
             for root, dirs, posts in os.walk(dir_):
                 for post in posts:
-                    if post.split(".")[1] == "md":
+                    if post != "__flags" and post.split(".")[1] == "md":
                         post_name = post.split(".")[0]
                         # create page
                         with open(f"{DIST_PATH}/{post_name}.html", "w+") as tmp_file:
@@ -216,7 +230,15 @@ for dir_ in os.listdir("."):
                                 html_content = str(soup)
                             tmp_file.write(html_content)
                             write_footer(tmp_file)
-                            post_file.close()
+                            post_file.close()            
+            # write page title
+            dir_page.write(f"<h1>{dir_.title()}</h1>")
+            if FLAG_DESC:
+                dir_page.write(f"<p>{FLAG_DESC}</p>")
+                dir_page.write("<hr>")
+            # columns
+            if FLAG_COL:
+                dir_page.write(f"<div style='column-count:{FLAG_COL};'>")
             # sort posts_lst by date then by name
             sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
             # write posts_lst (list by date)
@@ -243,7 +265,7 @@ for dir_ in os.listdir("."):
             # write posts in posts_dict (list by category and subcategory)
             for category in category_list:
                 # write category
-                dir_page.write(f"<h1 id='{category}'>{category.title()}</h1>")
+                dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
                 for subcategory in posts_dict[category]:
                     if len(posts_dict[category].keys()) > 1:
                         dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title()}</p>")
@@ -256,6 +278,7 @@ for dir_ in os.listdir("."):
                         else:    
                             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
+            if FLAG_COL: dir_page.write("</div>")
             write_footer(dir_page)
 
 # for each md file in pages, create html page
@@ -265,11 +288,23 @@ for root, dirs, files in os.walk("pages"):
             file_name = file.split(".")[0]
             # create page
             with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
+                flags = []
                 file = open(f"{root}/{file}", "r")
                 file_content = file.read()
-                title = file_content.split("\n")[0].split("# ")[1]
+                file_content = file_content.split("\n")
+                # flags
+                if (file_content[0].startswith("-* ")):
+                    flags = file_content[0][3:].split(" ")
+                    if (len(file_content[1]) == 0):
+                        file_content = file_content[2:]
+                    else:
+                        file_content = file_content[1:]
+                title = file_content[0].split("# ")[1]
+                # join 
+                file_content = "\n".join(file_content)
                 # generate anchors and inject index
-                file_content = generate_and_inject_index(file_content)
+                if ("toc" in flags):
+                    file_content = generate_and_inject_index(file_content)
                 # write
                 write_header(tmp_file, title)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
