@@ -1,6 +1,6 @@
 # Hello Assembly
 
-*May 2021* [Assembly](programming.html#assembly) [Misc](programming.html#assembly-misc)
+<mark>May 2021</mark>
 
 ```asm
 ; program (intel syntax)
