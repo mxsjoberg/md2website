@@ -110,7 +110,7 @@ def generate_and_inject_index(file_content):
             index.append("    - " + line.split("### ")[1].split("</a>")[1].strip())
     if len(index) > 0:
         # inject index as list just before first line starting with ##
-        file_content = re.sub(r"## (.*)", r"\n".join([f"{item}" for item in index]) + r"\n## \1", file_content, count=1)
+        file_content = re.sub(r"## (.*)", r"\n".join([f"{item}" for item in index]) + "\n ---" + r"\n## \1", file_content, count=1)
     return file_content
 
 # create dist folder
@@ -147,6 +147,19 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
 for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
     os.system(f"cp {asset} {DIST_PATH}/{asset}")
 
+def parse_flags(line):
+    FLAG_TOC = None
+    FLAG_COL = None
+    FLAG_DESC = None
+    if line.startswith("-* "):
+        flags_raw = line[3:].split(",")
+        for flag in flags_raw:
+            key, value = flag.split("=")
+            if key == "toc": FLAG_TOC = bool(value)
+            if key == "col": FLAG_COL = int(value)
+            if key == "desc": FLAG_DESC = str(value)
+    return FLAG_TOC, FLAG_COL, FLAG_DESC
+
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
     if "." not in dir_ and dir_ != "dist" and dir_ != "pages":
@@ -158,12 +171,7 @@ for dir_ in os.listdir("."):
             flag_file = open(f"{dir_}/__flags")
             flag_content = flag_file.read()
             # parse flags
-            flags_raw = flag_content[3:].split(",")
-            for flag in flags_raw:
-                key, value = flag.split("=")
-                if key == "toc": FLAG_TOC = True
-                if key == "col": FLAG_COL = int(value)
-                if key == "desc": FLAG_DESC = str(value)
+            FLAG_TOC, FLAG_COL, FLAG_DESC = parse_flags(flag_content)
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
             posts_lst = [] # [ { title, date, url } ]
@@ -284,17 +292,21 @@ for dir_ in os.listdir("."):
 # for each md file in pages, create html page
 for root, dirs, files in os.walk("pages"):
     for file in files:
+        FLAG_TOC = None
+        FLAG_COL = None
+        FLAG_DESC = None
         if file.split(".")[1] == "md":
             file_name = file.split(".")[0]
             # create page
             with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
-                flags = []
                 file = open(f"{root}/{file}", "r")
                 file_content = file.read()
                 file_content = file_content.split("\n")
                 # flags
                 if (file_content[0].startswith("-* ")):
-                    flags = file_content[0][3:].split(" ")
+                    # parse flags
+                    FLAG_TOC, FLAG_COL, FLAG_DESC = parse_flags(file_content[0])
+                    # skip empty line following flags (if any)
                     if (len(file_content[1]) == 0):
                         file_content = file_content[2:]
                     else:
@@ -303,7 +315,7 @@ for root, dirs, files in os.walk("pages"):
                 # join 
                 file_content = "\n".join(file_content)
                 # generate anchors and inject index
-                if ("toc" in flags):
+                if FLAG_TOC:
                     file_content = generate_and_inject_index(file_content)
                 # write
                 write_header(tmp_file, title)
