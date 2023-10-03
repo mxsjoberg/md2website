@@ -281,10 +281,12 @@ for dir_ in os.listdir("."):
                 dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
                 if isinstance(posts_dict[category], dict):
                     for subcategory in posts_dict[category]:
-                        if len(posts_dict[category].keys()) > 1:
-                            dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
+                        # if len(posts_dict[category].keys()) > 1:
+                        #     dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
                         sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
                         dir_page.write("<ul>")
+                        if len(posts_dict[category].keys()) > 1:
+                            dir_page.write(f"<span id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</span>")
                         for post in sorted_posts_dict:
                             # if date is current or last month
                             if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
@@ -349,7 +351,7 @@ for root, dirs, files in os.walk("pages"):
                     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
                     tmp_file.write("<dl>")
                     for post in sorted_global_posts:
-                        tmp_file.write(f"<li>{datetime.date(post['date'])} – <a href='{post['url']}.html'>{post['title']}</a></li>")
+                        tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='{post['url']}.html'>{post['title']}</a></li>")
                     tmp_file.write("</dl>")
                 if FLAG_COL: tmp_file.write("</div>")
                 write_footer(tmp_file)
