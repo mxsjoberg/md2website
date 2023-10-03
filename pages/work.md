@@ -1,121 +1,81 @@
 # Work
 
-I have been busy building my own software products for the last couple of years.
+I have been busy building my own software products for a while.
+
+Please buy my unused <mark>.com</mark> domains here: [/domains](/domains.html)
+
+---
+
+## My stack
+
+I work on a Macbook Pro (16 inch, Intel) and wear Sony's noise cancelling headphones. I tend to write code in Python, Ruby, C++, and Rust (with some HTML, CSS, JavaScript, etc). I use Flask for almost all web applications and deploy on AWS (ECB, Lambda, Amplify) or Render.
+
+I sometimes use a Keychron mechanical keyboard but often revert back to Apple's Magic keyboard (with numpad). I currently use an Xtrfy mouse.
+
+---
 
 ## I'm currently working on
 
----
+### Hackerman.AI
 
-### Hackerman.AI <mark>For profit</mark>
+Online code editor and program generator using Python (Flask), JavaScript (Ace.js, CodeMirror), and hosted on Render. Website: [hackerman.ai](https://hackerman.ai)
 
-Online code editor and program generator using Python (Flask), JavaScript (Ace.js, CodeMirror), and hosted on Render
+### Stockstack
 
-Website: [hackerman.ai](https://hackerman.ai)
-
----
-
-### Stockstack <mark>For profit</mark>
-
-Distraction-free stock market data dashboard using Python (Flask), JavaScript (Vue.js), MongoDB, and hosted on AWS
-
-Website: [trystockstack.com](https://trystockstack.com)
+Distraction-free stock market data dashboard using Python (Flask), JavaScript (Vue.js), MongoDB, and hosted on AWS. Website: [trystockstack.com](https://trystockstack.com)
 
 ---
 
 ## Other projects
 
----
+### Frozenfork
 
-### Frozenfork <mark>For profit</mark>
-
-Starter packages for web application developers using Python (Flask) with demo applications hosted Render
-
-Website: [frozenfork.com](https://frozenfork.com)
-
----
+Starter packages for web application developers using Python (Flask) with demo applications hosted Render. Website: [frozenfork.com](https://frozenfork.com)
 
 ### md2website
 
-Static website builder
-
-Repo: [github.com/mrsjoberg/md2website](https://github.com/mrsjoberg/md2website)
-
----
+Static website builder. Repo: [github.com/mrsjoberg/md2website](https://github.com/mrsjoberg/md2website)
 
 ### PlayCode
 
-Programming language for testing experimental features and language design
-
-Repo: [github.com/mrsjoberg/playcode](https://github.com/mrsjoberg/playcode)
-
----
+Programming language for testing experimental features and language design. Repo: [github.com/mrsjoberg/playcode](https://github.com/mrsjoberg/playcode)
 
 ### raknalang
 
-REPL for learning arithmetic in native languages
-
-Repo: [github.com/mrsjoberg/raknalang](https://github.com/mrsjoberg/raknalang)
-
----
+REPL for learning arithmetic in native languages. Repo: [github.com/mrsjoberg/raknalang](https://github.com/mrsjoberg/raknalang)
 
 ### pas2wat
 
-Pascal to WebAssembly text-format compiler
+Pascal to WebAssembly text-format compiler. Repo: [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat)
 
-Repo: [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat)
-
----
-
-### EQZEN [discontinued] <mark>For profit</mark>
+### EQZEN [discontinued]
 
 Collaborative portfolio tracker using Python (Flask), MongoDB, and hosted on AWS
 
----
-
-### GiveTrees [discontinued] <mark>For profit</mark>
+### GiveTrees [discontinued]
 
 Mobile application to plant trees using Lua (Corona SDK) and PHP
 
----
-
 ### LearnHub.io [discontinued]
 
-Online educational platform and community for self-learners
-
-Archive: [github.com/mrsjoberg/learnhub.io](https://github.com/mrsjoberg/learnhub.io)
-
----
+Online educational platform and community for self-learners. Archive: [github.com/mrsjoberg/learnhub.io](https://github.com/mrsjoberg/learnhub.io)
 
 ### AnonChat
 
-Text-based chat application with no login to learn JavaScript
-
-Demo: [anonchat.sjoberg.dev](https://anonchat.sjoberg.dev/)
-
----
+Text-based chat application with no login to learn JavaScript. Demo: [anonchat.sjoberg.dev](https://anonchat.sjoberg.dev/)
 
 ### Doolio.co
 
-Online interactive resume to learn PHP
-
-Archive: [github.com/mrsjoberg/doolio.co](https://github.com/mrsjoberg/doolio.co)
-
----
+Online interactive resume to learn PHP. Archive: [github.com/mrsjoberg/doolio.co](https://github.com/mrsjoberg/doolio.co)
 
 ### Adventures of Puffy
 
 Mobile game for iOS using Lua (Corona SDK)
 
----
-
 ### formul.as
 
 Website with formulas for mathematics and physics to learn HTML and CSS
 
----
-
 ### räkna.nu
 
 Q&A website for getting help with homework
-
----
