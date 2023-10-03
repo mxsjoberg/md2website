@@ -111,7 +111,7 @@ def generate_and_inject_index(file_content):
             index.append("    - " + line.split("### ")[1].split("</a>")[1].strip())
     if len(index) > 0:
         # inject index as list just before first line starting with ##
-        file_content = re.sub(r"## (.*)", r"\n".join([f"{item}" for item in index]) + "\n ---" + r"\n## \1", file_content, count=1)
+        file_content = re.sub(r"## (.*)", r"\n## Index\n" + r"\n".join([f"{item}" for item in index]) + "\n ---" + r"\n## \1", file_content, count=1)
     return file_content
 
 def parse_flags(line):
