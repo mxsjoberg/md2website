@@ -26,7 +26,7 @@ GLOBAL_POSTS = [] # [ { title, date, url } ]
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
 
-def write_header(file, title="Static website built with md2website", root=0):
+def write_header(file, title="This static website was built using md2website", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
     <!--
@@ -87,6 +87,7 @@ def write_footer(file):
     file.write(f"<p class='small'>Page config: <a id='invert'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
+    # is NO_JS useful at all?
     if not NO_JS:
         file.write("<script>")
         js_file = open(f"{DIST_PATH}/main.min.js", "r")
@@ -112,6 +113,19 @@ def generate_and_inject_index(file_content):
         # inject index as list just before first line starting with ##
         file_content = re.sub(r"## (.*)", r"\n".join([f"{item}" for item in index]) + "\n ---" + r"\n## \1", file_content, count=1)
     return file_content
+
+def parse_flags(line):
+    FLAG_TOC = None
+    FLAG_COL = None
+    FLAG_DESC = None
+    if line.startswith("-* "):
+        flags_raw = line[3:].split(",")
+        for flag in flags_raw:
+            key, value = flag.split("=")
+            if key == "toc": FLAG_TOC = bool(value)
+            if key == "col": FLAG_COL = int(value)
+            if key == "desc": FLAG_DESC = str(value)
+    return FLAG_TOC, FLAG_COL, FLAG_DESC
 
 # create dist folder
 if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
@@ -147,31 +161,18 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
 for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
     os.system(f"cp {asset} {DIST_PATH}/{asset}")
 
-def parse_flags(line):
-    FLAG_TOC = None
-    FLAG_COL = None
-    FLAG_DESC = None
-    if line.startswith("-* "):
-        flags_raw = line[3:].split(",")
-        for flag in flags_raw:
-            key, value = flag.split("=")
-            if key == "toc": FLAG_TOC = bool(value)
-            if key == "col": FLAG_COL = int(value)
-            if key == "desc": FLAG_DESC = str(value)
-    return FLAG_TOC, FLAG_COL, FLAG_DESC
-
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
-    if "." not in dir_ and dir_ != "dist" and dir_ != "pages":
+    if "." not in dir_ and dir_ != "pages":
         FLAG_TOC = None
         FLAG_COL = None
         FLAG_DESC = None
         # check if __flags file in dir_
         if os.path.exists(os.path.join(dir_, "__flags")):
-            flag_file = open(f"{dir_}/__flags")
-            flag_content = flag_file.read()
+            flag_content = open(f"{dir_}/__flags").read()
             # parse flags
             FLAG_TOC, FLAG_COL, FLAG_DESC = parse_flags(flag_content)
+        # create page for folder
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
             posts_lst = [] # [ { title, date, url } ]
