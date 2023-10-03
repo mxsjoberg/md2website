@@ -14,7 +14,7 @@ I want to explore DSL for GA or other similar optimization algorithms with brows
 
 Check this resource on CLI applications using Rust: [https://rust-cli.github.io/book/index.html](https://rust-cli.github.io/book/index.html)
 
-
+How to implement an interactive language? execute when typing (predicting)? Research this more.
 
 ## Runtime implementations
 
