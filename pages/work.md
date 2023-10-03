@@ -1,20 +1,40 @@
 # Work
 
-## Projects
+I have been busy building my own software products for the last couple of years.
+
+## I'm currently working on
 
 ---
 
-**Frozenfork** <mark>For profit</mark>
+### Hackerman.AI <mark>For profit</mark>
 
-Starter packages for web application developers
+Online code editor and program generator using Python (Flask), JavaScript (Ace.js, CodeMirror), and hosted on Render
+
+Website: [hackerman.ai](https://hackerman.ai)
+
+---
+
+### Stockstack <mark>For profit</mark>
+
+Distraction-free stock market data dashboard using Python (Flask), JavaScript (Vue.js), MongoDB, and hosted on AWS
+
+Website: [trystockstack.com](https://trystockstack.com)
+
+---
+
+## Other projects
+
+---
+
+### Frozenfork <mark>For profit</mark>
+
+Starter packages for web application developers using Python (Flask) with demo applications hosted Render
 
 Website: [frozenfork.com](https://frozenfork.com)
 
-Technologies: Python (Flask), Render
-
 ---
 
-**md2website**
+### md2website
 
 Static website builder
 
@@ -22,27 +42,7 @@ Repo: [github.com/mrsjoberg/md2website](https://github.com/mrsjoberg/md2website)
 
 ---
 
-**Hackerman** <mark>For profit</mark>
-
-Online code editor and program generator
-
-Website: [hackerman.ai](https://hackerman.ai)
-
-Technologies: Python (Flask), JavaScript (Ace.js, CodeMirror), Render
-
----
-
-**Stockstack** <mark>For profit</mark>
-
-Distraction-free stock market data dashboard
-
-Website: [trystockstack.com](https://trystockstack.com)
-
-Technologies: Python (Flask), JavaScript (Vue.js), MongoDB, AWS
-
----
-
-**PlayCode**
+### PlayCode
 
 Programming language for testing experimental features and language design
 
@@ -50,7 +50,7 @@ Repo: [github.com/mrsjoberg/playcode](https://github.com/mrsjoberg/playcode)
 
 ---
 
-**raknalang**
+### raknalang
 
 REPL for learning arithmetic in native languages
 
@@ -58,7 +58,7 @@ Repo: [github.com/mrsjoberg/raknalang](https://github.com/mrsjoberg/raknalang)
 
 ---
 
-**pas2wat**
+### pas2wat
 
 Pascal to WebAssembly text-format compiler
 
@@ -66,23 +66,19 @@ Repo: [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat)
 
 ---
 
-**EQZEN** [discontinued] <mark>For profit</mark>
+### EQZEN [discontinued] <mark>For profit</mark>
 
-Collaborative portfolio tracker
-
-Technologies: Python (Flask), MongoDB, AWS
+Collaborative portfolio tracker using Python (Flask), MongoDB, and hosted on AWS
 
 ---
 
-**GiveTrees** [discontinued] <mark>For profit</mark>
+### GiveTrees [discontinued] <mark>For profit</mark>
 
-Mobile application to plant trees
-
-Technologies: Lua (Corona SDK), PHP
+Mobile application to plant trees using Lua (Corona SDK) and PHP
 
 ---
 
-**LearnHub.io** [discontinued]
+### LearnHub.io [discontinued]
 
 Online educational platform and community for self-learners
 
@@ -90,7 +86,7 @@ Archive: [github.com/mrsjoberg/learnhub.io](https://github.com/mrsjoberg/learnhu
 
 ---
 
-**AnonChat**
+### AnonChat
 
 Text-based chat application with no login to learn JavaScript
 
@@ -98,7 +94,7 @@ Demo: [anonchat.sjoberg.dev](https://anonchat.sjoberg.dev/)
 
 ---
 
-**Doolio.co**
+### Doolio.co
 
 Online interactive resume to learn PHP
 
@@ -106,21 +102,19 @@ Archive: [github.com/mrsjoberg/doolio.co](https://github.com/mrsjoberg/doolio.co
 
 ---
 
-**Adventures of Puffy**
+### Adventures of Puffy
 
-Mobile game for iOS
-
-Technologies: Lua (Corona SDK)
+Mobile game for iOS using Lua (Corona SDK)
 
 ---
 
-**formul.as**
+### formul.as
 
 Website with formulas for mathematics and physics to learn HTML and CSS
 
 ---
 
-**räkna.nu**
+### räkna.nu
 
 Q&A website for getting help with homework
 
