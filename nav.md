@@ -1,1 +1,1 @@
-[/index](index.html) [/about](about.html) [/work](work.html) [/notes](notes.html)
+[/index](/index.html) [/about](/about.html) [/work](/work.html) [/notes](/notes.html)
