@@ -1,6 +1,10 @@
 # Courses
 
-# 2021
+A list of all courses taken.
+
+---
+
+## 2021
 
 - **<a name="introduction-to-corporate-finance" class="anchor"></a> [Introduction to corporate finance](#introduction-to-corporate-finance)**
 
@@ -14,7 +18,7 @@
 
 	Research methods and methodology in finance, time series, panel data, probability distributions, linear and multiple regression, binary regression models.
 
-# 2020
+## 2020
 
 - **<a name="network-theory" class="anchor"></a> [Network Theory](#network-theory)**
 
@@ -40,7 +44,7 @@
 
 	Distributed software and database systems, MapReduce, OLTP/OLAP, Apache Spark, data streaming.
 
-# 2019
+## 2019
 
 - **<a name="security-engineering" class="anchor"></a> [Security engineering](#security-engineering)**
 
@@ -72,7 +76,7 @@
 
 	Descriptive statistics, regression and surveys, hypothesis testing, association and estimation, experiments and clinical trials.
 
-# 2018
+## 2018
 
 - **<a name="configuring-linux-web-servers" class="anchor"></a> [Configuring Linux Web Servers](#configuring-linux-web-servers)**
 
@@ -98,7 +102,7 @@
 
 	Databases and data architectures, real-world dataset analysis (Python, SQL, MapReduce) and visualization (matplotlib), individual research and report writing.
 
-# 2017
+## 2017
 
 - **<a name="web-mobile-and-cloud-technologies" class="anchor"></a> [Web, mobile and cloud technologies](#web-mobile-and-cloud-technologies)**
 
@@ -136,7 +140,7 @@
 
 	Software quality, team working, project and service management techniques (ITIL).
 
-# 2016
+## 2016
 
 - **<a name="web-technologies" class="anchor"></a> [Web technologies](#web-technologies)**
 
@@ -174,7 +178,7 @@
 
 	Introduction to data analysis with Python (Numpy, Matplotlib, Pandas).
 
-# 2015
+## 2015
 
 - **<a name="introduction-to-computing-and-information-technology" class="anchor"></a> [Introduction to computing and information technology](#introduction-to-computing-and-information-technology)**
 
@@ -206,7 +210,7 @@
 
 	Web development fundamentals, best practices, and professional problem-solving techniques using Developer Tools.
 
-# 2013
+## 2013
 
 - **<a name="introduction-to-programming-and-thinking-in-computer-science" class="anchor"></a> [Introduction to Programming and Thinking in Computer Science](#introduction-to-programming-and-thinking-in-computer-science)**
 
@@ -250,7 +254,7 @@
 
 	Introduction to evolutionary biology, ecology, and geology.
 
-# 2012
+## 2012
 
 - **<a name="mathematics-i" class="anchor"></a> [Mathematics I](#mathematics-i)**
 
