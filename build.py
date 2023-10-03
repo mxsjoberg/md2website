@@ -320,6 +320,12 @@ for root, dirs, files in os.walk("pages"):
                     file_content = generate_and_inject_index(file_content)
                 # write
                 write_header(tmp_file, title)
+                # columns
+                # if FLAG_COL:
+                #     tmp_file.write(f"<div style='column-count:{FLAG_COL};'>")
+                # if FLAG_COL:
+                #     print(file_name, "OK")
+                #     file_content = re.sub(r"---", f"\n<div style='column-count:{FLAG_COL};'>" + r"\n", file_content, count=1)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
                 # list recent posts
                 if POSTS_ON_INDEX and file_name == "index":
@@ -330,5 +336,8 @@ for root, dirs, files in os.walk("pages"):
                     for post in sorted_global_posts:
                         tmp_file.write(f"<li>{datetime.date(post['date'])} – <a href='{post['url']}.html'>{post['title']}</a></li>")
                     tmp_file.write("</dl>")
+                if FLAG_COL: tmp_file.write("</div>")
                 write_footer(tmp_file)
                 file.close()
+
+
