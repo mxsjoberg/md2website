@@ -1,3 +1,15 @@
+@font-face {
+  font-family: "Hack";
+  src: local("Hack Regular"), local("Hack"), url("Hack-Regular.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Hack";
+  src: local("Hack Bold"), local("Hack-Bold"), url("Hack-Bold.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
 body {
   font-family: "Hack", monospace !important;
 }
