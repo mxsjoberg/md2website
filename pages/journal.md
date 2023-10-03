@@ -6,6 +6,16 @@ This journal contains my unstructured and unfiltered notes. I might consolidate 
 
 ---
 
+## TODOs
+
+I should get started on llvmlite for python implementation of playcode (should be fun!). + create outline for next playcode post (control structures? tags and swaps?). Third post should be after working llvm codegen.
+
+I want to explore DSL for GA or other similar optimization algorithms with browser-based playground. Basically implementing DSL for complicated logic in JavaScript?? or is there a better way to do this? (without using more than one "language").
+
+Check this resource on CLI applications using Rust: [https://rust-cli.github.io/book/index.html](https://rust-cli.github.io/book/index.html)
+
+
+
 ## Runtime implementations
 
 Note on class-based OOP vs prototype-based OOP (instances is an environment):
