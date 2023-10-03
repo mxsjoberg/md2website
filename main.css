@@ -66,6 +66,16 @@ html.styling a {
 html.styling a:hover {
   text-decoration: underline;
 }
+html.styling ul {
+  list-style: square;
+  padding: 2rem;
+  border: 1px dashed #66666C;
+}
+html.styling ul span {
+  margin-bottom: 1rem;
+  display: block;
+  font-weight: bold;
+}
 html.styling dl {
   list-style: none;
 }
