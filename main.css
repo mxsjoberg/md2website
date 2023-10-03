@@ -41,6 +41,9 @@ html.styling div.page p {
   margin: 2rem 0;
   line-height: 2rem;
 }
+html.styling div.page li p {
+  margin: 1rem 0;
+}
 html.styling .nav {
   padding: 1rem 0;
 }
