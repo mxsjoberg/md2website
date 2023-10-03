@@ -12,7 +12,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 DIST_PATH = "../michaelsjoberg.com/dist"
-ASSETS = ["main.css", "main.js"]
+ASSETS = ["main.css", "main.js", "Hack-Bold.ttf", "Hack-Regular.ttf"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I write about programming, projects, and finance."
 APP_NAME = "Michael's Page"
@@ -54,7 +54,6 @@ def write_header(file, title="Static website built with md2website", root=0):
     file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
     file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
-    file.write("<link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>")
     # css
     # file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
     file.write("<style>")
@@ -145,8 +144,8 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
     file.write(js_content)
 
 # copy non-css and non-js assets
-# for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
-#     os.system(f"cp {asset} {DIST_PATH}/{asset}")
+for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
+    os.system(f"cp {asset} {DIST_PATH}/{asset}")
 
 # for each folder in root dir, create list page with content
 for dir_ in os.listdir("."):
