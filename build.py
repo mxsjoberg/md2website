@@ -249,9 +249,6 @@ for dir_ in os.listdir("."):
             if FLAG_DESC:
                 dir_page.write(f"<p>{FLAG_DESC}</p>")
                 dir_page.write("<hr>")
-            # columns
-            if FLAG_COL:
-                dir_page.write(f"<div style='column-count:{FLAG_COL};'>")
             # sort posts_lst by date then by name
             sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
             # write posts_lst (list by date)
@@ -262,7 +259,12 @@ for dir_ in os.listdir("."):
                         dir_page.write("</ul>")
                     dir_page.write(f"<h1>{post['date'].year}</h1>")
                     current_date = post['date'].year
-                    dir_page.write("<ul>")
+                    # dir_page.write("<ul>")
+                    # columns
+                    if FLAG_COL:
+                        dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
+                    else:
+                        dir_page.write("<ul>")
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
             dir_page.write("</ul>")
             # create list with categories for ordering
@@ -281,12 +283,15 @@ for dir_ in os.listdir("."):
                 dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
                 if isinstance(posts_dict[category], dict):
                     for subcategory in posts_dict[category]:
-                        # if len(posts_dict[category].keys()) > 1:
-                        #     dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
                         sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
-                        dir_page.write("<ul>")
+                        # subcategory name
                         if len(posts_dict[category].keys()) > 1:
-                            dir_page.write(f"<span id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</span>")
+                            dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
+                        # dir_page.write("<ul>")
+                        if FLAG_COL:
+                            dir_page.write(f"<ul style='column-count:{FLAG_COL};column-gap:2rem;'>")
+                        else:
+                            dir_page.write("<ul>")
                         for post in sorted_posts_dict:
                             # if date is current or last month
                             if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
@@ -296,7 +301,11 @@ for dir_ in os.listdir("."):
                         dir_page.write("</ul>")
                 else:
                     sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
-                    dir_page.write("<ul>")
+                    # dir_page.write("<ul>")
+                    if FLAG_COL:
+                        dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
+                    else:
+                        dir_page.write("<ul>")
                     for post in sorted_posts_dict:
                         # if date is current or last month
                         if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
@@ -304,7 +313,7 @@ for dir_ in os.listdir("."):
                         else:    
                             dir_page.write(f"<li><a href='{dir_}/{category}/{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
-            if FLAG_COL: dir_page.write("</div>")
+            # if FLAG_COL: dir_page.write("</div>")
             write_footer(dir_page)
 
 # for each md file in pages, create html page
