@@ -194,6 +194,11 @@ for dir_ in os.listdir("."):
                                 date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
                             except:
                                 date = post_content.split("\n")[2].split("*")[1]
+                            # check if date is older than 2 years
+                            try:
+                                date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
+                            except:
+                                date_is_outdated = False
                             # categories
                             category, subcategory = None, None
                             try:
@@ -224,6 +229,9 @@ for dir_ in os.listdir("."):
                             post_content = generate_and_inject_index(post_content)
                             # write
                             write_header(tmp_file, title=title)
+                            # write outdated notice
+                            if date_is_outdated:
+                                tmp_file.write(f"<mark>This post is more than two years old and may contain outdated information</mark>")
                             html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
                             # syntax highlight
                             soup = BeautifulSoup(html_content, "html.parser")
