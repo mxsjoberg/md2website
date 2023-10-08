@@ -1,4 +1,4 @@
-# How to invest in stocks
+# A note to self about investing in stocks
 
 <mark>May 16, 2020</mark> by [Michael Sjöberg](/about.html)
 
