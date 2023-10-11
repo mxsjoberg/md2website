@@ -14,7 +14,7 @@ I want to explore DSL for GA or other similar optimization algorithms with brows
 
 Check this resource on CLI applications using Rust: [https://rust-cli.github.io/book/index.html](https://rust-cli.github.io/book/index.html)
 
-How to implement an interactive language? execute when typing (predicting)? Research this more. I have started working on this in this repo: [github.com/mrsjoberg/pasby](https://github.com/mrsjoberg/pasby). I am using Pascal as test language and implementing interpreter in Ruby (to make it interactive and to run in browser).
+How to implement an interactive language? execute when typing (predicting)? Research this more. I have started working on this in this repo: [github.com/mrsjoberg/pascal-in-ruby](https://github.com/mrsjoberg/pascal-in-ruby). I am using Pascal as test language and implementing interpreter in Ruby (to make it interactive and to run in browser).
 
 ## Runtime implementations
 
