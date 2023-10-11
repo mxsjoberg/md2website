@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // toggle invert
-    var invert = document.querySelector("#invert");
-    invert.addEventListener("click", function() {
-        document.querySelector("html").classList.toggle("invert");
+    // toggle theme
+    var theme = document.querySelector("#theme");
+    theme.addEventListener("click", function() {
+        document.querySelector("html").classList.toggle("light");
         // save to local storage
-        if (document.querySelector("html").classList.contains("invert")) {
-            localStorage.setItem("invert", "true");
+        if (document.querySelector("html").classList.contains("light")) {
+            localStorage.setItem("light", "true");
         } else {
-            localStorage.setItem("invert", "false");
+            localStorage.setItem("light", "false");
         }
     });
     // toggle styling
@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     // check local storage
-    if (localStorage.getItem("invert") == "true") {
-        document.querySelector("html").classList.add("invert");
+    if (localStorage.getItem("light") == "true") {
+        document.querySelector("html").classList.add("light");
     }
     if (localStorage.getItem("styling") == "true") {
         document.querySelector("html").classList.add("styling");
