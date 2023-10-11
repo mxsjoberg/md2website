@@ -18,6 +18,7 @@ DESCRIPTION = "I write about programming, projects, and finance."
 APP_NAME = "Michael's Page"
 APP_THEME = "#161716"
 POSTS_ON_INDEX = True
+ADD_CONTACT_TO_RESUME = True
 NO_JS = False 
 
 # for listing all posts on index page
@@ -69,7 +70,7 @@ def write_header(file, title="This static website was built using md2website", r
     file.write("<body>")
     file.write("<div class='page'>")
     # nav
-    file.write("<div class='nav'>")
+    file.write("<div class='nav no-print'>")
     try:
         nav_file = open("nav.md", "r")
         nav_content = nav_file.read()
@@ -83,7 +84,7 @@ def write_header(file, title="This static website was built using md2website", r
     file.write("</div>")
 
 def write_footer(file):
-    file.write("<div id='footer'>")
+    file.write("<div id='footer' class='no-print'>")
     file.write(f"<p class='small'>Page config: <a id='theme'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
@@ -361,8 +362,13 @@ for root, dirs, files in os.walk("pages"):
                 # if FLAG_COL:
                 #     print(file_name, "OK")
                 #     file_content = re.sub(r"---", f"\n<div style='column-count:{FLAG_COL};'>" + r"\n", file_content, count=1)
+                # add name and contact on top of resume page
+                if ADD_CONTACT_TO_RESUME and file_name == "resume":
+                    tmp_file.write("<dl id='resume-contact' style='text-align:right;'><li><strong>Michael Sjöberg</strong></li><li><a href='mailto:michael@micsjo.com'>michael@micsjo.com</a></li><li><a href='https://michaelsjoberg.com'>michaelsjoberg.com</a></li><li><a href='https://github.com/mrsjoberg'>github.com/mrsjoberg</a></li></dl>")
+                # replace -- with &mdash;
+                file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
-                # list recent posts
+                # list recent posts on index
                 if POSTS_ON_INDEX and file_name == "index":
                     tmp_file.write("<hr>")
                     # list posts
