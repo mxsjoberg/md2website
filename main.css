@@ -76,6 +76,7 @@ html.styling a:hover {
 }
 html.styling ul {
   list-style: square;
+  margin: 2rem 0;
   /*padding: 2rem;
   border: 1px dashed #66666C;*/
 }
@@ -130,13 +131,14 @@ html.styling hr {
   max-width: 10%;
 }
 html.styling.light hr {
- max-width: 100%; 
+  max-width: 100%; 
 }
 html.styling mark {
   background-color: #E3E463;
   color: #161716;
   padding: 4px 6px;
-  font-size: 80%;
+  /*font-size: 80%;*/
+  font-size: 16px;
 }
 html.styling.light mark {
   background-color: #6BF !important;
@@ -162,3 +164,78 @@ html.styling .highlight .nb     { color: #6BF !important; }
 
 html.styling .highlight .nc     { color: #6BF !important; font-weight: bold; }
 
+#resume-contact {
+  display: none;
+}
+
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+  .print-right {
+    float: right !important;
+  }
+  body {
+    font-family: "Helvetica", sans-serif !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-size: 12px !important;
+  }
+  #resume-contact {
+    display: block !important;
+  }
+  h1 {
+    display: none !important;
+  }
+  /*h1,
+  h2 {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }*/
+  h2 {
+    font-size: 12px !important;
+    /*border-bottom: 1px solid #000000 !important;*/
+    margin: 2rem 0 !important;
+    text-transform: uppercase !important;
+  }
+  h3 {
+    font-size: 12px !important;
+    margin: 0 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  a {
+    color: #000000 !important;
+    font-weight: normal !important;
+  }
+  p {
+    margin: 0 !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.2rem !important;
+  }
+  mark {
+    font-size: 12px !important;
+    background: transparent !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    font-weight: normal !important;
+  }
+  ul {
+    margin: 0.5rem 0 !important;
+  }
+  li {
+    margin-bottom: 0.25rem !important;
+    line-height: 1.2rem !important;
+  }
+  li p {
+    margin: 0 !important;
+    margin-bottom: 0.25rem !important;
+    line-height: 1.2rem !important;
+  }
+  hr {
+    /*margin: 1rem 0 !important;
+    color: #000000 !important;*/
+    display: none !important;
+  }
+}
