@@ -84,7 +84,7 @@ def write_header(file, title="This static website was built using md2website", r
 
 def write_footer(file):
     file.write("<div id='footer'>")
-    file.write(f"<p class='small'>Page config: <a id='invert'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
+    file.write(f"<p class='small'>Page config: <a id='theme'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
     # is NO_JS useful at all?
