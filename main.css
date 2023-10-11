@@ -19,18 +19,22 @@ a {
 div.page {
   max-width: 640px;
 }
-html:not(.invert) a#invert {
+html:not(.light) a#theme {
   text-decoration: underline;
 }
 /* styling  */
-html.styling.invert {
+/*html.styling.light {
   filter: invert(1);
-}
+}*/
 html.styling body {
   background: #161716;
   color: #D7D7D8;
   font-size: 18px;
   margin: 0;
+}
+html.styling.light body {
+  background: #FFFFFF !important;
+  color: #161716 !important;
 }
 html.styling div.page {
   padding: 1rem 2rem;
@@ -63,6 +67,10 @@ html.styling a {
   cursor: pointer;
   text-decoration: none;
 }
+html.styling.light a {
+  color: #161716;
+  font-weight: bold;
+}
 html.styling a:hover {
   text-decoration: underline;
 }
@@ -81,6 +89,7 @@ html.styling dl {
 }
 html.styling li {
   margin-bottom: 0.25rem;
+  line-height: 1.5rem;
 }
 html.styling table {
   border-collapse: collapse;
@@ -120,19 +129,17 @@ html.styling hr {
   margin: 2rem 0;
   max-width: 10%;
 }
-/*html.styling em {
-  font-size: 80%;
-  background: #66666C;
-  padding: 4px 6px;
-  border-radius: 4px;
-  font-style: normal !important;
-  float: right;
-}*/
+html.styling.light hr {
+ max-width: 100%; 
+}
 html.styling mark {
-  background-color: #e3e463;
+  background-color: #E3E463;
   color: #161716;
   padding: 4px 6px;
   font-size: 80%;
+}
+html.styling.light mark {
+  background-color: #6BF !important;
 }
 html.styling #footer {
   padding: 1rem 0;
