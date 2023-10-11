@@ -10,6 +10,8 @@ Please buy my unused <mark>.com</mark> domains here: [/domains](/domains.html)
 
 I work on a Macbook Pro (16 inch, Intel) and wear Sony's noise cancelling headphones. I tend to write code in Python, Ruby, C++, and Rust (with some HTML, CSS, JavaScript, etc). I use Flask for almost all web applications and deploy on AWS (ECB, Lambda, Amplify) or Render.
 
+I will likely try to learn these programming languages next: [Cairo](https://www.cairo-lang.org/) (provable programs), [Berry](https://berry-lang.github.io/) (embedded scripting)
+
 I sometimes use a Keychron mechanical keyboard but often revert back to Apple's Magic keyboard (with numpad). I currently use an Xtrfy mouse.
 
 ---
