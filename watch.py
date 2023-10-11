@@ -9,7 +9,7 @@ from watchdog.events import FileSystemEventHandler
 from livereload import Server
 
 DIST_PATH = "../michaelsjoberg.com/dist"
-DIR_TO_WATCH = "posts"
+DIR_TO_WATCH = "pages"
 COMMAND_TO_RUN = "python3 build.py"
 
 def md_modified(event):
