@@ -80,6 +80,9 @@ html.styling ul {
   /*padding: 2rem;
   border: 1px dashed #66666C;*/
 }
+html.styling ul li ul {
+  margin: 0.5rem 0;
+}
 html.styling ul span {
   margin-bottom: 1rem;
   display: block;
