@@ -4,4 +4,4 @@ I build software products (full-stack product engineer?). I want to build progra
 
 I have a MSc degree in Advanced Computing from King's College London and have taken a few postgraduate courses in corporate finance/ financial research at The Open University Business School (distance learning is very nice). I have a full list of courses taken here: <a href="courses.html">/courses</a>
 
-[[github](https://github.com/mrsjoberg)] [[twitter](https://twitter.com/mxsjoberg)] [[soundcloud](https://soundcloud.com/mixmaester)] [[linkedin](https://www.linkedin.com/in/micsjo)]
+[[github](https://github.com/mxsjoberg)] [[twitter](https://twitter.com/mxsjoberg)] [[soundcloud](https://soundcloud.com/mixmaester)] [[linkedin](https://www.linkedin.com/in/micsjo)]

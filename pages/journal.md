@@ -12,9 +12,9 @@ I should get started on llvmlite for python implementation of playcode (should b
 
 I want to explore DSL for GA or other similar optimization algorithms with browser-based playground. Basically implementing DSL for complicated logic in JavaScript?? or is there a better way to do this? (without using more than one "language").
 
-Check this resource on CLI applications using Rust: [rust-cli.github.io/book/index.html](https://rust-cli.github.io/book/index.html). I should use this and [doc.rust-lang.org/book/](https://doc.rust-lang.org/book/) to refactor [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat). **I created a branch for old code (subset-of-pascal) since moving main to PL/0 with my own modifications (see ebnf-file).**
+Check this resource on CLI applications using Rust: [rust-cli.github.io/book/index.html](https://rust-cli.github.io/book/index.html). I should use this and [doc.rust-lang.org/book/](https://doc.rust-lang.org/book/) to refactor [github.com/mxsjoberg/pas2wat](https://github.com/mxsjoberg/pas2wat). **I created a branch for old code (subset-of-pascal) since moving main to PL/0 with my own modifications (see ebnf-file).**
 
-How to implement an interactive language? execute when typing (predicting)? Research this more. **I have started working on this in this repo: [github.com/mrsjoberg/pascal-in-ruby](https://github.com/mrsjoberg/pascal-in-ruby)**
+How to implement an interactive language? execute when typing (predicting)? Research this more. **I have started working on this in this repo: [github.com/mxsjoberg/pascal-in-ruby](https://github.com/mxsjoberg/pascal-in-ruby)**
 
 ## Runtime implementations
 

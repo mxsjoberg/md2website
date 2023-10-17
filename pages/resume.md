@@ -51,16 +51,16 @@ The Open University, United Kingdom
 
 ### pascal-in-ruby
 
-Interactive interpreter for Pascal in Ruby, repo: [github.com/mrsjoberg/pascal-in-ruby](https://github.com/mrsjoberg/pascal-in-ruby). Blog post: [michaelsjoberg.com/posts/writing-an-interactive-interpreter-in-ruby](https://michaelsjoberg.com/posts/writing-an-interactive-interpreter-in-ruby)
+Interactive interpreter for Pascal in Ruby, repo: [github.com/mxsjoberg/pascal-in-ruby](https://github.com/mxsjoberg/pascal-in-ruby). Blog post: [michaelsjoberg.com/posts/writing-an-interactive-interpreter-in-ruby](https://michaelsjoberg.com/posts/writing-an-interactive-interpreter-in-ruby)
 
 ### md2website
 
-Markdown to static website builder in Python, repo: [github.com/mrsjoberg/md2website](https://github.com/mrsjoberg/md2website)
+Markdown to static website builder in Python, repo: [github.com/mxsjoberg/md2website](https://github.com/mxsjoberg/md2website)
 
 ### PlayCode
 
-A playful programming language in Python, repo: [github.com/mrsjoberg/playcode](https://github.com/mrsjoberg/playcode). Blog post: [michaelsjoberg.com/posts/playcode-introduction-and-operator-precedence](https://michaelsjoberg.com/posts/playcode-introduction-and-operator-precedence)
+A playful programming language in Python, repo: [github.com/mxsjoberg/playcode](https://github.com/mxsjoberg/playcode). Blog post: [michaelsjoberg.com/posts/playcode-introduction-and-operator-precedence](https://michaelsjoberg.com/posts/playcode-introduction-and-operator-precedence)
 
 <!-- ### pas2wat
 
-Pascal-to-WebAssembly text-format compiler in Rust, repo: [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat) -->
+Pascal-to-WebAssembly text-format compiler in Rust, repo: [github.com/mxsjoberg/pas2wat](https://github.com/mxsjoberg/pas2wat) -->

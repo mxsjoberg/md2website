@@ -124,10 +124,10 @@ There should be a reasonable result with or without issues though, so an input o
 
 Operator precedence seems to work, it's updating information on each keystroke, and not too slow (yet).
 
-![https://raw.githubusercontent.com/mrsjoberg/pascal-in-ruby/main/pascal_in_ruby.png](https://raw.githubusercontent.com/mrsjoberg/pascal-in-ruby/main/pascal_in_ruby.png)
+![https://raw.githubusercontent.com/mxsjoberg/pascal-in-ruby/main/pascal_in_ruby.png](https://raw.githubusercontent.com/mxsjoberg/pascal-in-ruby/main/pascal_in_ruby.png)
 
 Now I just need to add the rest of the language... I'll make another post when it can interpret a larger subset of the Pascal grammar.
 
-The repo for this project is here: [github.com/mrsjoberg/pascal-in-ruby](https://github.com/mrsjoberg/pascal-in-ruby)
+The repo for this project is here: [github.com/mxsjoberg/pascal-in-ruby](https://github.com/mxsjoberg/pascal-in-ruby)
 
 [1] *I don't like parser generators. It's a nice idea and always consider using one, but it's just too much "magic" for my taste. I want to control the whole process.*

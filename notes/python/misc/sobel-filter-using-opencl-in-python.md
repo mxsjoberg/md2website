@@ -16,7 +16,7 @@ input_array = np.array(input_image).astype(np.uint8)
 input_image.show()
 ```
 
-![](https://raw.githubusercontent.com/mrsjoberg/playground/main/python/images/photo.png)
+![](https://raw.githubusercontent.com/mxsjoberg/playground/main/python/images/photo.png)
 
 ```python
 # sobel kernel
@@ -77,4 +77,4 @@ output_image.save('images/edges.png')
 output_image.show()
 ```
 
-![](https://raw.githubusercontent.com/mrsjoberg/playground/main/python/images/edges.png)
+![](https://raw.githubusercontent.com/mxsjoberg/playground/main/python/images/edges.png)

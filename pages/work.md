@@ -36,19 +36,19 @@ Starter packages for web application developers using Python (Flask) with demo a
 
 ### md2website
 
-Static website builder. Repo: [github.com/mrsjoberg/md2website](https://github.com/mrsjoberg/md2website)
+Static website builder. Repo: [github.com/mxsjoberg/md2website](https://github.com/mxsjoberg/md2website)
 
 ### PlayCode
 
-Programming language for testing experimental features and language design. Repo: [github.com/mrsjoberg/playcode](https://github.com/mrsjoberg/playcode)
+Programming language for testing experimental features and language design. Repo: [github.com/mxsjoberg/playcode](https://github.com/mxsjoberg/playcode)
 
 ### raknalang
 
-REPL for learning arithmetic in native languages. Repo: [github.com/mrsjoberg/raknalang](https://github.com/mrsjoberg/raknalang)
+REPL for learning arithmetic in native languages. Repo: [github.com/mxsjoberg/raknalang](https://github.com/mxsjoberg/raknalang)
 
 ### pas2wat
 
-Pascal to WebAssembly text-format compiler. Repo: [github.com/mrsjoberg/pas2wat](https://github.com/mrsjoberg/pas2wat)
+Pascal to WebAssembly text-format compiler. Repo: [github.com/mxsjoberg/pas2wat](https://github.com/mxsjoberg/pas2wat)
 
 ### EQZEN [discontinued]
 
@@ -60,7 +60,7 @@ Mobile application to plant trees using Lua (Corona SDK) and PHP
 
 ### LearnHub.io [discontinued]
 
-Online educational platform and community for self-learners. Archive: [github.com/mrsjoberg/learnhub.io](https://github.com/mrsjoberg/learnhub.io)
+Online educational platform and community for self-learners. Archive: [github.com/mxsjoberg/learnhub.io](https://github.com/mxsjoberg/learnhub.io)
 
 ### AnonChat
 
@@ -68,7 +68,7 @@ Text-based chat application with no login to learn JavaScript. Demo: [anonchat.s
 
 ### Doolio.co
 
-Online interactive resume to learn PHP. Archive: [github.com/mrsjoberg/doolio.co](https://github.com/mrsjoberg/doolio.co)
+Online interactive resume to learn PHP. Archive: [github.com/mxsjoberg/doolio.co](https://github.com/mxsjoberg/doolio.co)
 
 ### Adventures of Puffy
 

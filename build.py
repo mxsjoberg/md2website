@@ -35,7 +35,7 @@ def write_header(file, title="This static website was built using md2website", r
     █▄─▀█▀─▄█▄─▄▄▀█▀▄▄▀█▄─█▀▀▀█─▄█▄─▄▄─█▄─▄─▀█─▄▄▄▄█▄─▄█─▄─▄─█▄─▄▄─█
     ██─█▄█─███─██─██▀▄███─█─█─█─███─▄█▀██─▄─▀█▄▄▄▄─██─████─████─▄█▀█
     █▄▄▄█▄▄▄█▄▄▄▄██▄▄▄▄██▄▄▄█▄▄▄██▄▄▄▄▄█▄▄▄▄██▄▄▄▄▄█▄▄▄██▄▄▄██▄▄▄▄▄█
-    This static website was built by github.com/mrsjoberg/md2website
+    This static website was built by github.com/mxsjoberg/md2website
     -->
     """.replace("    ", ""))
     file.write("<html lang='en'>")
@@ -85,7 +85,7 @@ def write_header(file, title="This static website was built using md2website", r
 
 def write_footer(file):
     file.write("<div id='footer' class='no-print'>")
-    file.write(f"<p class='small'>Page config: <a id='theme'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mrsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
+    file.write(f"<p class='small'>Page config: <a id='theme'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
     # is NO_JS useful at all?
@@ -364,7 +364,7 @@ for root, dirs, files in os.walk("pages"):
                 #     file_content = re.sub(r"---", f"\n<div style='column-count:{FLAG_COL};'>" + r"\n", file_content, count=1)
                 # add name and contact on top of resume page
                 if ADD_CONTACT_TO_RESUME and file_name == "resume":
-                    tmp_file.write("<dl id='resume-contact' style='text-align:right;'><li><strong>Michael Sjöberg</strong></li><li><a href='mailto:michael@micsjo.com'>michael@micsjo.com</a></li><li><a href='https://michaelsjoberg.com'>michaelsjoberg.com</a></li><li><a href='https://github.com/mrsjoberg'>github.com/mrsjoberg</a></li></dl>")
+                    tmp_file.write("<dl id='resume-contact' style='text-align:right;'><li><strong>Michael Sjöberg</strong></li><li><a href='mailto:michael@micsjo.com'>michael@micsjo.com</a></li><li><a href='https://michaelsjoberg.com'>michaelsjoberg.com</a></li><li><a href='https://github.com/mxsjoberg'>github.com/mxsjoberg</a></li></dl>")
                 # replace -- with &mdash;
                 file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))

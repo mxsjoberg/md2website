@@ -2,7 +2,7 @@
 
 <mark>May 12, 2023</mark> by [Michael Sjöberg](/about.html)
 
-This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available [here](https://github.com/mrsjoberg/playcode).
+This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available [here](https://github.com/mxsjoberg/playcode).
 
 ## What is PlayCode?
 
@@ -52,7 +52,7 @@ There are two ways to include comments, `--` and `->`, which also can be used as
 
 ### Implementation language and method
 
-I started working on PlayCode before writing this post and managed to implement a basic but working structure for lexer and parser in C++ (mainly to refresh my knowledge of C++ programming). The code is available [here](https://github.com/mrsjoberg/playcode/blob/main/fpc.cpp). However, having to refresh it in the first place is probably due to its insane complexity. It is not a very fun language to work with, so decided to start over in Python. I could always rewrite in C++, C, or something like Zig later if performance is important. 
+I started working on PlayCode before writing this post and managed to implement a basic but working structure for lexer and parser in C++ (mainly to refresh my knowledge of C++ programming). The code is available [here](https://github.com/mxsjoberg/playcode/blob/main/fpc.cpp). However, having to refresh it in the first place is probably due to its insane complexity. It is not a very fun language to work with, so decided to start over in Python. I could always rewrite in C++, C, or something like Zig later if performance is important. 
 
 Python is my go-to language to express ideas, and since Python 3.4+ there is support for enumerations and 3.10+ structural pattern matching (switch statements). Maybe can be used for compiler-writing now?
 
