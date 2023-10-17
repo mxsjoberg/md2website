@@ -22,7 +22,9 @@ Developed and launched online businesses
 
 ### Co-founder/ Software Developer, Plant for Earth Company LTD <mark style="float:right;">2014 -- 2015</mark>
 
-Worked on mobile applications for iOS and Android in Lua. Planted 1000+ trees via in-app purchases
+Worked on mobile applications for iOS and Android using Lua (Corona SDK)
+
+<!-- Planted 1000+ trees via in-app purchases -->
 
 <!-- ### Swedish Armed Forces (1st Marine Regiment) <mark style="float:right;">2009 -- 2010</mark>
 
