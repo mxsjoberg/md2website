@@ -12,7 +12,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 DIST_PATH = "../michaelsjoberg.com/dist"
-ASSETS = ["main.css", "main.js", "Hack-Bold.ttf", "Hack-Regular.ttf"]
+ASSETS = ["main.css", "main.js", "Hack-Bold.ttf", "Hack-Regular.ttf", "resume.pdf"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I write about programming, projects, and finance."
 APP_NAME = "Michael's Page"
