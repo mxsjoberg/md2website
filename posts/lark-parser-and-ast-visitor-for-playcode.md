@@ -1,6 +1,6 @@
 # Lark parser and AST visitor for PlayCode
 
-<mark>October 20 12, 2023</mark> by [Michael Sjöberg](/about.html)
+<mark>October 20, 2023</mark> by [Michael Sjöberg](/about.html)
 
 I never really use parser generators. But I have many language-related ideas that I want to explore without writing a new parser each time, or worse, update after every grammar change... So, I have decided to re-implement a subset of PlayCode using [Lark](https://github.com/lark-parser/lark).
 
