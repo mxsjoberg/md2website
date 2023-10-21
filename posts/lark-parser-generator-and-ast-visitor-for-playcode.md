@@ -130,7 +130,7 @@ print(SYMBOL_TABLE)
 
 Now, this is nice. You can basically write the typical calculator example in only a few lines with the correct grammar.
 
-# Replacing the old parser and interpreter
+## Replacing the old parser and interpreter
 
 I have replaced the PlayCode tokenizer, parser, and interpreter with the Lark generated parser and AST visitor. I think it will be much more maintainable frequent changes to the grammar, which is the whole point of an experimental programming language.
 
