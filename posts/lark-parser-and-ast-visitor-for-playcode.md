@@ -25,7 +25,7 @@ factor : NUMBER             -> number
        | IDENTIFIER         -> identifier
        | "(" expr ")"
 
-COMMENT : ("--" | "->") /[^\n]*/
+COMMENT : "--" /[^\n]*/
 
 %import common.CNAME        -> IDENTIFIER
 %import common.NUMBER
