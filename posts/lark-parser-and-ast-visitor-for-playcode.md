@@ -1,14 +1,18 @@
-# Lark parser and AST visitor for PlayCode
+# Lark parser generator and AST visitor for PlayCode
 
 <mark>October 20, 2023</mark> by [Michael Sjöberg](/about.html)
 
-I never really use parser generators. But I have many language-related ideas that I want to explore without writing a new parser each time, or worse, update after every grammar change... So, I have decided to re-implement a subset of PlayCode using [Lark](https://github.com/lark-parser/lark).
+I have never really used parser generators. I briefly tried YACC, Bison, and ANTLR, but didn't like it. I prefer to write my own recursive descent parsers, it's more fun (sometimes!) and it's nice to have full control over the AST layout.
+
+However, I do have many language-related ideas lined up for PlayCode, and it would be great to not having to re-write parts of the parser every time there is a change in the grammar.
+
+So, in this post, I want to explore implementing a subset of PlayCode using [Lark](https://github.com/lark-parser/lark).
 
 ## Lark grammar
 
-A Lark parser is generated based on the `.lark` grammar file, so first need to translate PlayCode's pseudo-grammar into a proper grammar using Lark's syntax. It's very similar to the EBNF dialects that I'm used to, so all good.
+A Lark parser is generated from the `.lark` grammar file, so first need to translate PlayCode's pseudo-grammar into the syntax used by Lark. It's [very similar](https://lark-parser.readthedocs.io/en/latest/grammar.html) to EBNF.
 
-Below is a subset of PlayCode's grammar in Lark. It's somewhat simplified to make it more readable, you can see the full up-to-date grammar here: [github.com/mxsjoberg/playcode/blob/main/pc.lark](https://github.com/mxsjoberg/playcode/blob/main/pc.lark)
+Below is a subset of PlayCode's grammar for Lark. You can see the full up-to-date grammar [here](https://github.com/mxsjoberg/playcode/blob/main/pc.lark).
 
 ```lark
 assign_stmt : IDENTIFIER "=" expr
@@ -33,22 +37,22 @@ COMMENT : "--" /[^\n]*/
 %ignore COMMENT
 ```
 
-I like the built-in patterns for numbers, strings, whitespace, and so on. The `-> add` is an alias to match case for addition expression (and not assert as in PlayCode).
+I like the built-in patterns for numbers, strings, whitespace, and so on. The `->` followed by `add`, `sub`, etc., are aliases to match for addition and subtraction expressions (and not inline asserts as in PlayCode).
 
-Parsing the grammar and generating the parser looks like this:
+Parsing the grammar file and creating a parser looks like this:
 
 ```python
 parser = Lark(open("pc.lark", "r").read(), start="assign_stmt", parser="lalr")
 ```
 
-Then simply `parser.parse()` input file to generate the AST:
+Simple enough. Then to parse input file to generate an AST.
 
 ```python
 file = open(sys.argv[1], "r").read()
 tree = parser.parse(file)
 ```
 
-Here's an example input and the resulting AST:
+Here's an example input (in file passed as `sys.argv[1]`) and the resulting AST:
 
 ```python
 x = 2
@@ -88,13 +92,11 @@ Tree(Token('RULE', 'program'), [
 ])
 ```
 
-It's a verbose tree. Maybe a little too verbose?
+This is a much more verbose tree than what I would normally construct when writing a parser, especially for such as simple input. Maybe a little too verbose? I could always do another pass over the AST (a pre-visitor?) to reconstruct it without the `Tree`, `Token`, and `RULE` all over the place.
 
 ## AST visitor
 
-Writing the AST visitor is surprisingly straightforward, basically just matching rule names, aliases, and returning the expected behaviour.
-
-Again, I'm only including the parts of the visitor function that is relevant for this post, see the full up-to-date AST visitor here: [github.com/mxsjoberg/playcode/blob/main/pc.py](https://github.com/mxsjoberg/playcode/blob/main/pc.py)
+Building the AST visitor is surprisingly straightforward, basically just matching rule names, aliases, and returning the expected behaviour. Again, I'm only including the parts of the function that is relevant for this post, see the full up-to-date code [here](https://github.com/mxsjoberg/playcode/blob/main/pc.py).
 
 ```python
 def visitor(tree):
@@ -120,16 +122,16 @@ def visitor(tree):
             return SYMBOL_TABLE[str(tree.children[0])]
 ```
 
-Running this on the AST and printing the symbol table.
-
 ```python
 visitor(tree)
 print(SYMBOL_TABLE)
 # {'x': 2, 'y': 3}
 ```
 
-# Replacing PlayCode's parser and interpreter
+Now, this is nice. You can basically write the typical calculator example in only a few lines with the correct grammar.
 
-I have replaced both the PlayCode parser and interpreter with the Lark generated parser and AST visitor. I think it will be much more maintainable and faster to make changes to the grammar, which is the whole point of an experimental programming language.
+# Replacing the old parser and interpreter
+
+I have replaced the PlayCode tokenizer, parser, and interpreter with the Lark generated parser and AST visitor. I think it will be much more maintainable frequent changes to the grammar, which is the whole point of an experimental programming language.
 
 PlayCode is open source and all code is available [here](https://github.com/mxsjoberg/playcode).
