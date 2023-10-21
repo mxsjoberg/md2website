@@ -18,17 +18,15 @@ expr : term
      | term "-" term        -> sub
 
 term : factor
-     | factor "*" factor    -> mul
-     | factor "/" factor    -> div
 
-factor : NUMBER             -> number
+factor : SIGNED_NUMBER      -> number
        | IDENTIFIER         -> identifier
        | "(" expr ")"
 
 COMMENT : "--" /[^\n]*/
 
-%import common.CNAME        -> IDENTIFIER
-%import common.NUMBER
+%import common.CNAME -> IDENTIFIER
+%import common.SIGNED_NUMBER
 %import common.WS
 
 %ignore WS
@@ -37,7 +35,20 @@ COMMENT : "--" /[^\n]*/
 
 I like the built-in patterns for numbers, strings, whitespace, and so on. The `-> add` is an alias to match case for addition expression (and not assert as in PlayCode).
 
-Here's an example program and the generated AST:
+Parsing the grammar and generating the parser looks like this:
+
+```python
+parser = Lark(open("pc.lark", "r").read(), start="assign_stmt", parser="lalr")
+```
+
+Then simply `parser.parse()` input file to generate the AST:
+
+```python
+file = open(sys.argv[1], "r").read()
+tree = parser.parse(file)
+```
+
+Here's an example input and the resulting AST:
 
 ```python
 x = 2
@@ -81,35 +92,44 @@ It's a verbose tree. Maybe a little too verbose?
 
 ## AST visitor
 
-Writing the AST visitor is surprisingly straightforward as well, basically just matching rule names and aliases. Again, I'm only showing the parts of the visitor function that is relevant for this subset of the grammar, see the full up-to-date AST visitor here: [github.com/mxsjoberg/playcode/blob/main/pc.py](https://github.com/mxsjoberg/playcode/blob/main/pc.py)
+Writing the AST visitor is surprisingly straightforward, basically just matching rule names, aliases, and returning the expected behaviour.
+
+Again, I'm only including the parts of the visitor function that is relevant for this post, see the full up-to-date AST visitor here: [github.com/mxsjoberg/playcode/blob/main/pc.py](https://github.com/mxsjoberg/playcode/blob/main/pc.py)
 
 ```python
 def visitor(tree):
     match tree.data:
         case "assign_stmt":
             left, right = tree.children
-            SYMBOL_TABLE[left] = visitor(right)
+            SYMBOL_TABLE[left.children[0].value] = visitor(right)
         case "expr":
             return visitor(tree.children[0])
         case "term":
             return visitor(tree.children[0])
         case "factor":
             return visitor(tree.children[0])
-        case "number":
-            return int(tree.children[0])
-        case "identifier":
-            return SYMBOL_TABLE[tree.children[0]]
         case "add":
             left, right = tree.children
             return int(visitor(left)) + int(visitor(right))
         case "sub":
             left, right = tree.children
             return int(visitor(left)) - int(visitor(right))
+        case "number":
+            return int(tree.children[0])
+        case "identifier":
+            return SYMBOL_TABLE[str(tree.children[0])]
 ```
 
-Running this and printing the symbol table gives the expected result.
+Running this on the AST and printing the symbol table.
 
 ```python
+visitor(tree)
 print(SYMBOL_TABLE)
-# {Token('IDENTIFIER', 'x'): 2, Token('IDENTIFIER', 'y'): 3}
+# {'x': 2, 'y': 3}
 ```
+
+# Replacing PlayCode's parser and interpreter
+
+I have replaced both the PlayCode parser and interpreter with the Lark generated parser and AST visitor. I think it will be much more maintainable and faster to make changes to the grammar, which is the whole point of an experimental programming language.
+
+PlayCode is open source and all code is available [here](https://github.com/mxsjoberg/playcode).
