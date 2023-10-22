@@ -12,13 +12,15 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-# TODO: load markdown files from source folder (only include build tools in project)
-DIST_PATH = "../michaelsjoberg.com/dist"
-ASSETS = ["main.scss", "main.js", "resume.pdf"]
+# SOURCE_PATH = "source"
+SOURCE_PATH = "demo"
+# DIST_PATH = "../michaelsjoberg.com/dist"
+DIST_PATH = "__dist"
+ASSETS = ["main.scss", "main.js"]
 AUTHOR = "Michael Sjöberg"
-DESCRIPTION = "I write about programming, projects, and finance."
+DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
 APP_NAME = "Michael Sjöberg"
-APP_THEME = "#161716"
+APP_THEME = "#0B0F12"
 POSTS_ON_INDEX = False
 NO_JS = False
 
@@ -28,7 +30,7 @@ GLOBAL_POSTS = [] # [ { title, date, url } ]
 def sort_by_date_and_title(item):
     return (item["date"], item["title"])
 
-def write_header(file, title="This static website was built using md2website", root=0):
+def write_header(file, title="md2website – Markdown to static website builder", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
     <!--
@@ -59,7 +61,7 @@ def write_header(file, title="This static website was built using md2website", r
     # css
     # file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
     file.write("<style>")
-    css_file = open(f"{DIST_PATH}/main.min.css", "r")
+    css_file = open(f"__assets/main.min.css", "r")
     css_content = css_file.read()
     css_file.close()
     file.write(css_content)
@@ -73,7 +75,7 @@ def write_header(file, title="This static website was built using md2website", r
     # nav
     file.write("<div class='nav no-print'>")
     try:
-        nav_file = open("nav.md", "r")
+        nav_file = open(f"{SOURCE_PATH}/nav.md", "r")
         nav_content = nav_file.read()
         nav_file.close()
         if nav_content != "":
@@ -98,7 +100,7 @@ def write_footer(file):
     # is NO_JS useful at all?
     if not NO_JS:
         file.write("<script>")
-        js_file = open(f"{DIST_PATH}/main.min.js", "r")
+        js_file = open(f"__assets/main.min.js", "r")
         js_content = js_file.read()
         js_file.close()
         file.write(js_content)
@@ -165,20 +167,20 @@ if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
 os.mkdir(DIST_PATH)
 
 # minimize css
-with open(f"{DIST_PATH}/main.min.css", "w+") as file:
+with open(f"__assets/main.min.css", "w+") as file:
     css_content = ""
     for css in [asset for asset in ASSETS if asset.split(".")[-1] == "scss"]:
-        tmp_file = open(css, "r")
+        tmp_file = open(f"__assets/{css}", "r")
         css_content += tmp_file.read()
         tmp_file.close()
     css_content = sass.compile(string=css_content, output_style="compressed")
     file.write(css_content)
 
 # minimize js
-with open(f"{DIST_PATH}/main.min.js", "w+") as file:
+with open(f"__assets/main.min.js", "w+") as file:
     js_content = ""
     for js in [asset for asset in ASSETS if asset.split(".")[-1] == "js"]:
-        tmp_file = open(js, "r")
+        tmp_file = open(f"__assets/{js}", "r")
         js_content += tmp_file.read()
         tmp_file.close()
     js_content = js_content.replace("  ", "")
@@ -189,22 +191,23 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
     file.write(js_content)
 
 # copy fonts in _fonts folder
-os.system(f"cp -r _fonts {DIST_PATH}")
+os.system(f"cp -r __fonts {DIST_PATH}")
 
-# copy non-css and non-js assets
-for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "scss", "js"]]:
-    os.system(f"cp {asset} {DIST_PATH}/{asset}")
+# copy other stuff in source folder
+for file in os.listdir(SOURCE_PATH):
+    if not file.startswith(".") and not file == "nav.md" and not os.path.isdir(f"{SOURCE_PATH}/{file}"):
+        os.system(f"cp {SOURCE_PATH}/{file} {DIST_PATH}/{file}")
 
 # create list page for each folder in root dir
-for dir_ in os.listdir("."):
-    if "." not in dir_ and dir_ != "pages" and not dir_.startswith("_"):
+for dir_ in os.listdir(SOURCE_PATH):
+    if "." not in dir_ and dir_ != "pages" and not dir_.startswith("__"):
         FLAG_TOC = None
         FLAG_TIME = None
         FLAG_COL = None
         FLAG_DESC = None
         # check if __flags file in dir_
-        if os.path.exists(os.path.join(dir_, "__flags")):
-            flag_content = open(f"{dir_}/__flags").read()
+        if os.path.exists(os.path.join(f"{SOURCE_PATH}/{dir_}", "__flags")):
+            flag_content = open(f"{SOURCE_PATH}/{dir_}/__flags").read()
             # parse flags
             FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = parse_flags(flag_content)
         # create page for folder
@@ -213,14 +216,15 @@ for dir_ in os.listdir("."):
             posts_lst = [] # [ { title, date, url } ]
             posts_dict = {} # { category: { subcategory: [ { title, date, url } ] } }
             # for each md file in dir_, create html page and append to posts_lst or posts_dict
-            for root, dirs, posts in os.walk(dir_):
+            for root, dirs, posts in os.walk(f"{SOURCE_PATH}/{dir_}"):
+                root = "/".join(root.split("/")[1:])
                 os.mkdir(f"{DIST_PATH}/{root}")
                 for post in posts:
                     if post != "__flags" and post.split(".")[1] == "md":
                         post_name = post.split(".")[0]
                         # create page
                         with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
-                            post_file = open(f"{root}/{post}")
+                            post_file = open(f"{SOURCE_PATH}/{root}/{post}")
                             post_content = post_file.read()
                             # title
                             title = post_content.split("\n")[0].split("# ")[1]
@@ -332,7 +336,7 @@ for dir_ in os.listdir("."):
             write_footer(dir_page)
 
 # create html page for each md file in pages folder
-for root, dirs, files in os.walk("pages"):
+for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
     for file in files:
         FLAG_TOC = None
         FLAG_TIME = None
