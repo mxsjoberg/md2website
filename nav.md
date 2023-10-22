@@ -1,1 +1,1 @@
-[/index](/index.html) [/about](/about.html) [/work](/work.html) [/notes](/notes.html)
+[/journal](/index.html) [/posts](/posts.html) [/notes](/notes.html) [/about](/about.html) [[contact]](mailto:michael@proton.me)
