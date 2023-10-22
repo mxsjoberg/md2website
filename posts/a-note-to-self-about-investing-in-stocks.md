@@ -1,6 +1,6 @@
 # A note to self about investing in stocks
 
-<mark>May 16, 2020</mark> by [Michael Sjöberg](/about.html)
+*May 16, 2020*
 
 The stock market is a chaotic and emotional place, so just because something is bought or sold at a certain price one day does not mean that this is its actual value the next day (or even same day). A rational investor would expect their investment to increase in value or at least expect to be paid back something of equal value. In short, the rationale is that you can pay a low price (cheap) for something with a high value but also pay too much (expensive) for something with a lower value. However, the actual value may only be determined by each person ([subjective theory of value](https://en.wikipedia.org/wiki/Subjective_theory_of_value)), where some investor could value something a lot higher than someone else. However, and in the context of stocks and the stock market, it is somewhat safe to assume that most participant want their investment to increase in value.
 

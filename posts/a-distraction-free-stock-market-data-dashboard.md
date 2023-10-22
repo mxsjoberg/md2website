@@ -1,6 +1,6 @@
 # A distraction-free stock market data dashboard
 
-<mark>July 5, 2023</mark> by [Michael Sjöberg](/about.html)
+*July 5, 2023*
 
 I recently (re)launched my Yahoo Finance alternative "Terminal", it's available here: [trystockstack.com](https://www.trystockstack.com/)
 

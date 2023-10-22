@@ -1,6 +1,10 @@
 # Security Engineering: Secure system design
 
-<mark>September 2, 2022</mark> by [Michael Sjöberg](/about.html)
+*September 2, 2022*
+
+This is the final post in a series of lecture notes on security engineering.
+
+---
 
 ## Hardware and software solutions
 

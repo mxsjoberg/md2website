@@ -1,8 +1,10 @@
 # PlayCode: Introduction and operator precedence
 
-<mark>May 12, 2023</mark> by [Michael Sjöberg](/about.html)
+*May 12, 2023*
 
 This is the first post in a series of posts on implementing the new non-trivial programming language, PlayCode. It is open source and all code is available [here](https://github.com/mxsjoberg/playcode).
+
+---
 
 ## What is PlayCode?
 

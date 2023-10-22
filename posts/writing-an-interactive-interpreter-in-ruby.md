@@ -1,6 +1,6 @@
 # Writing an Interactive Interpreter in Ruby
 
-<mark>October 11, 2023</mark> by [Michael Sjöberg](/about.html)
+*October 11, 2023*
 
 I like Ruby. I used to get a chance to write Ruby when working on my personal website (Rails app). However, I recently made the (regrettable?) decision to automate my recreational website programming by generating it from Markdown, so I don't have any active projects using Ruby...
 
@@ -9,6 +9,8 @@ This project aims to fix that! And at the same time, explore different aspects o
 I'm thinking something like writing code and being able to "see" into the lexing, parsing, and interpreting processes at each keystroke. Is this feasible? No idea. But it's an idea (and I get to use Ruby again)!
 
 I did not forget about PlayCode (my other language implementation project). It's still very much on my mind and I will get back to it as soon as I feel for working on back-end stuff (targeting LLVM IR). There will be a post on this too soon.
+
+---
 
 ## The Plan
 

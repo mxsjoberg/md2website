@@ -1,6 +1,10 @@
 # Security Engineering: The stack
 
-<mark>August 27, 2022</mark> by [Michael Sjöberg](/about.html)
+*August 27, 2022*
+
+This is the fourth post in a series of lecture notes on security engineering.
+
+---
 
 ## Stack layout
 

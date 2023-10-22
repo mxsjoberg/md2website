@@ -1,6 +1,10 @@
 # Security Engineering: Programs and processes
 
-<mark>August 12, 2022</mark> by [Michael Sjöberg](/about.html)
+*August 12, 2022*
+
+This is the second post in a series of lecture notes on security engineering.
+
+---
 
 ## File permissions
 

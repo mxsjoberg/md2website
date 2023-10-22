@@ -1,12 +1,14 @@
 # Lark parser generator and AST visitor for PlayCode
 
-<mark>October 20, 2023</mark> by [Michael Sjöberg](/about.html)
+*October 20, 2023*
 
 I have never really used parser generators. I briefly tried YACC, Bison, and ANTLR, but didn't like it. I prefer to write my own recursive descent parsers, it's more fun (sometimes!) and it's nice to have full control over the AST layout.
 
 However, I do have many language-related ideas lined up for PlayCode, and it would be great to not having to re-write parts of the parser every time there is a change in the grammar.
 
 So, in this post, I want to explore implementing a subset of PlayCode using [Lark](https://github.com/lark-parser/lark).
+
+---
 
 ## Lark grammar
 
