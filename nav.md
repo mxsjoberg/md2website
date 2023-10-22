@@ -1,1 +1,0 @@
-[/journal](/index.html) [/posts](/posts.html) [/notes](/notes.html) [/about](/about.html) [[contact]](mailto:mxsjoberg@proton.me)
