@@ -17,6 +17,7 @@ def md_modified(event):
     if event.src_path.endswith(".md"):
         # print(f"detected change in file: {event.src_path}")
         subprocess.run(COMMAND_TO_RUN, shell=True)
+        # TODO: fix this to reload once done building (how to only build file that changed?)
         time.sleep(1)
 
 def start_watching():
