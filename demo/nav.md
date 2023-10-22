@@ -1,0 +1,1 @@
+[Home](/index.html) [Blog](/posts.html) [About](/about.html) [Contact](/contact.html)
