@@ -12,10 +12,10 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-# SOURCE_PATH = "source"
-SOURCE_PATH = "demo"
-# DIST_PATH = "../michaelsjoberg.com/dist"
-DIST_PATH = "__dist"
+SOURCE_PATH = "../michaelsjoberg.com/source"
+# SOURCE_PATH = "demo"
+DIST_PATH = "../michaelsjoberg.com/dist"
+# DIST_PATH = "__dist"
 ASSETS = ["main.scss", "main.js"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
@@ -44,7 +44,8 @@ def write_header(file, title="md2website – Markdown to static website builder"
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
-    file.write("<link rel='icon' href='data:,'>")
+    # file.write("<link rel='icon' href='data:,'>")
+    file.write("<link rel='icon' href='favicon.png'>")
     # title
     file.write(f"<title>{title}</title>")
     # meta
@@ -217,7 +218,7 @@ for dir_ in os.listdir(SOURCE_PATH):
             posts_dict = {} # { category: { subcategory: [ { title, date, url } ] } }
             # for each md file in dir_, create html page and append to posts_lst or posts_dict
             for root, dirs, posts in os.walk(f"{SOURCE_PATH}/{dir_}"):
-                root = "/".join(root.split("/")[1:])
+                root = root.replace(f"{SOURCE_PATH}/", "")
                 os.mkdir(f"{DIST_PATH}/{root}")
                 for post in posts:
                     if post != "__flags" and post.split(".")[1] == "md":
