@@ -26,48 +26,26 @@ I type on Apple's Magic keyboard (with numpad) and move pointer with an Xtrfy ul
 
 *Current*
 
-- **Hackerman.AI** [[hackerman.ai]](https://hackerman.ai)
+**[Hackerman.AI](https://hackerman.ai)** GPT-powered online code editor and program generator
 
-	> GPT-powered online code editor and program generator
+**[Stockstack](https://trystockstack.com)** Distraction-free stock market data dashboard
 
-- **Stockstack** [[trystockstack.com]](https://trystockstack.com)
-
-	> Distraction-free stock market data dashboard
-
-- **Frozenfork** [[frozenfork.com]](https://frozenfork.com)
-
-	> Starter packages for web application developers
+**[Frozenfork](https://frozenfork.com)** Starter packages for web application developers
 
 *Discontinued*
 
-- **EQZEN**
+**EQZEN** Collaborative portfolio tracker
 
-	> Collaborative portfolio tracker
+**GiveTrees** Mobile applications for iOS and Android
 
-- **GiveTrees**
+**LearnHub.io** Online educational platform and community for self-learners
 
-	> Mobile applications for iOS and Android
+**[AnonChat [demo]](https://anonchat.sjoberg.dev/)** Text-based chat application with no login
 
-- **LearnHub.io**
+**Doolio.co** Online interactive resume
 
-	> Online educational platform and community for self-learners
+**Adventures of Puffy** Mobile game for iOS
 
-- **AnonChat** [[try demo]](https://anonchat.sjoberg.dev/)
+**formul.as** Online cheat sheet for mathematics and physics
 
-	> Text-based chat application with no login
-
-- **Doolio.co**
-
-	> Online interactive resume
-
-- **Adventures of Puffy**
-
-	> Mobile game for iOS
-
-- **formul.as**
-
-	> Online cheat sheet for mathematics and physics
-
-- **räkna.nu**
-
-	> Q&A website for getting help with homework
+**räkna.nu** Q&A website for getting help with homework
