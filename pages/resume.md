@@ -1,66 +1,67 @@
-# Resume
+# Michael Sjöberg
+
+[mxsjoberg@proton.me](mailto:mxsjoberg@proton.me) -- [github.com/mxsjoberg](https://github.com/mxsjoberg)
 
 ## Experience
 
 ---
 
-### Founder/ Solo Developer <mark style="float:right;">2020 -- 2023</mark>
+**Sole Proprietor/ Software Engineer** <strong style="float:right;">2020 -- Present</strong>
 
-Developed and launched online businesses
+- Developed and launched multiple software as a service businesses
 
-- **Stockstack**, website: [trystockstack.com](https://trystockstack.com)
+*Stockstack* <span style="float:right;">[trystockstack.com](https://trystockstack.com)</span>
 
-	Built web application using Python (Flask), Vue.js, and MongoDB. Developed serverless API wrappers on AWS Lambda to consolidate financial data from multiple sources (later integrated into Flask application). Designed a template-based system for rendering user-customizable data widgets
+- Built web application back-end using Python (Flask), MongoDB, and AWS
+- Developed serverless API wrappers on AWS Lambda to consolidate financial data from several sources (later
+integrated into Flask back-end)
+- Designed and developed a user-facing dashboard with customizable layout using Vue.js
+- Implemented a template-based format to render user-defined data widgets
 
-- **Hackerman.AI**, website: [hackerman.ai](https://hackerman.ai)
+*Hackerman.AI* <span style="float:right;">[hackerman.ai](https://hackerman.ai)</span>
 
-	Built web application using Python (Flask) and JavaScript. Developed system to execute embedded Python, C, and Go programs. Integrated OpenAI's API for prompt-based program generation and manipulation
+- Designed and built full-stack web application using Python (Flask) and JavaScript
+- Developed back-end system to execute embedded Python, C, and Go programs
+- Integrated OpenAI’s API for prompt-based program generation and manipulation
 
-- **Frozenfork**, website: [frozenfork.com](https://frozenfork.com)
+*Frozenfork* <span style="float:right;">[frozenfork.com](https://frozenfork.com)</span>
 
-	Productized web application back-end used in other products. Integrated user authentication using Auth0 and payments using Stripe API
+- Productized Flask back-end used in other products for rapid prototyping
 
-### Co-founder/ Software Developer, Plant for Earth Company LTD <mark style="float:right;">2014 -- 2015</mark>
+**Plant for Earth Company LTD/ Co-founder** <strong style="float:right;">2014 -- 2015</strong>
 
-Worked on mobile applications for iOS and Android using Lua (Corona SDK)
+- Worked on mobile applications for iOS and Android using Lua (Corona SDK) resulting in 1000+ trees
+planted via in-app purchases
+- Built a website to show number of trees planted via mobile applications in real-time using PHP and SQL
 
-<!-- Planted 1000+ trees via in-app purchases -->
+**Swedish Armed Forces (1st Marine Regiment)** <strong style="float:right;">2009 -- 2010</strong>
 
-<!-- ### Swedish Armed Forces (1st Marine Regiment) <mark style="float:right;">2009 -- 2010</mark>
-
-Mandatory military service. Leadership and teamwork training in extreme environments -->
+- Mandatory military service. Leadership, teamwork, and technical training in extreme environments
 
 ## Education
 
 ---
 
-### M.Sc in Advanced Computing <mark style="float:right;">2020</mark>
+**M.Sc Advanced Computing**, King's College London <strong style="float:right;">2020</strong>
 
-King's College London, United Kingdom
+- Thesis: "A Standard Pascal Compiler Targeting WebAssembly"
+- Selected coursework: optimization problems, distributed computing, deep learning (TensorFlow/keras,
+scikit-learn), system security (C, x86)
 
-- Thesis: *A Standard Pascal Compiler Targeting WebAssembly*
-- Selected coursework: optimization problems, distributed computing, system security (C, x86)
+**B.Sc Computing and IT**, The Open University <strong style="float:right;">2018</strong>
 
-### B.Sc with Honours in Computing and Information Technology <mark style="float:right;">2018</mark>
-
-The Open University, United Kingdom
-
-## Projects
+## Selected projects
 
 ---
 
-### pascal-in-ruby
+**[pascal-in-ruby](https://github.com/mxsjoberg/pascal-in-ruby)** Interactive interpreter and browser-based editor for Pascal in Ruby
 
-Interactive interpreter for Pascal in Ruby, repo: [github.com/mxsjoberg/pascal-in-ruby](https://github.com/mxsjoberg/pascal-in-ruby). Blog post: [michaelsjoberg.com/posts/writing-an-interactive-interpreter-in-ruby](https://michaelsjoberg.com/posts/writing-an-interactive-interpreter-in-ruby)
+**[PlayCode](https://github.com/mxsjoberg/playcode)** A programming language for testing experimental features and language design
 
-### md2website
+**[md2website](https://github.com/mxsjoberg/md2website)** Markdown to static website builder with live-reload, asset minify, and auto generated anchors
 
-Markdown to static website builder in Python, repo: [github.com/mxsjoberg/md2website](https://github.com/mxsjoberg/md2website)
+**[pas2wat](https://github.com/mxsjoberg/pas2wat)** Pascal to WebAssembly text-format compiler with recursive-descent parser implemented in Rust
 
-### PlayCode
+**[todoparser.sh](https://github.com/mxsjoberg/todoparser)** A simple utility to find TODO comments in files using bash
 
-A playful programming language in Python, repo: [github.com/mxsjoberg/playcode](https://github.com/mxsjoberg/playcode). Blog post: [michaelsjoberg.com/posts/playcode-introduction-and-operator-precedence](https://michaelsjoberg.com/posts/playcode-introduction-and-operator-precedence)
-
-<!-- ### pas2wat
-
-Pascal-to-WebAssembly text-format compiler in Rust, repo: [github.com/mxsjoberg/pas2wat](https://github.com/mxsjoberg/pas2wat) -->
+**[michaelsjoberg.com](https://michaelsjoberg.com/)** Personal website with journal and technical notes as bite-sized executable programs
