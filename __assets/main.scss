@@ -1,0 +1,304 @@
+$black: #000;
+$white: #FFF;
+$blue: #6BF;
+$blue-dark: #0B0F12;
+$blue-dark-muted: rgba($blue-dark, 0.8);
+$white-muted: rgba(255,255,255, 0.1);
+$grey: #7B91A0;
+$grey-muted: rgba($grey, 0.3);
+$yellow: #E3E463;
+$pink: #F47BEB;
+
+@font-face {
+    font-family: "Hack";
+    src: local("Hack Regular"), local("Hack"), url("../__fonts/Hack-Regular.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Hack";
+    src: local("Hack Bold"), local("Hack-Bold"), url("../__fonts/Hack-Bold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Hack";
+    src: local("Hack Italic"), local("Hack-Italic"), url("../__fonts/Hack-Italic.ttf");
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Hack";
+    src: local("Hack Bold Italic"), local("Hack-BoldItalic"), url("../__fonts/Hack-BoldItalic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: "LibreBaskerville";
+    src: local("LibreBaskerville Regular"), local("LibreBaskerville"), url("../__fonts/LibreBaskerville-Regular.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "LibreBaskerville";
+    src: local("LibreBaskerville Bold"), local("LibreBaskerville-Bold"), url("../__fonts/LibreBaskerville-Bold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: "LibreBaskerville";
+    src: local("LibreBaskerville Italic"), local("LibreBaskerville-Italic"), url("../__fonts/LibreBaskerville-Italic.ttf");
+    font-weight: normal;
+    font-style: italic;
+}
+a {
+    cursor: pointer;
+}
+pre {
+    white-space: break-spaces;
+}
+#styling-on {
+    display: none;
+}
+#theme-light {
+    display: none;
+}
+html.styling.light #theme-light {
+    display: inline;
+}
+html.styling.light #theme-dark {
+    display: none;
+}
+html.styling #styling-off {
+    display: none;
+}
+html.styling #styling-on {
+    display: inline;
+}
+html.styling body {
+    font-family: "Hack", monospace !important;
+    font-size: 16px;
+    margin: 0;
+    background: $blue-dark;
+    color: $white;
+}
+html.styling.light body {
+    font-family: "LibreBaskerville", serif !important;
+    font-size: 18px;
+    background: $white !important;
+    color: $blue-dark-muted !important;
+}
+html.styling div.page {
+    max-width: 600px;
+    padding: 1rem 2rem;
+    margin: 0 auto;
+}
+html.styling div.page p {
+    margin: 2rem 0;
+    line-height: 1.5;
+}
+html.styling div.page li p {
+    margin: 1rem 0;
+}
+html.styling .nav {
+    padding: 1rem 0;
+}
+html.styling .nav p {
+    display: flex;
+    justify-content: space-between;
+}
+html.styling .nav p a {
+    justify-content: center;
+}
+html.styling p + ul:not(.border) {
+    margin-top: -1rem;
+}
+html.styling h1 {
+    font-size: 2em;
+    font-weight: bold;
+}
+html.styling a {
+    cursor: pointer;
+    text-decoration: none;
+    color: $blue;
+}
+html.styling.light a {
+    font-weight: bold;
+    color: darken($blue, 15%);
+}
+html.styling a:hover {
+    text-decoration: underline;
+}
+html.styling ul {
+    list-style: square;
+    margin: 2rem 0;
+}
+html.styling ul p.label {
+    margin: 0;
+    margin-left: -1.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-size: 80%;
+    color: $grey-muted;
+}
+html.styling.light ul p.label {
+    display: none;
+}
+html.styling ul.border {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 1rem;
+    border: 1px dashed;
+    border-color: $grey-muted;
+}
+html.styling ul li ul {
+    margin: 0.25rem 0;
+}
+html.styling dl {
+    list-style: none;
+}
+html.styling li {
+    margin-bottom: 0.25rem;
+    line-height: 1.5rem;
+}
+html.styling table {
+    border-collapse: collapse;
+}
+html.styling td {
+    padding: 1rem;
+    border: 1px dashed;
+    border-color: $white-muted;
+}
+html.styling.light td {
+    border-color: $grey;
+}
+html.styling pre {
+    white-space: break-spaces;
+    word-break: break-all;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px dashed;
+    border-color: $grey-muted;
+}
+html.styling code,
+html.styling .highlight pre {
+    font-family: "Hack", monospace !important;
+    font-size: 16px;
+    color: $grey;
+}
+html.styling .highlight {
+    line-height: 1.4;
+}
+html.styling img {
+    max-width: 100%;
+}
+html.styling .small,
+html.styling blockquote {
+    margin: 0;
+    color: $grey-muted;
+}
+html.styling.light .small,
+html.styling.light blockquote {
+    color: $grey;
+}
+html.styling hr {
+    border-style: dashed;
+    margin: 2rem 0;
+    border-color: $white-muted;
+}
+html.styling.light hr {
+    border-color: $grey-muted;
+}
+html.styling em {
+    color: $grey;
+}
+html.styling mark {
+    padding: 4px 6px;
+    font-size: 80%;
+    background-color: $yellow;
+    color: $blue-dark;
+}
+html.styling.light mark {
+    background-color: $blue !important;
+}
+html.styling #footer {
+    padding: 1rem 0;
+}
+html.styling a#styling {
+    text-decoration: underline;
+}
+/* code highlight */
+html.styling .highlight .n          { color: $white !important; }
+
+// html.styling .highlight .k,
+// html.styling .highlight .kn,
+// html.styling .highlight .ow         { color: $pink !important; }
+
+html.styling .highlight .kn         { color: $yellow !important; }
+
+html.styling .highlight .s1,
+html.styling .highlight .si         { color: $grey !important; }
+
+// html.styling .highlight .s2         { color: $yellow !important; }
+
+html.styling .highlight .c1         { color: $grey-muted !important; }
+
+html.styling .highlight .mi         { color: $blue !important; }
+
+html.styling .highlight .nf,
+html.styling .highlight .nb         { color: $blue !important; }
+
+html.styling .highlight .nc         { color: $blue !important; font-weight: bold; }
+
+html.styling.light {
+    .highlight .n    { color: $blue-dark !important; }
+    .highlight .kn   { color: $blue-dark !important; }
+    .highlight .c1   { color: $grey !important; }
+    .highlight .mi   { color: darken($blue, 15%) !important; }
+    .highlight .nf   { color: darken($blue, 15%) !important; }
+    .highlight .nb   { color: darken($blue, 15%) !important; }
+    .highlight .nc   { color: darken($blue, 15%) !important; }
+}
+
+@media print {
+    .no-print,
+    .no-print * {
+        display: none !important;
+    }
+    html body,
+    html.styling body {
+        font-family: auto !important;
+        font-size: 12px !important;
+
+        background: $white !important;
+        color: $black !important;
+    }
+    a {
+        font-weight: normal !important;
+
+        color: $black !important;
+    }
+    p {
+        margin: 0 !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.2 !important;
+    }
+    mark {
+        font-size: 12px !important;
+        background: transparent !important;
+        padding: 0 !important;
+        font-weight: normal !important;
+
+        color: $black !important;
+    }
+    ul {
+        list-style: circle !important;
+        margin: 0.5rem 0 !important;
+    }
+    li {
+        line-height: 1.2rem !important;
+    }
+    hr {
+        display: none !important;
+    }
+}
