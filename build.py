@@ -17,9 +17,8 @@ AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I write about programming, projects, and finance."
 APP_NAME = "Michael's Page"
 APP_THEME = "#161716"
-POSTS_ON_INDEX = True
-ADD_CONTACT_TO_RESUME = True
-NO_JS = False 
+POSTS_ON_INDEX = False
+NO_JS = False
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
@@ -112,21 +111,23 @@ def generate_and_inject_index(file_content):
             index.append("    - " + line.split("### ")[1].split("</a>")[1].strip())
     if len(index) > 0:
         # inject index as list just before first line starting with ##
-        file_content = re.sub(r"## (.*)", r"\n## Index\n" + r"\n".join([f"{item}" for item in index]) + "\n ---" + r"\n## \1", file_content, count=1)
+        file_content = re.sub(r"## (.*)", f"<span class='no-print'>\n".join([f"{item}" for item in index]) + "\n --- \n</span>" + r"\n## \1", file_content, count=1)
     return file_content
 
 def parse_flags(line):
     FLAG_TOC = None
+    FLAG_TIME = None
     FLAG_COL = None
     FLAG_DESC = None
     if line.startswith("-* "):
-        flags_raw = line[3:].split(",")
+        flags_raw = line[3:].split(";")
         for flag in flags_raw:
             key, value = flag.split("=")
             if key == "toc": FLAG_TOC = bool(value)
+            if key == "time": FLAG_TIME = bool(value)
             if key == "col": FLAG_COL = int(value)
             if key == "desc": FLAG_DESC = str(value)
-    return FLAG_TOC, FLAG_COL, FLAG_DESC
+    return FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC
 
 # create dist folder
 if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
@@ -162,17 +163,18 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
 for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
     os.system(f"cp {asset} {DIST_PATH}/{asset}")
 
-# for each folder in root dir, create list page with content
+# create list page for each folder in root dir
 for dir_ in os.listdir("."):
     if "." not in dir_ and dir_ != "pages":
         FLAG_TOC = None
+        FLAG_TIME = None
         FLAG_COL = None
         FLAG_DESC = None
         # check if __flags file in dir_
         if os.path.exists(os.path.join(dir_, "__flags")):
             flag_content = open(f"{dir_}/__flags").read()
             # parse flags
-            FLAG_TOC, FLAG_COL, FLAG_DESC = parse_flags(flag_content)
+            FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = parse_flags(flag_content)
         # create page for folder
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
@@ -203,14 +205,10 @@ for dir_ in os.listdir("."):
                             # categories
                             category, subcategory = None, None
                             try:
-                                # category = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[0].split("]")[0][1:].lower()
-                                # subcategory = post_content.split("\n")[2].split("*")[2].strip().split(" ", 1)[1].split("]")[0][1:].lower()
                                 category, subcategory = root.split("/")[1], root.split("/")[2]
                             except:
-                                try:
-                                    category = root.split("/")[1]
-                                except:
-                                    pass
+                                try: category = root.split("/")[1]
+                                except: pass
                             # category and subcategory
                             if category and subcategory:
                                 if not category in posts_dict: posts_dict[category] = {}
@@ -231,8 +229,7 @@ for dir_ in os.listdir("."):
                             # write
                             write_header(tmp_file, title=title)
                             # write outdated notice
-                            if date_is_outdated:
-                                tmp_file.write(f"<mark>This post is more than two years old and may contain outdated information</mark>")
+                            if date_is_outdated: tmp_file.write(f"*This post is more than two years old and may contain outdated information*")
                             html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
                             # syntax highlight
                             soup = BeautifulSoup(html_content, "html.parser")
@@ -265,27 +262,24 @@ for dir_ in os.listdir("."):
             for post in sorted_posts_lst:
                 if current_date != post['date'].year:
                     if current_date != None:
-                        dir_page.write("</ul>")
-                    dir_page.write(f"<h1>{post['date'].year}</h1>")
+                        dir_page.write("</dl>")
+                    dir_page.write(f"<p><em>{post['date'].year}</em></p>")
                     current_date = post['date'].year
-                    # dir_page.write("<ul>")
                     # columns
                     if FLAG_COL:
                         dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
                     else:
-                        dir_page.write("<ul>")
-                dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+                        dir_page.write("<dl>")
+                # dir_page.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
+                dir_page.write(f"<li><a href='posts/{post['url']}.html'>{post['title']}</a></li>")
+                # tmp_file.write("<dl>")
+                # for post in sorted_global_posts:
+                #     # TODO: posts/ hardcoded is ugly hack, fix later
+                #     tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
+                # tmp_file.write("</dl>")
             dir_page.write("</ul>")
             # create list with categories for ordering
             category_list = sorted(posts_dict.keys())
-            # list newest posts on top (unless already listed in index)
-            # if not SHOW_RECENT_POSTS:
-            #     all_posts = [post for category in category_list for subcategory in posts_dict[category] for post in posts_dict[category][subcategory]]
-            #     sorted_all_posts = sorted(all_posts, key=sort_by_date_and_title, reverse=True)
-            #     for post in sorted_all_posts:
-            #         # if date is current or last month
-            #         if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
-            #             dir_page.write(f"<p><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></p>")
             # write posts in posts_dict (list by category and subcategory)
             for category in category_list:
                 # write category
@@ -296,7 +290,6 @@ for dir_ in os.listdir("."):
                         # subcategory name
                         if len(posts_dict[category].keys()) > 1:
                             dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
-                        # dir_page.write("<ul>")
                         if FLAG_COL:
                             dir_page.write(f"<ul style='column-count:{FLAG_COL};column-gap:2rem;'>")
                         else:
@@ -310,7 +303,6 @@ for dir_ in os.listdir("."):
                         dir_page.write("</ul>")
                 else:
                     sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
-                    # dir_page.write("<ul>")
                     if FLAG_COL:
                         dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
                     else:
@@ -322,13 +314,13 @@ for dir_ in os.listdir("."):
                         else:    
                             dir_page.write(f"<li><a href='{dir_}/{category}/{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
-            # if FLAG_COL: dir_page.write("</div>")
             write_footer(dir_page)
 
-# for each md file in pages, create html page
+# create html page for each md file in pages folder
 for root, dirs, files in os.walk("pages"):
     for file in files:
         FLAG_TOC = None
+        FLAG_TIME = None
         FLAG_COL = None
         FLAG_DESC = None
         if file.split(".")[1] == "md":
@@ -341,7 +333,7 @@ for root, dirs, files in os.walk("pages"):
                 # flags
                 if (file_content[0].startswith("-* ")):
                     # parse flags
-                    FLAG_TOC, FLAG_COL, FLAG_DESC = parse_flags(file_content[0])
+                    FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = parse_flags(file_content[0])
                     # skip empty line following flags (if any)
                     if (len(file_content[1]) == 0):
                         file_content = file_content[2:]
@@ -350,10 +342,11 @@ for root, dirs, files in os.walk("pages"):
                 title = file_content[0].split("# ")[1]
                 # join 
                 file_content = "\n".join(file_content)
+                # add updated time
+                if FLAG_TIME: file_content = re.sub(r"# (.*)", r"#\1" + f"\n*Updated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*", file_content, count=1)
                 # generate anchors and inject index
-                if FLAG_TOC:
-                    file_content = generate_and_inject_index(file_content)
-                # write
+                if FLAG_TOC: file_content = generate_and_inject_index(file_content)
+                # write header
                 write_header(tmp_file, title)
                 # TODO: fix for multi columns on regular pages? below title
                 # columns
@@ -362,9 +355,6 @@ for root, dirs, files in os.walk("pages"):
                 # if FLAG_COL:
                 #     print(file_name, "OK")
                 #     file_content = re.sub(r"---", f"\n<div style='column-count:{FLAG_COL};'>" + r"\n", file_content, count=1)
-                # add name and contact on top of resume page
-                if ADD_CONTACT_TO_RESUME and file_name == "resume":
-                    tmp_file.write("<dl id='resume-contact' style='text-align:right;'><li><strong>Michael Sjöberg</strong></li><li><a href='mailto:michael@micsjo.com'>michael@micsjo.com</a></li><li><a href='https://michaelsjoberg.com'>michaelsjoberg.com</a></li><li><a href='https://github.com/mxsjoberg'>github.com/mxsjoberg</a></li></dl>")
                 # replace -- with &mdash;
                 file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
                 tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
