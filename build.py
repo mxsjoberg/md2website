@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import markdown
+import sass
 from datetime import datetime
 # syntax highlight
 from bs4 import BeautifulSoup
@@ -11,11 +12,12 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+# TODO: load markdown files from source folder (only include build tools in project)
 DIST_PATH = "../michaelsjoberg.com/dist"
-ASSETS = ["main.css", "main.js", "Hack-Bold.ttf", "Hack-Regular.ttf", "resume.pdf"]
+ASSETS = ["main.scss", "main.js", "resume.pdf"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I write about programming, projects, and finance."
-APP_NAME = "Michael's Page"
+APP_NAME = "Michael Sjöberg"
 APP_THEME = "#161716"
 POSTS_ON_INDEX = False
 NO_JS = False
@@ -84,7 +86,13 @@ def write_header(file, title="This static website was built using md2website", r
 
 def write_footer(file):
     file.write("<div id='footer' class='no-print'>")
-    file.write(f"<p class='small'>Page config: <a id='theme'>dark</a> <a id='styling'>styling</a>. This static website was built using <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
+    # page config
+    file.write(f"<p class='small' style='display:flex;justify-content:space-between;'>")
+    file.write(f"<a id='styling'>[styling: <span id='styling-on'>on</span><span id='styling-off'>off</span>]</a> ")
+    file.write(f"<a id='theme'>[theme: <span id='theme-dark'>dark</span><span id='theme-light'>light</span>]</a> ")
+    file.write(f"</p>")
+    # credits
+    file.write(f"<p class='small' style='text-align:justify;'>DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
     # is NO_JS useful at all?
@@ -111,8 +119,31 @@ def generate_and_inject_index(file_content):
             index.append("    - " + line.split("### ")[1].split("</a>")[1].strip())
     if len(index) > 0:
         # inject index as list just before first line starting with ##
-        file_content = re.sub(r"## (.*)", f"<span class='no-print'>\n".join([f"{item}" for item in index]) + "\n --- \n</span>" + r"\n## \1", file_content, count=1)
+        file_content = re.sub(r"## (.*)", f"\n".join([f"{item}" for item in index]) + "\n --- \n" + r"\n## \1", file_content, count=1)
     return file_content
+
+def replace_hr_with_border(file_content, toc=False):
+    file_content = re.sub(r"<hr />\n<ul>", r"<ul class='border'>\n" + f"<p class='label'>Page index</p>" if toc else "", file_content)
+    file_content = re.sub(r"</ul>\n<hr />", r"</ul>", file_content)
+    return file_content
+
+def syntax_highlight(html_content):
+    soup = BeautifulSoup(html_content, "html.parser")
+    code_blocks = soup.find_all("code")
+    if code_blocks:
+        for code_block in code_blocks:
+            try:
+                code_content = code_block.get_text()
+                code_language = code_block.get('class')[0].split("-")[1]
+                lexer = get_lexer_by_name(code_language, stripall=True)
+                formatter = HtmlFormatter(linenos=False, cssclass="highlight")
+                highlighted_code = highlight(code_content, lexer, formatter)
+                code_block.parent.unwrap()
+                code_block.replace_with(BeautifulSoup(highlighted_code, "html.parser"))
+            except:
+                pass
+        html_content = str(soup)
+    return html_content
 
 def parse_flags(line):
     FLAG_TOC = None
@@ -136,13 +167,11 @@ os.mkdir(DIST_PATH)
 # minimize css
 with open(f"{DIST_PATH}/main.min.css", "w+") as file:
     css_content = ""
-    for css in [asset for asset in ASSETS if asset.split(".")[-1] == "css"]:
+    for css in [asset for asset in ASSETS if asset.split(".")[-1] == "scss"]:
         tmp_file = open(css, "r")
         css_content += tmp_file.read()
         tmp_file.close()
-    css_content = css_content.replace("\n", "")
-    css_content = css_content.replace("\t", "")
-    css_content = css_content.replace("  ", "")
+    css_content = sass.compile(string=css_content, output_style="compressed")
     file.write(css_content)
 
 # minimize js
@@ -159,13 +188,16 @@ with open(f"{DIST_PATH}/main.min.js", "w+") as file:
     # write
     file.write(js_content)
 
+# copy fonts in _fonts folder
+os.system(f"cp -r _fonts {DIST_PATH}")
+
 # copy non-css and non-js assets
-for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "js"]]:
+for asset in [asset for asset in ASSETS if asset.split(".")[-1] not in ["css", "scss", "js"]]:
     os.system(f"cp {asset} {DIST_PATH}/{asset}")
 
 # create list page for each folder in root dir
 for dir_ in os.listdir("."):
-    if "." not in dir_ and dir_ != "pages":
+    if "." not in dir_ and dir_ != "pages" and not dir_.startswith("_"):
         FLAG_TOC = None
         FLAG_TIME = None
         FLAG_COL = None
@@ -229,24 +261,13 @@ for dir_ in os.listdir("."):
                             # write
                             write_header(tmp_file, title=title)
                             # write outdated notice
-                            if date_is_outdated: tmp_file.write(f"*This post is more than two years old and may contain outdated information*")
+                            if date_is_outdated: tmp_file.write(f"<p style='margin-top:0;'><em>This post is more than two years old and may contain outdated information.</em></p>")
                             html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
+                            # replace hr with border (for table of contents)
+                            html_content = replace_hr_with_border(html_content, toc=True)
                             # syntax highlight
-                            soup = BeautifulSoup(html_content, "html.parser")
-                            code_blocks = soup.find_all("code")
-                            if code_blocks:
-                                for code_block in code_blocks:
-                                    try:
-                                        code_content = code_block.get_text()
-                                        code_language = code_block.get('class')[0].split("-")[1]
-                                        lexer = get_lexer_by_name(code_language, stripall=True)
-                                        formatter = HtmlFormatter(linenos=False, cssclass="highlight")
-                                        highlighted_code = highlight(code_content, lexer, formatter)
-                                        code_block.parent.unwrap()
-                                        code_block.replace_with(BeautifulSoup(highlighted_code, "html.parser"))
-                                    except:
-                                        pass
-                                html_content = str(soup)
+                            html_content = syntax_highlight(html_content)
+                            # write to file
                             tmp_file.write(html_content)
                             write_footer(tmp_file)
                             post_file.close()            
@@ -270,13 +291,7 @@ for dir_ in os.listdir("."):
                         dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
                     else:
                         dir_page.write("<dl>")
-                # dir_page.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
                 dir_page.write(f"<li><a href='posts/{post['url']}.html'>{post['title']}</a></li>")
-                # tmp_file.write("<dl>")
-                # for post in sorted_global_posts:
-                #     # TODO: posts/ hardcoded is ugly hack, fix later
-                #     tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
-                # tmp_file.write("</dl>")
             dir_page.write("</ul>")
             # create list with categories for ordering
             category_list = sorted(posts_dict.keys())
@@ -357,7 +372,14 @@ for root, dirs, files in os.walk("pages"):
                 #     file_content = re.sub(r"---", f"\n<div style='column-count:{FLAG_COL};'>" + r"\n", file_content, count=1)
                 # replace -- with &mdash;
                 file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
-                tmp_file.write(markdown.markdown(file_content, extensions=["fenced_code", "tables"]))
+                # convert markdown to html
+                file_content = markdown.markdown(file_content, extensions=["fenced_code", "tables"])
+                # replace hr with border (for table of contents)
+                file_content = replace_hr_with_border(file_content, toc=True)
+                # syntax highlight
+                file_content = syntax_highlight(file_content)
+                # write to file
+                tmp_file.write(file_content)
                 # list recent posts on index
                 if POSTS_ON_INDEX and file_name == "index":
                     tmp_file.write("<hr>")
@@ -371,5 +393,4 @@ for root, dirs, files in os.walk("pages"):
                 if FLAG_COL: tmp_file.write("</div>")
                 write_footer(tmp_file)
                 file.close()
-
 
