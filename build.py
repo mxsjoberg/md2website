@@ -25,7 +25,15 @@ POSTS_ON_INDEX = False
 NO_JS = False
 
 # analytics
-GOOGLE_TAG = "G-FPF1MCLY5P"
+GOOGLE_TAG = """
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPF1MCLY5P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FPF1MCLY5P');
+</script>
+"""
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
@@ -76,9 +84,7 @@ def write_header(file, title="md2website – Markdown to static website builder"
     # -------------------------------------------
     file.write("<body>")
     # google tag
-    # if GOOGLE_TAG:
-    #     file.write(f"<script async src='https://www.googletagmanager.com/gtag/js?id={GOOGLE_TAG}></script>")
-    #     file.write("<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}" + f"gtag('js', new Date());gtag('config', {GOOGLE_TAG});</script>")
+    if GOOGLE_TAG: file.write(GOOGLE_TAG)
     # page
     file.write("<div class='page'>")
     # nav
