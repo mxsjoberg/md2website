@@ -1,53 +1,60 @@
 $black: #000;
-$white: #FFF;
-$blue: #6BF;
-$blue-dark: #0B0F12;
+// $white: #FFF;
+$white: #F5F9FC;
+// $blue: #6BF;
+$blue: #52A1F0;
+// $blue-dark: #0B0F12;
+$blue-dark: #0E1525;
 $blue-dark-muted: rgba($blue-dark, 0.8);
-$white-muted: rgba(255,255,255, 0.1);
-$grey: #7B91A0;
-$grey-muted: rgba($grey, 0.3);
-$yellow: #E3E463;
-$pink: #F47BEB;
+// $white-muted: rgba(255,255,255, 0.1);
+// $grey: #7B91A0;
+$grey: #4F6E8E;
+// $grey-muted: rgba($grey, 0.3);
+$grey-muted: #2B3245;
+// $yellow: #E3E463;
+$yellow: #F1DF87;
+// $pink: #F47BEB;
+$pink: #D4359F;
 
 @font-face {
     font-family: "Hack";
-    src: local("Hack Regular"), local("Hack"), url("../__fonts/Hack-Regular.ttf");
+    src: local("Hack Regular"), local("Hack"), url("/__fonts/Hack-Regular.ttf");
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: "Hack";
-    src: local("Hack Bold"), local("Hack-Bold"), url("../__fonts/Hack-Bold.ttf");
+    src: local("Hack Bold"), local("Hack-Bold"), url("/__fonts/Hack-Bold.ttf");
     font-weight: bold;
     font-style: normal;
 }
 @font-face {
     font-family: "Hack";
-    src: local("Hack Italic"), local("Hack-Italic"), url("../__fonts/Hack-Italic.ttf");
+    src: local("Hack Italic"), local("Hack-Italic"), url("/__fonts/Hack-Italic.ttf");
     font-weight: normal;
     font-style: italic;
 }
 @font-face {
     font-family: "Hack";
-    src: local("Hack Bold Italic"), local("Hack-BoldItalic"), url("../__fonts/Hack-BoldItalic.ttf");
+    src: local("Hack Bold Italic"), local("Hack-BoldItalic"), url("/__fonts/Hack-BoldItalic.ttf");
     font-weight: bold;
     font-style: italic;
 }
 @font-face {
     font-family: "LibreBaskerville";
-    src: local("LibreBaskerville Regular"), local("LibreBaskerville"), url("../__fonts/LibreBaskerville-Regular.ttf");
+    src: local("LibreBaskerville Regular"), local("LibreBaskerville"), url("/__fonts/LibreBaskerville-Regular.ttf");
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: "LibreBaskerville";
-    src: local("LibreBaskerville Bold"), local("LibreBaskerville-Bold"), url("../__fonts/LibreBaskerville-Bold.ttf");
+    src: local("LibreBaskerville Bold"), local("LibreBaskerville-Bold"), url("/__fonts/LibreBaskerville-Bold.ttf");
     font-weight: bold;
     font-style: normal;
 }
 @font-face {
     font-family: "LibreBaskerville";
-    src: local("LibreBaskerville Italic"), local("LibreBaskerville-Italic"), url("../__fonts/LibreBaskerville-Italic.ttf");
+    src: local("LibreBaskerville Italic"), local("LibreBaskerville-Italic"), url("/__fonts/LibreBaskerville-Italic.ttf");
     font-weight: normal;
     font-style: italic;
 }
@@ -139,7 +146,7 @@ html.styling ul p.label {
     margin-bottom: 1rem;
     text-transform: uppercase;
     font-size: 80%;
-    color: $grey-muted;
+    color: $grey;
 }
 html.styling.light ul p.label {
     display: none;
@@ -167,7 +174,7 @@ html.styling table {
 html.styling td {
     padding: 1rem;
     border: 1px dashed;
-    border-color: $white-muted;
+    border-color: $grey-muted;
 }
 html.styling.light td {
     border-color: $grey;
@@ -204,7 +211,7 @@ html.styling.light blockquote {
 html.styling hr {
     border-style: dashed;
     margin: 2rem 0;
-    border-color: $white-muted;
+    border-color: $grey-muted;
 }
 html.styling.light hr {
     border-color: $grey-muted;
@@ -213,8 +220,9 @@ html.styling em {
     color: $grey;
 }
 html.styling mark {
-    padding: 4px 6px;
-    font-size: 80%;
+    padding: 2px 8px;
+    // font-size: 80%;
+    font-weight: bold;
     background-color: $yellow;
     color: $blue-dark;
 }
