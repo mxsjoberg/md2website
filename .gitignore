@@ -3,3 +3,4 @@
 .secrets
 source
 *.pyc
+config.py
