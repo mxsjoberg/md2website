@@ -12,14 +12,11 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-# TODO: move config to separate file
-
 # TODO: import folders into source at build (e.g. posts folder on desktop)
 
+# TODO: move config to separate file and import otherwise set default (for demo)
 SOURCE_PATH = "../michaelsjoberg.com/source"
-# SOURCE_PATH = "demo"
 DIST_PATH = "../michaelsjoberg.com/dist"
-# DIST_PATH = "__dist"
 ASSETS = ["main.scss", "main.js"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
@@ -28,7 +25,7 @@ APP_THEME = "#0B0F12"
 POSTS_ON_INDEX = False
 NO_JS = False
 
-ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "asm", "txt"]
+ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "asm", "txt"]
 
 FORMAT_MAP = {
     "py": {
@@ -42,6 +39,14 @@ FORMAT_MAP = {
     "cpp": {
         "name": "cpp",
         "comment": "//"
+    },
+    "pas": {
+        "name": "pascal",
+        "comment": "//"
+    },
+    "rb": {
+        "name": "ruby",
+        "comment": "#"
     },
     "asm": {
         "name": "asm",
@@ -63,6 +68,10 @@ GOOGLE_TAG = """
   gtag('config', 'G-FPF1MCLY5P');
 </script>
 """
+
+# use demo if not defined in config file
+if not SOURCE_PATH: SOURCE_PATH = "demo"
+if not DIST_PATH: DIST_PATH = "__dist"
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
