@@ -24,6 +24,8 @@ APP_NAME = "Michael Sjöberg"
 APP_THEME = "#0B0F12"
 POSTS_ON_INDEX = False
 NO_JS = False
+# TODO: DEFAULT_THEME
+# TODO: ALLOW_CHANGE_THEME
 
 ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "asm", "txt"]
 
