@@ -12,20 +12,20 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+from config import *
+
 # TODO: import folders into source at build (e.g. posts folder on desktop)
 
-# TODO: move config to separate file and import otherwise set default (for demo)
-SOURCE_PATH = "../michaelsjoberg.com/source"
-DIST_PATH = "../michaelsjoberg.com/dist"
-ASSETS = ["main.scss", "main.js"]
-AUTHOR = "Michael Sjöberg"
-DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
-APP_NAME = "Michael Sjöberg"
-APP_THEME = "#0B0F12"
-POSTS_ON_INDEX = False
-NO_JS = False
-# TODO: DEFAULT_THEME
-# TODO: ALLOW_CHANGE_THEME
+# analytics
+GOOGLE_TAG = """
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPF1MCLY5P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FPF1MCLY5P');
+</script>
+"""
 
 ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "asm", "txt"]
 
@@ -59,17 +59,6 @@ FORMAT_MAP = {
         "comment": None
     }
 }
-
-# analytics
-GOOGLE_TAG = """
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPF1MCLY5P"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FPF1MCLY5P');
-</script>
-"""
 
 # use demo if not defined in config file
 if not SOURCE_PATH: SOURCE_PATH = "demo"
