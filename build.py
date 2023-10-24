@@ -12,10 +12,10 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-# SOURCE_PATH = "../michaelsjoberg.com/source"
-SOURCE_PATH = "demo"
-# DIST_PATH = "../michaelsjoberg.com/dist"
-DIST_PATH = "__dist"
+SOURCE_PATH = "../michaelsjoberg.com/source"
+# SOURCE_PATH = "demo"
+DIST_PATH = "../michaelsjoberg.com/dist"
+# DIST_PATH = "__dist"
 ASSETS = ["main.scss", "main.js"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
@@ -25,7 +25,6 @@ POSTS_ON_INDEX = False
 NO_JS = False
 
 ACCEPTED_FILE_FORMATS = ["md", "py", "c", "txt"]
-DOWNLOAD_FILE_LINKS = True
 
 # analytics
 GOOGLE_TAG = """
@@ -359,7 +358,7 @@ for dir_ in os.listdir(SOURCE_PATH):
                         for post in sorted_posts_dict:
                             # if date is current or last month
                             if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
-                                dir_page.write(f"<li><mark>new</mark> <a href='{dir_}/{category}/{subcategory}/{post['url']}.html'>{post['title']}</a></li>")
+                                dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
                             else:    
                                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                         dir_page.write("</ul>")
@@ -372,9 +371,9 @@ for dir_ in os.listdir(SOURCE_PATH):
                     for post in sorted_posts_dict:
                         # if date is current or last month
                         if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
-                            dir_page.write(f"<li><mark>new</mark> <a href='{dir_}/{category}/{post['url']}.html'>{post['title']}</a></li>")
+                            dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
                         else:    
-                            dir_page.write(f"<li><a href='{dir_}/{category}/{post['url']}.html'>{post['title']}</a></li>")
+                            dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
             write_footer(dir_page)
 
