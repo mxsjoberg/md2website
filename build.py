@@ -12,22 +12,10 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-from config import *
+try: from config import *
+except: from config_demo import *
 
-# TODO: import folders into source at build (e.g. posts folder on desktop)
-
-# analytics
-GOOGLE_TAG = """
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPF1MCLY5P"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FPF1MCLY5P');
-</script>
-"""
-
-ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "asm", "txt"]
+ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "rs", "pl", "scala", "asm", "v", "txt"]
 
 FORMAT_MAP = {
     "py": {
@@ -50,9 +38,25 @@ FORMAT_MAP = {
         "name": "ruby",
         "comment": "#"
     },
+    "rs": {
+        "name": "rust",
+        "comment": "//"
+    },
+    "pl": {
+        "name": "prolog",
+        "comment": "%"
+    },
+    "scala": {
+        "name": "scala",
+        "comment": "//"
+    },
     "asm": {
         "name": "asm",
         "comment": ";"
+    },
+    "v": {
+        "name": "verilog",
+        "comment": "//"
     },
     "txt": {
         "name": "txt",
@@ -81,7 +85,7 @@ def write_header(file, title="md2website – Markdown to static website builder"
     This static website was built by github.com/mxsjoberg/md2website
     -->
     """.replace("    ", ""))
-    file.write("<html lang='en'>")
+    file.write(f"<html lang='en' class='styling {DEFAULT_THEME}'>")
     file.write("<head>")
     # favicon
     # file.write("<link rel='icon' href='data:,'>")
@@ -141,14 +145,14 @@ def write_footer(file):
     file.write(f"<p class='small' style='text-align:justify;'>© {datetime.now().year} {AUTHOR}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
-    # is NO_JS useful at all?
-    if not NO_JS:
-        file.write("<script>")
-        js_file = open(f"__assets/main.min.js", "r")
-        js_content = js_file.read()
-        js_file.close()
-        file.write(js_content)
-        file.write("</script>")
+    # js
+    file.write("<script>")
+    js_file = open(f"__assets/main.min.js", "r")
+    js_content = js_file.read()
+    js_file.close()
+    file.write(js_content)
+    file.write("</script>")
+    # end of file
     file.write("</body>")
     file.write("</html>")
 
@@ -239,6 +243,10 @@ for file in os.listdir(SOURCE_PATH):
     if not file.startswith(".") and not file == "nav.md" and not os.path.isdir(f"{SOURCE_PATH}/{file}"):
         os.system(f"cp {SOURCE_PATH}/{file} {DIST_PATH}/{file}")
 
+# copy load folders into source
+for folder in LOAD_FOLDERS:
+    os.system(f"cp -r {folder} {SOURCE_PATH}")
+
 # create list page for each folder in root dir
 for dir_ in os.listdir(SOURCE_PATH):
     if "." not in dir_ and dir_ != "pages" and not dir_.startswith("__"):
@@ -257,92 +265,103 @@ for dir_ in os.listdir(SOURCE_PATH):
             # for each md file in dir_, create html page and append to posts_lst or posts_dict
             for root, dirs, posts in os.walk(f"{SOURCE_PATH}/{dir_}"):
                 root = root.replace(f"{SOURCE_PATH}/", "")
-                os.mkdir(f"{DIST_PATH}/{root}")
-                for post in posts:
-                    if post != "__flags" and post.split(".")[1] in ACCEPTED_FILE_FORMATS:
+                if ".git" not in root and "/_" not in root: os.mkdir(f"{DIST_PATH}/{root}")
+                for post in posts if ".git" not in root and "/_" not in root else []:
+                    try:
                         post_name = post.split(".")[0]
-                        post_file = open(f"{SOURCE_PATH}/{root}/{post}")
-                        # title from file name
-                        post_title = post_name.replace("-", " ").capitalize()
-                        date = False
-                        # TODO: refactor this as helper function?
-                        # python
-                        if post.split(".")[1] in FORMAT_MAP.keys():
-                            key = post.split(".")[1]
-                            file_content = post_file.read()
-                            post_content = f"# {post_title}\n"
-                            try:
-                                date = datetime.strptime(file_content.split('\n')[0].split(FORMAT_MAP[key]["comment"])[1].strip(), "%Y-%m")
-                                post_content += f"*{date.strftime('%B %Y')}*\n"
-                                file_content = "\n".join(file_content.split('\n')[1:])
-                            except:
-                                pass
-                            post_content += f"```{FORMAT_MAP[key]['name']}\n{file_content}\n```\n"
-                        else:
-                            post_content = post_file.read()
-                        # TODO: refactor this as helper function?
-                        # create page
-                        with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
-                            # title
-                            try:
-                                title = post_content.split("\n")[0].split("# ")[1]
-                            except:
-                                title = post_name.replace("-", " ").capitalize()
-                            # date
-                            if not date:
+                        post_format = post.split(".")[1]
+                        if post != "__flags" and post != "README.md" and not post.startswith("_") and post_format in ACCEPTED_FILE_FORMATS:
+                            # post_name = post.split(".")[0]
+                            post_file = open(f"{SOURCE_PATH}/{root}/{post}")
+                            # title from file name
+                            post_title = post_name.replace("-", " ").capitalize()
+                            date = False
+                            # TODO: refactor this as helper function?
+                            # python
+                            if post_format in FORMAT_MAP.keys():
+                                key = post.split(".")[1]
+                                file_content = post_file.read()
+                                post_content = f"# {post_title}\n"
                                 try:
-                                    date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
+                                    date = datetime.strptime(file_content.split('\n')[0].split(FORMAT_MAP[key]["comment"])[1].strip(), "%Y-%m")
+                                    post_content += f"*{date.strftime('%B %Y')}*\n"
+                                    file_content = "\n".join(file_content.split('\n')[1:])
                                 except:
-                                    try:
-                                        date = post_content.split("\n")[2].split("*")[1]
-                                    except:
-                                        date = False
-                            # check if date is older than 2 years
-                            if date:
-                                try:
-                                    date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
-                                except:
-                                    date_is_outdated = False
-                            # categories
-                            category, subcategory = None, None
-                            try:
-                                category, subcategory = root.split("/")[1], root.split("/")[2]
-                            except:
-                                try: category = root.split("/")[1]
-                                except: pass
-                            # category and subcategory
-                            if category and subcategory:
-                                if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
-                                if not category in posts_dict: posts_dict[category] = {}
-                                if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
-                                # append
-                                posts_dict[category][subcategory].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
-                            # category
-                            elif category:
-                                if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
-                                if not category in posts_dict: posts_dict[category] = []
-                                # append
-                                posts_dict[category].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                    pass
+                                post_content += f"```{FORMAT_MAP[key]['name']}\n{file_content}\n```\n"
                             else:
-                                if type(date) == type(""): date = datetime.strptime(date, "%B %d, %Y")
-                                # append to posts_lst
-                                posts_lst.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
-                                GLOBAL_POSTS.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
-                            # generate anchors and inject index
-                            post_content = generate_and_inject_index(post_content)
-                            # write
-                            write_header(tmp_file, title=title)
-                            # write outdated notice
-                            if date_is_outdated: tmp_file.write(f"<p style='margin-top:0;'><em>This post is more than two years old and may contain outdated information.</em></p>")
-                            html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
-                            # replace hr with border (for table of contents)
-                            html_content = replace_hr_with_border(html_content, toc=True)
-                            # syntax highlight
-                            html_content = syntax_highlight(html_content)
-                            # write to file
-                            tmp_file.write(html_content)
-                            write_footer(tmp_file)
-                            post_file.close()            
+                                post_content = post_file.read()
+                            # TODO: refactor this as helper function?
+                            # create page
+                            with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
+                                # title
+                                try:
+                                    title = post_content.split("\n")[0].split("# ")[1]
+                                except:
+                                    title = post_name.replace("-", " ").capitalize()
+                                # date
+                                if not date:
+                                    try:
+                                        date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
+                                    except:
+                                        try:
+                                            date = post_content.split("\n")[2].split("*")[1]
+                                        except:
+                                            date = False
+                                # check if date is older than 2 years
+                                if date:
+                                    try:
+                                        date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
+                                    except:
+                                        date_is_outdated = False
+                                # categories
+                                category, subcategory = None, None
+                                try:
+                                    category, subcategory = root.split("/")[1], root.split("/")[2]
+                                except:
+                                    try: category = root.split("/")[1]
+                                    except: pass
+                                # category and subcategory
+                                if category and subcategory:
+                                    try:
+                                        if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
+                                    except: date = False
+                                    if not category in posts_dict: posts_dict[category] = {}
+                                    if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
+                                    # append
+                                    posts_dict[category][subcategory].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                # category
+                                elif category:
+                                    try:
+                                        if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
+                                    except: date = False
+                                    if not category in posts_dict: posts_dict[category] = []
+                                    # append
+                                    posts_dict[category].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                else:
+                                    try:
+                                        if type(date) == type(""): date = datetime.strptime(date, "%B %d, %Y")
+                                    except: date = False
+                                    # append to posts_lst
+                                    posts_lst.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                    GLOBAL_POSTS.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                # generate anchors and inject index
+                                post_content = generate_and_inject_index(post_content)
+                                # write
+                                write_header(tmp_file, title=title)
+                                # write outdated notice
+                                if date_is_outdated: tmp_file.write(f"<p style='margin-top:0;'><em>This post is more than two years old and may contain outdated information.</em></p>")
+                                html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
+                                # replace hr with border (for table of contents)
+                                html_content = replace_hr_with_border(html_content, toc=True)
+                                # syntax highlight
+                                html_content = syntax_highlight(html_content)
+                                # write to file
+                                tmp_file.write(html_content)
+                                write_footer(tmp_file)
+                                post_file.close()
+                    except:
+                        pass
             # write page title
             dir_page.write(f"<h1>{dir_.title()}</h1>")
             if FLAG_DESC:
@@ -461,3 +480,6 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 write_footer(tmp_file)
                 file.close()
 
+# remove loaded folders from source folder
+for folder in LOAD_FOLDERS:
+    shutil.rmtree(f"{SOURCE_PATH}/{folder.split('/')[-1]}")
