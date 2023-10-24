@@ -1,0 +1,10 @@
+.DS_Store
+.git
+.gitignore
+.gitattributes
+demo
+__dist
+__assets
+__fonts
+readme.md
+requirements.txt
