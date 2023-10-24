@@ -203,10 +203,7 @@ def syntax_highlight(html_content):
     return html_content
 
 def parse_flags(line):
-    FLAG_TOC = None
-    FLAG_TIME = None
-    FLAG_COL = None
-    FLAG_DESC = None
+    FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = None, None, None, None
     if line.startswith("-* "):
         flags_raw = line[3:].split(";")
         for flag in flags_raw:
@@ -256,10 +253,7 @@ for file in os.listdir(SOURCE_PATH):
 # create list page for each folder in root dir
 for dir_ in os.listdir(SOURCE_PATH):
     if "." not in dir_ and dir_ != "pages" and not dir_.startswith("__"):
-        FLAG_TOC = None
-        FLAG_TIME = None
-        FLAG_COL = None
-        FLAG_DESC = None
+        FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = None, None, None, None
         # check if __flags file in dir_
         if os.path.exists(os.path.join(f"{SOURCE_PATH}/{dir_}", "__flags")):
             flag_content = open(f"{SOURCE_PATH}/{dir_}/__flags").read()
@@ -286,7 +280,6 @@ for dir_ in os.listdir(SOURCE_PATH):
                         # python
                         if post.split(".")[1] in FORMAT_MAP.keys():
                             key = post.split(".")[1]
-                            # print(FORMAT_MAP[key]["comment"])
                             file_content = post_file.read()
                             post_content = f"# {post_title}\n"
                             try:
@@ -346,7 +339,6 @@ for dir_ in os.listdir(SOURCE_PATH):
                                 # append to posts_lst
                                 posts_lst.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
                                 GLOBAL_POSTS.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
-                                # print(posts_lst)
                             # generate anchors and inject index
                             post_content = generate_and_inject_index(post_content)
                             # write
@@ -426,10 +418,7 @@ for dir_ in os.listdir(SOURCE_PATH):
 # create html page for each md file in pages folder
 for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
     for file in files:
-        FLAG_TOC = None
-        FLAG_TIME = None
-        FLAG_COL = None
-        FLAG_DESC = None
+        FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = None, None, None, None
         if file.split(".")[1] == "md":
             file_name = file.split(".")[0]
             # create page
@@ -439,7 +428,6 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 file_content = file_content.split("\n")
                 # flags
                 if (file_content[0].startswith("-* ")):
-                    # parse flags
                     FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = parse_flags(file_content[0])
                     # skip empty line following flags (if any)
                     if (len(file_content[1]) == 0):
@@ -455,7 +443,7 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 if FLAG_TOC: file_content = generate_and_inject_index(file_content)
                 # write header
                 write_header(tmp_file, title)
-                # TODO: fix for multi columns on regular pages? below title
+                # TODO: fix for multi columns on regular pages? below title (need to read html)
                 # columns
                 # if FLAG_COL:
                 #     tmp_file.write(f"<div style='column-count:{FLAG_COL};'>")
@@ -478,9 +466,7 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                     # list posts
                     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
                     tmp_file.write("<dl>")
-                    for post in sorted_global_posts:
-                        # TODO: posts/ hardcoded is ugly hack, fix later
-                        tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
+                    for post in sorted_global_posts: tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
                     tmp_file.write("</dl>")
                 if FLAG_COL: tmp_file.write("</div>")
                 write_footer(tmp_file)
