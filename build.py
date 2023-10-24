@@ -28,7 +28,7 @@ APP_THEME = "#0B0F12"
 POSTS_ON_INDEX = False
 NO_JS = False
 
-ACCEPTED_FILE_FORMATS = ["md", "py", "c", "asm", "txt"]
+ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "asm", "txt"]
 
 FORMAT_MAP = {
     "py": {
@@ -37,6 +37,10 @@ FORMAT_MAP = {
     },
     "c": {
         "name": "c",
+        "comment": "//"
+    },
+    "cpp": {
+        "name": "cpp",
         "comment": "//"
     },
     "asm": {
