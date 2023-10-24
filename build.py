@@ -12,10 +12,10 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-SOURCE_PATH = "../michaelsjoberg.com/source"
-# SOURCE_PATH = "demo"
-DIST_PATH = "../michaelsjoberg.com/dist"
-# DIST_PATH = "__dist"
+# SOURCE_PATH = "../michaelsjoberg.com/source"
+SOURCE_PATH = "demo"
+# DIST_PATH = "../michaelsjoberg.com/dist"
+DIST_PATH = "__dist"
 ASSETS = ["main.scss", "main.js"]
 AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
@@ -23,6 +23,9 @@ APP_NAME = "Michael Sjöberg"
 APP_THEME = "#0B0F12"
 POSTS_ON_INDEX = False
 NO_JS = False
+
+ACCEPTED_FILE_FORMATS = ["md", "py", "c", "txt"]
+DOWNLOAD_FILE_LINKS = True
 
 # analytics
 GOOGLE_TAG = """
@@ -84,7 +87,7 @@ def write_header(file, title="md2website – Markdown to static website builder"
     # -------------------------------------------
     file.write("<body>")
     # google tag
-    if GOOGLE_TAG: file.write(GOOGLE_TAG)
+    if GOOGLE_TAG and SOURCE_PATH != "demo": file.write(GOOGLE_TAG)
     # page
     file.write("<div class='page'>")
     # nav
@@ -228,6 +231,7 @@ for dir_ in os.listdir(SOURCE_PATH):
         # create page for folder
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
+            # TODO: refactor this to single data structure and use flags to set ordering? (by date, category, etc)
             posts_lst = [] # [ { title, date, url } ]
             posts_dict = {} # { category: { subcategory: [ { title, date, url } ] } }
             # for each md file in dir_, create html page and append to posts_lst or posts_dict
@@ -235,24 +239,44 @@ for dir_ in os.listdir(SOURCE_PATH):
                 root = root.replace(f"{SOURCE_PATH}/", "")
                 os.mkdir(f"{DIST_PATH}/{root}")
                 for post in posts:
-                    if post != "__flags" and post.split(".")[1] == "md":
+                    if post != "__flags" and post.split(".")[1] in ACCEPTED_FILE_FORMATS:
                         post_name = post.split(".")[0]
+                        post_file = open(f"{SOURCE_PATH}/{root}/{post}")
+                        # title from file name
+                        post_title = post_name.replace("-", " ").capitalize()
+                        if post.split(".")[1] == "py":
+                            post_content = f"# {post_title}\n"
+                            post_content += f"```python\n{post_file.read()}\n```\n"
+                        elif post.split(".")[1] == "c":
+                            post_content = f"# {post_title}\n"
+                            post_content += f"```c\n{post_file.read()}\n```\n"
+                        elif post.split(".")[1] == "txt":
+                            post_content = f"# {post_title}\n"
+                            post_content += f"```\n{post_file.read()}\n```\n"
+                        else:
+                            post_content = post_file.read()
+                        # TODO: refactor this as helper function?
                         # create page
                         with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
-                            post_file = open(f"{SOURCE_PATH}/{root}/{post}")
-                            post_content = post_file.read()
                             # title
-                            title = post_content.split("\n")[0].split("# ")[1]
+                            try:
+                                title = post_content.split("\n")[0].split("# ")[1]
+                            except:
+                                title = post_name.replace("-", " ").capitalize()
                             # date
                             try:
                                 date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
                             except:
-                                date = post_content.split("\n")[2].split("*")[1]
+                                try:
+                                    date = post_content.split("\n")[2].split("*")[1]
+                                except:
+                                    date = False
                             # check if date is older than 2 years
-                            try:
-                                date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
-                            except:
-                                date_is_outdated = False
+                            if date:
+                                try:
+                                    date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
+                                except:
+                                    date_is_outdated = False
                             # categories
                             category, subcategory = None, None
                             try:
@@ -262,19 +286,23 @@ for dir_ in os.listdir(SOURCE_PATH):
                                 except: pass
                             # category and subcategory
                             if category and subcategory:
+                                if date: date = datetime.strptime(date, "%B %Y")
                                 if not category in posts_dict: posts_dict[category] = {}
                                 if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
                                 # append
-                                posts_dict[category][subcategory].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                                posts_dict[category][subcategory].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
                             # category
                             elif category:
+                                if date: date = datetime.strptime(date, "%B %Y")
                                 if not category in posts_dict: posts_dict[category] = []
                                 # append
-                                posts_dict[category].append({ "title": title, "date": datetime.strptime(date, "%B %Y"), "url": post_name })
+                                posts_dict[category].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
                             else:
+                                if date: date = datetime.strptime(date, "%B %d, %Y")
                                 # append to posts_lst
-                                posts_lst.append({ "title": title, "date": datetime.strptime(date, "%B %d, %Y"), "url": post_name })
-                                GLOBAL_POSTS.append({ "title": title, "date": datetime.strptime(date, "%B %d, %Y"), "url": post_name })
+                                posts_lst.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                GLOBAL_POSTS.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                # print(posts_lst)
                             # generate anchors and inject index
                             post_content = generate_and_inject_index(post_content)
                             # write
@@ -300,7 +328,7 @@ for dir_ in os.listdir(SOURCE_PATH):
             # write posts_lst (list by date)
             current_date = None
             for post in sorted_posts_lst:
-                if current_date != post['date'].year:
+                if post['date'] and current_date != post['date'].year:
                     if current_date != None:
                         dir_page.write("</dl>")
                     dir_page.write(f"<p><em>{post['date'].year}</em></p>")
@@ -310,7 +338,7 @@ for dir_ in os.listdir(SOURCE_PATH):
                         dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
                     else:
                         dir_page.write("<dl>")
-                dir_page.write(f"<li><a href='posts/{post['url']}.html'>{post['title']}</a></li>")
+                dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
             dir_page.write("</ul>")
             # create list with categories for ordering
             category_list = sorted(posts_dict.keys())
@@ -330,10 +358,10 @@ for dir_ in os.listdir(SOURCE_PATH):
                             dir_page.write("<ul>")
                         for post in sorted_posts_dict:
                             # if date is current or last month
-                            if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                            if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
                                 dir_page.write(f"<li><mark>new</mark> <a href='{dir_}/{category}/{subcategory}/{post['url']}.html'>{post['title']}</a></li>")
                             else:    
-                                dir_page.write(f"<li><a href='{dir_}/{category}/{subcategory}/{post['url']}.html'>{post['title']}</a></li>")
+                                dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                         dir_page.write("</ul>")
                 else:
                     sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
