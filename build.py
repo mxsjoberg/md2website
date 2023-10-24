@@ -12,6 +12,10 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+# TODO: move config to separate file
+
+# TODO: import folders into source at build (e.g. posts folder on desktop)
+
 SOURCE_PATH = "../michaelsjoberg.com/source"
 # SOURCE_PATH = "demo"
 DIST_PATH = "../michaelsjoberg.com/dist"
@@ -24,7 +28,26 @@ APP_THEME = "#0B0F12"
 POSTS_ON_INDEX = False
 NO_JS = False
 
-ACCEPTED_FILE_FORMATS = ["md", "py", "c", "txt"]
+ACCEPTED_FILE_FORMATS = ["md", "py", "c", "asm", "txt"]
+
+FORMAT_MAP = {
+    "py": {
+        "name": "python",
+        "comment": "#"
+    },
+    "c": {
+        "name": "c",
+        "comment": "//"
+    },
+    "asm": {
+        "name": "asm",
+        "comment": ";"
+    },
+    "txt": {
+        "name": "txt",
+        "comment": None
+    }
+}
 
 # analytics
 GOOGLE_TAG = """
@@ -111,7 +134,7 @@ def write_footer(file):
     file.write(f"<a id='theme'>[theme: <span id='theme-dark'>dark</span><span id='theme-light'>light</span>]</a> ")
     file.write(f"</p>")
     # credits
-    file.write(f"<p class='small' style='text-align:justify;'>DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
+    file.write(f"<p class='small' style='text-align:justify;'>© {datetime.now().year} {AUTHOR}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
     file.write("</div>")
     file.write("</div>") # ./page
     # is NO_JS useful at all?
@@ -243,15 +266,21 @@ for dir_ in os.listdir(SOURCE_PATH):
                         post_file = open(f"{SOURCE_PATH}/{root}/{post}")
                         # title from file name
                         post_title = post_name.replace("-", " ").capitalize()
-                        if post.split(".")[1] == "py":
+                        date = False
+                        # TODO: refactor this as helper function?
+                        # python
+                        if post.split(".")[1] in FORMAT_MAP.keys():
+                            key = post.split(".")[1]
+                            # print(FORMAT_MAP[key]["comment"])
+                            file_content = post_file.read()
                             post_content = f"# {post_title}\n"
-                            post_content += f"```python\n{post_file.read()}\n```\n"
-                        elif post.split(".")[1] == "c":
-                            post_content = f"# {post_title}\n"
-                            post_content += f"```c\n{post_file.read()}\n```\n"
-                        elif post.split(".")[1] == "txt":
-                            post_content = f"# {post_title}\n"
-                            post_content += f"```\n{post_file.read()}\n```\n"
+                            try:
+                                date = datetime.strptime(file_content.split('\n')[0].split(FORMAT_MAP[key]["comment"])[1].strip(), "%Y-%m")
+                                post_content += f"*{date.strftime('%B %Y')}*\n"
+                                file_content = "\n".join(file_content.split('\n')[1:])
+                            except:
+                                pass
+                            post_content += f"```{FORMAT_MAP[key]['name']}\n{file_content}\n```\n"
                         else:
                             post_content = post_file.read()
                         # TODO: refactor this as helper function?
@@ -263,13 +292,14 @@ for dir_ in os.listdir(SOURCE_PATH):
                             except:
                                 title = post_name.replace("-", " ").capitalize()
                             # date
-                            try:
-                                date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
-                            except:
+                            if not date:
                                 try:
-                                    date = post_content.split("\n")[2].split("*")[1]
+                                    date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
                                 except:
-                                    date = False
+                                    try:
+                                        date = post_content.split("\n")[2].split("*")[1]
+                                    except:
+                                        date = False
                             # check if date is older than 2 years
                             if date:
                                 try:
@@ -285,19 +315,19 @@ for dir_ in os.listdir(SOURCE_PATH):
                                 except: pass
                             # category and subcategory
                             if category and subcategory:
-                                if date: date = datetime.strptime(date, "%B %Y")
+                                if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
                                 if not category in posts_dict: posts_dict[category] = {}
                                 if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
                                 # append
                                 posts_dict[category][subcategory].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
                             # category
                             elif category:
-                                if date: date = datetime.strptime(date, "%B %Y")
+                                if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
                                 if not category in posts_dict: posts_dict[category] = []
                                 # append
                                 posts_dict[category].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
                             else:
-                                if date: date = datetime.strptime(date, "%B %d, %Y")
+                                if type(date) == type(""): date = datetime.strptime(date, "%B %d, %Y")
                                 # append to posts_lst
                                 posts_lst.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
                                 GLOBAL_POSTS.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
@@ -363,6 +393,7 @@ for dir_ in os.listdir(SOURCE_PATH):
                                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                         dir_page.write("</ul>")
                 else:
+                    # TODO: sort by number of children? set via flag?
                     sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
                     if FLAG_COL:
                         dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
@@ -370,7 +401,7 @@ for dir_ in os.listdir(SOURCE_PATH):
                         dir_page.write("<ul>")
                     for post in sorted_posts_dict:
                         # if date is current or last month
-                        if post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1:
+                        if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
                             dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
                         else:    
                             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
