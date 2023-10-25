@@ -1,15 +1,12 @@
-SOURCE_PATH = "../michaelsjoberg.com/source"
-DIST_PATH = "../michaelsjoberg.com/dist"
-LOAD_FOLDERS = []
-ASSETS = ["main.scss", "main.js"]
+SOURCE_PATH = "demo"
+DIST_PATH = "__dist"
+LOAD_FOLDER = False
+LOAD_FOLDER_FLAGS = False
 AUTHOR = "Michael Sjöberg"
-DESCRIPTION = "I build software products, learn about stuff in public, and sometimes write about programming, projects, and finance."
-GOOGLE_TAG = False
-# mobile preferences
-APP_NAME = "Michael Sjöberg"
-APP_THEME = "#0E1525"
-# page settings
-POSTS_ON_INDEX = False # TODO: change this to number
-STYLING = True
+DESCRIPTION = "My awesome static website"
+GOOGLE_TAG = False # "<tag>"
+APP_NAME = "My Website"
 DEFAULT_THEME = "dark" # "dark" | "light"
 ALLOW_CHANGE_THEME = True
+POSTS_ON_INDEX = False # TODO: change this to number
+STYLING = True
