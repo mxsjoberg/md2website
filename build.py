@@ -1,6 +1,7 @@
 # md2website: markdown to static website builder
 
 import os
+import sys
 import re
 import shutil
 import markdown
@@ -62,11 +63,13 @@ FORMAT_MAP = {
     }
 }
 
-# TODO: move this to argv
-SOURCE_PATH = "/Users/michaelsjoeberg/Dropbox/_PROJECTS/michaelsjoberg.com/source"
+SOURCE_PATH = sys.argv[1] if len(sys.argv) > 1 else False
 
 # use demo if not defined in config file
-if not SOURCE_PATH: SOURCE_PATH = "demo"
+if not SOURCE_PATH:
+    print("No source provided, building demo site.")
+    print("Usage: python3 build.py <path/to/source>")
+    SOURCE_PATH = "demo"
 
 ASSETS = ["main.scss", "main.js"]
 APP_THEME = "#0E1525"
@@ -496,7 +499,3 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 if FLAG_COL: tmp_file.write("</div>")
                 write_footer(tmp_file)
                 file.close()
-
-# remove loaded folders from source folder
-# for folder, _ in LOAD_FOLDERS:
-#     shutil.rmtree(f"{SOURCE_PATH}/{folder.split('/')[-1]}")
