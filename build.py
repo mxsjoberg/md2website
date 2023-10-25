@@ -13,9 +13,6 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-try: from config import *
-except: from config_demo import *
-
 ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "rs", "pl", "scala", "asm", "v", "txt"]
 
 FORMAT_MAP = {
@@ -65,9 +62,35 @@ FORMAT_MAP = {
     }
 }
 
+# TODO: move this to argv
+SOURCE_PATH = "/Users/michaelsjoeberg/Dropbox/_PROJECTS/michaelsjoberg.com/source"
+
 # use demo if not defined in config file
 if not SOURCE_PATH: SOURCE_PATH = "demo"
-if not DIST_PATH: DIST_PATH = "__dist"
+
+ASSETS = ["main.scss", "main.js"]
+APP_THEME = "#0E1525"
+
+# check if .md2website-config in source folder root
+if os.path.exists(f"{SOURCE_PATH}/.md2website-config"):
+    # load into project
+    with open(f"{SOURCE_PATH}/.md2website-config", "r") as file:
+        config_content = file.read()
+        # parse config
+        for line in config_content.split("\n"):
+            CONFIG_NAME = str(line.split("=")[0].strip())
+            if CONFIG_NAME == "DIST_PATH": DIST_PATH = str(line.split("DIST_PATH =")[1].strip()[1:-1])
+            if CONFIG_NAME == "LOAD_FOLDER": LOAD_FOLDER = str(line.split("LOAD_FOLDER =")[1].strip()[1:-1]) if not False else False
+            if CONFIG_NAME == "LOAD_FOLDER_FLAGS": LOAD_FOLDER_FLAGS = str(line.split("LOAD_FOLDER_FLAGS =")[1].strip()[1:-1]) if not False else False
+            if CONFIG_NAME == "AUTHOR": AUTHOR = str(line.split("AUTHOR =")[1].strip())[1:-1]
+            if CONFIG_NAME == "DESCRIPTION": DESCRIPTION = str(line.split("DESCRIPTION =")[1].strip()[1:-1])
+            if CONFIG_NAME == "GOOGLE_TAG": GOOGLE_TAG = str(line.split("GOOGLE_TAG =")[1].strip()[1:-1]) if not False else False
+            if CONFIG_NAME == "APP_NAME": APP_NAME = str(line.split("APP_NAME =")[1].strip()[1:-1])
+            if CONFIG_NAME == "POSTS_ON_INDEX": POSTS_ON_INDEX = bool(line.split("POSTS_ON_INDEX =")[1].strip())
+            if CONFIG_NAME == "STYLING": STYLING = bool(line.split("STYLING =")[1].strip())
+            if CONFIG_NAME == "DEFAULT_THEME": DEFAULT_THEME = str(line.split("DEFAULT_THEME =")[1].strip()[1:-1])
+            if CONFIG_NAME == "ALLOW_CHANGE_THEME": ALLOW_CHANGE_THEME = bool(line.split("ALLOW_CHANGE_THEME =")[1].strip())
+else: from config_demo import *
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
@@ -243,11 +266,10 @@ for file in os.listdir(SOURCE_PATH):
         os.system(f"cp {SOURCE_PATH}/{file} {DIST_PATH}/{file}")
 
 # copy load folders into source
-for folder, flag in LOAD_FOLDERS:
-    os.system(f"rsync -av --progress {folder} {SOURCE_PATH} --exclude .git --exclude='_*'")
+if LOAD_FOLDER != False:
+    os.system(f"rsync -av --progress {LOAD_FOLDER} {SOURCE_PATH} --exclude .git --exclude='_*'")
     # create file in source folder with flags for loaded folder
-    with open(f"{SOURCE_PATH}/{folder.split('/')[-1]}/__flags", "w+") as file:
-        file.write(flag)
+    with open(f"{SOURCE_PATH}/{LOAD_FOLDER.split('/')[-1]}/__flags", "w+") as file: file.write(LOAD_FOLDER_FLAGS)
 
 # create list page for each folder in root dir
 for dir_ in os.listdir(SOURCE_PATH):
@@ -476,5 +498,5 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 file.close()
 
 # remove loaded folders from source folder
-for folder, _ in LOAD_FOLDERS:
-    shutil.rmtree(f"{SOURCE_PATH}/{folder.split('/')[-1]}")
+# for folder, _ in LOAD_FOLDERS:
+#     shutil.rmtree(f"{SOURCE_PATH}/{folder.split('/')[-1]}")
