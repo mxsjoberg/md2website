@@ -10,7 +10,8 @@ $blue-dark-muted: rgba($blue-dark, 0.8);
 // $grey: #7B91A0;
 $grey: #4F6E8E;
 // $grey-muted: rgba($grey, 0.3);
-$grey-muted: #2B3245;
+// $grey-muted: #2B3245;
+$grey-muted: #353F57;
 // $yellow: #E3E463;
 $yellow: #F1DF87;
 // $pink: #F47BEB;
@@ -117,7 +118,7 @@ html.styling .nav p {
 html.styling .nav p a {
     justify-content: center;
 }
-html.styling p + ul:not(.border) {
+html.styling p + ul:not(.border):not(.columns) {
     margin-top: -1rem;
 }
 html.styling h1 {
@@ -139,6 +140,9 @@ html.styling a:hover {
 html.styling ul {
     list-style: square;
     margin: 2rem 0;
+}
+html.styling ul.columns {
+    column-gap: 2rem;
 }
 html.styling ul p.label {
     margin: 0;
