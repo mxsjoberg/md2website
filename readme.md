@@ -2,32 +2,53 @@
 
 [Example website (my personal)](https://michaelsjoberg.com/)
 
+Going to host demo website soon TM.
+
 ## Usage
 
-Running `build.py` in root turns `.md` files in pages-folder into `.html` pages and any other folders into collections of pages (e.g. posts). Page navigation is generated based on `nav.md`. Page anchors are automatically generated from `##` and `###` tags if `toc`-flag is set to `true`. Page index is injected right before the first `##` tag.
+Running `python3 build.py <path/to/source>` turns `.md` files in pages-folder (see demo folder structure) into `.html` pages and any other folders into list pages (e.g., blog posts, articles, files). Files are embedded into `.html` pages and code is highlighted.
+
+Page navigation is generated based on `nav.md`, which should be in root folder of source.
+
+Page anchors and table of contents are automatically generated from `##` and `###` tags if `toc`-flag is set to `true`. Table of contents is injected right before the first `##` tag.
 
 ## Configuration
 
-- `DIST_PATH = "dist"` - set output folder
+Create a `.md2website-configure` file in root of source with following contents:
 
-- `ASSETS = ["main.css", "main.js", "fav.png"]` - define assets to copy to output folder (css and js-files are minimized)
+```
+DIST_PATH = "../dist"
+LOAD_FOLDER = "../../files"
+LOAD_FOLDER_FLAGS = "-* col=2;sort=name;desc=My code"
+AUTHOR = "Your Name"
+DESCRIPTION = "A description for your website."
+GOOGLE_TAG = "<your google analytics tag>"
+APP_NAME = "My Website"
+POSTS_ON_INDEX = False
+STYLING = True
+DEFAULT_THEME = "dark"
+ALLOW_CHANGE_THEME = True
+```
 
-- `AUTHOR = "Michael Sjöberg"` - set author name for meta tags
+Set `LOAD_FOLDER` and `LOAD_FOLDER_FLAGS` to `False` if not loading external folders into source folder.
 
-- `DESCRIPTION = "My projects, posts, and programming notes."` - set description for meta tags
+Set `GOOGLE_TAG` to `False` if no analytics.
 
-- `APP_NAME = "Michael's Page"` - set app name for meta tags
+Set `POSTS_ON_INDEX` to `True` if you want to show posts on index page.
 
-- `APP_THEME = "#161716"` - set app theme for meta tags
+Set `STYLING` to `False` to disable default styling (not implemented yet).
 
-- `POSTS_ON_INDEX = True` - set to `False` to remove posts from index page
+There are two themes for `DEFAULT_THEME`: `dark` and `light`.
+
+Set `ALLOW_CHANGE_THEME` to `False` to remove toggle theme button.
+
 
 ## Flags
 
-Folder can have a `__flags` file to further customize generated pages. I.e. flag file with content `-* col=3,desc=My notes` would split files in folder into three columns and add text "My notes" under title.
+Folder can have a `__flags` file to customize list pages, e.g., a flag file with content `-* col=3;desc=My notes` would split listed content into three columns and add the intro text "My notes" under title.
 
-Flags can also placed as first line in `.md` files. Currently only used to generate anchors and index on regular pages with `-* toc=true`.
+Experimental feature (not fully implemented yet): Flags can also placed as first line in `.md` files to customize individual pages (such as `-* toc=true` to include table of content on page).
 
 ## Watcher
 
-Run `watch.py` to automatically rebuild on `DIR_TO_WATCH` changes.
+Run `python3 watch.py <path/to/source> <path/to/dist>` to watch for changes in source, rebuild, and serve dist on localhost.
