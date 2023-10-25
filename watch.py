@@ -1,6 +1,7 @@
 # watch for changes and re-build
 
 import os
+import sys
 import time
 import subprocess
 import threading
@@ -8,10 +9,17 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from livereload import Server
 
-DIST_PATH = "../michaelsjoberg.com/dist"
-# DIST_PATH = "__dist"
+SOURCE_PATH = sys.argv[1] if len(sys.argv) > 1 else False
+DIST_PATH = sys.argv[2] if len(sys.argv) > 2 else False
+
+if not SOURCE_PATH or not DIST_PATH:
+    print("No source and dist folder provided, watching demo.")
+    print("Usage: python3 watch.py <path/to/source> <path/to/dist>")
+    SOURCE_PATH = "demo"
+    DIST_PATH = "__dist"
+
 DIR_TO_WATCH = "pages"
-COMMAND_TO_RUN = "python3 build.py"
+COMMAND_TO_RUN = f"python3 build.py {SOURCE_PATH}"
 
 def md_modified(event):
     # if event.is_directory(): return
