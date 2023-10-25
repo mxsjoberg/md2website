@@ -5,6 +5,7 @@ import re
 import shutil
 import markdown
 import sass
+import traceback
 from datetime import datetime
 # syntax highlight
 from bs4 import BeautifulSoup
@@ -71,9 +72,6 @@ if not DIST_PATH: DIST_PATH = "__dist"
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
 
-def sort_by_date_and_title(item):
-    return (item["date"], item["title"])
-
 def write_header(file, title="md2website – Markdown to static website builder", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
@@ -89,7 +87,7 @@ def write_header(file, title="md2website – Markdown to static website builder"
     file.write("<head>")
     # favicon
     # file.write("<link rel='icon' href='data:,'>")
-    file.write("<link rel='icon' href='favicon.png'>")
+    file.write("<link rel='icon' href='/favicon.png'>")
     # title
     file.write(f"<title>{title}</title>")
     # meta
@@ -126,12 +124,9 @@ def write_header(file, title="md2website – Markdown to static website builder"
         nav_file = open(f"{SOURCE_PATH}/nav.md", "r")
         nav_content = nav_file.read()
         nav_file.close()
-        if nav_content != "":
-            file.write(markdown.markdown(nav_content))
-        else:
-            raise
-    except:
-        file.write(f"<p><a href='{'../'*root}index.html'>home</a></p>")
+        if nav_content != "": file.write(markdown.markdown(nav_content))
+        else: raise
+    except: file.write(f"<p><a href='{'../'*root}index.html'>home</a></p>")
     file.write("</div>")
 
 def write_footer(file):
@@ -157,6 +152,9 @@ def write_footer(file):
     file.write("</html>")
 
 # helpers
+def sort_by_date_and_title(item):
+    return (item["date"], item["title"])
+
 def generate_and_inject_index(file_content):
     # generate anchors
     file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
@@ -196,7 +194,7 @@ def syntax_highlight(html_content):
     return html_content
 
 def parse_flags(line):
-    FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = None, None, None, None
+    FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC = None, None, None, None, None
     if line.startswith("-* "):
         flags_raw = line[3:].split(";")
         for flag in flags_raw:
@@ -204,8 +202,9 @@ def parse_flags(line):
             if key == "toc": FLAG_TOC = bool(value)
             if key == "time": FLAG_TIME = bool(value)
             if key == "col": FLAG_COL = int(value)
+            if key == "sort": FLAG_SORT = "date" if value == "date" else "name"
             if key == "desc": FLAG_DESC = str(value)
-    return FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC
+    return FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC
 
 # create dist folder
 if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
@@ -244,18 +243,21 @@ for file in os.listdir(SOURCE_PATH):
         os.system(f"cp {SOURCE_PATH}/{file} {DIST_PATH}/{file}")
 
 # copy load folders into source
-for folder in LOAD_FOLDERS:
-    os.system(f"cp -r {folder} {SOURCE_PATH}")
+for folder, flag in LOAD_FOLDERS:
+    os.system(f"rsync -av --progress {folder} {SOURCE_PATH} --exclude .git --exclude='_*'")
+    # create file in source folder with flags for loaded folder
+    with open(f"{SOURCE_PATH}/{folder.split('/')[-1]}/__flags", "w+") as file:
+        file.write(flag)
 
 # create list page for each folder in root dir
 for dir_ in os.listdir(SOURCE_PATH):
     if "." not in dir_ and dir_ != "pages" and not dir_.startswith("__"):
-        FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = None, None, None, None
+        FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC = None, None, None, None, None
         # check if __flags file in dir_
         if os.path.exists(os.path.join(f"{SOURCE_PATH}/{dir_}", "__flags")):
             flag_content = open(f"{SOURCE_PATH}/{dir_}/__flags").read()
             # parse flags
-            FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = parse_flags(flag_content)
+            FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC = parse_flags(flag_content)
         # create page for folder
         with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
             write_header(dir_page, title=dir_.title())
@@ -268,16 +270,16 @@ for dir_ in os.listdir(SOURCE_PATH):
                 if ".git" not in root and "/_" not in root: os.mkdir(f"{DIST_PATH}/{root}")
                 for post in posts if ".git" not in root and "/_" not in root else []:
                     try:
-                        post_name = post.split(".")[0]
-                        post_format = post.split(".")[1]
-                        if post != "__flags" and post != "README.md" and not post.startswith("_") and post_format in ACCEPTED_FILE_FORMATS:
-                            # post_name = post.split(".")[0]
+                        if post != "__flags" and post != "README.md" and not post.startswith("_") and post.split(".")[1] in ACCEPTED_FILE_FORMATS:
                             post_file = open(f"{SOURCE_PATH}/{root}/{post}")
+                            post_name = post.split(".")[0]
+                            post_format = post.split(".")[1]
+                            category, subcategory = None, None
+                            date = False
                             # title from file name
                             post_title = post_name.replace("-", " ").capitalize()
-                            date = False
                             # TODO: refactor this as helper function?
-                            # python
+                            # embed file content in markdown code block
                             if post_format in FORMAT_MAP.keys():
                                 key = post.split(".")[1]
                                 file_content = post_file.read()
@@ -295,29 +297,20 @@ for dir_ in os.listdir(SOURCE_PATH):
                             # create page
                             with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
                                 # title
-                                try:
-                                    title = post_content.split("\n")[0].split("# ")[1]
-                                except:
-                                    title = post_name.replace("-", " ").capitalize()
+                                try: post_title = post_content.split("\n")[0].split("# ")[1]
+                                except: pass
                                 # date
                                 if not date:
-                                    try:
-                                        date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
+                                    try: date = post_content.split("\n")[2].split("<mark>")[1].split("</mark>")[0]
                                     except:
-                                        try:
-                                            date = post_content.split("\n")[2].split("*")[1]
-                                        except:
-                                            date = False
+                                        try: date = post_content.split("\n")[2].split("*")[1]
+                                        except: pass
                                 # check if date is older than 2 years
                                 if date:
-                                    try:
-                                        date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
-                                    except:
-                                        date_is_outdated = False
+                                    try: date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
+                                    except: date_is_outdated = False
                                 # categories
-                                category, subcategory = None, None
-                                try:
-                                    category, subcategory = root.split("/")[1], root.split("/")[2]
+                                try: category, subcategory = root.split("/")[1], root.split("/")[2]
                                 except:
                                     try: category = root.split("/")[1]
                                     except: pass
@@ -329,26 +322,26 @@ for dir_ in os.listdir(SOURCE_PATH):
                                     if not category in posts_dict: posts_dict[category] = {}
                                     if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
                                     # append
-                                    posts_dict[category][subcategory].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                    posts_dict[category][subcategory].append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
                                 # category
                                 elif category:
                                     try:
                                         if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
                                     except: date = False
-                                    if not category in posts_dict: posts_dict[category] = []
+                                    if not category in posts_dict: posts_dict[category] = { "_root": [] }
                                     # append
-                                    posts_dict[category].append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                    posts_dict[category]["_root"].append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
                                 else:
                                     try:
                                         if type(date) == type(""): date = datetime.strptime(date, "%B %d, %Y")
                                     except: date = False
                                     # append to posts_lst
-                                    posts_lst.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
-                                    GLOBAL_POSTS.append({ "title": title, "date": date, "url": f"{root}/{post_name}" })
+                                    posts_lst.append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
+                                    GLOBAL_POSTS.append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
                                 # generate anchors and inject index
                                 post_content = generate_and_inject_index(post_content)
                                 # write
-                                write_header(tmp_file, title=title)
+                                write_header(tmp_file, title=post_title)
                                 # write outdated notice
                                 if date_is_outdated: tmp_file.write(f"<p style='margin-top:0;'><em>This post is more than two years old and may contain outdated information.</em></p>")
                                 html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
@@ -360,7 +353,8 @@ for dir_ in os.listdir(SOURCE_PATH):
                                 tmp_file.write(html_content)
                                 write_footer(tmp_file)
                                 post_file.close()
-                    except:
+                    except Exception as error:
+                        # print(traceback.format_exc())
                         pass
             # write page title
             dir_page.write(f"<h1>{dir_.title()}</h1>")
@@ -368,7 +362,10 @@ for dir_ in os.listdir(SOURCE_PATH):
                 dir_page.write(f"<p>{FLAG_DESC}</p>")
                 dir_page.write("<hr>")
             # sort posts_lst by date then by name
-            sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+            if FLAG_SORT == "date":
+                sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+            else:
+                sorted_posts_lst = sorted(posts_lst, key=lambda item: item["title"])
             # write posts_lst (list by date)
             current_date = None
             for post in sorted_posts_lst:
@@ -379,7 +376,7 @@ for dir_ in os.listdir(SOURCE_PATH):
                     current_date = post['date'].year
                     # columns
                     if FLAG_COL:
-                        dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
+                        dir_page.write(f"<ul class='columns' style='column-count:{FLAG_COL};'>")
                     else:
                         dir_page.write("<dl>")
                 dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
@@ -390,30 +387,15 @@ for dir_ in os.listdir(SOURCE_PATH):
             for category in category_list:
                 # write category
                 dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
-                if isinstance(posts_dict[category], dict):
-                    for subcategory in posts_dict[category]:
-                        sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
-                        # subcategory name
-                        if len(posts_dict[category].keys()) > 1:
-                            dir_page.write(f"<p id='{category}-{subcategory.replace(' ', '-')}'>{subcategory.title() if not subcategory == subcategory.upper() else subcategory}</p>")
-                        if FLAG_COL:
-                            dir_page.write(f"<ul style='column-count:{FLAG_COL};column-gap:2rem;'>")
-                        else:
-                            dir_page.write("<ul>")
-                        for post in sorted_posts_dict:
-                            # if date is current or last month
-                            if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
-                                dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
-                            else:    
-                                dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-                        dir_page.write("</ul>")
-                else:
-                    # TODO: sort by number of children? set via flag?
-                    sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
-                    if FLAG_COL:
-                        dir_page.write(f"<ul style='column-count:{FLAG_COL};'>")
-                    else:
-                        dir_page.write("<ul>")
+                # if isinstance(posts_dict[category], dict):
+                for subcategory in posts_dict[category]:
+                    if FLAG_SORT == "date": sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
+                    else: sorted_posts_dict = sorted(posts_dict[category][subcategory], key=lambda item: item["title"])
+                    # subcategory name
+                    if subcategory != "_root":
+                        dir_page.write(f"<p id='{category.lower()}-{subcategory.replace(' ', '-').lower()}'>{subcategory.replace('-', ' ')}</p>")
+                    if FLAG_COL: dir_page.write(f"<ul class='columns' style='column-count:{FLAG_COL};'>")
+                    else: dir_page.write("<ul>")
                     for post in sorted_posts_dict:
                         # if date is current or last month
                         if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
@@ -421,12 +403,28 @@ for dir_ in os.listdir(SOURCE_PATH):
                         else:    
                             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
                     dir_page.write("</ul>")
+                # else:
+                #     if FLAG_SORT == "date":
+                #         sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
+                #     else:
+                #         sorted_posts_dict = sorted(posts_dict[category], key=lambda item: item["title"])
+                #     if FLAG_COL:
+                #         dir_page.write(f"<ul class='columns' style='column-count:{FLAG_COL};'>")
+                #     else:
+                #         dir_page.write("<ul>")
+                #     for post in sorted_posts_dict:
+                #         # if date is current or last month
+                #         if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
+                #             dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
+                #         else:    
+                #             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+                #     dir_page.write("</ul>")
             write_footer(dir_page)
 
 # create html page for each md file in pages folder
 for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
     for file in files:
-        FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = None, None, None, None
+        FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC = None, None, None, None, None
         if file.split(".")[1] == "md":
             file_name = file.split(".")[0]
             # create page
@@ -436,7 +434,7 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 file_content = file_content.split("\n")
                 # flags
                 if (file_content[0].startswith("-* ")):
-                    FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_DESC = parse_flags(file_content[0])
+                    FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC = parse_flags(file_content[0])
                     # skip empty line following flags (if any)
                     if (len(file_content[1]) == 0):
                         file_content = file_content[2:]
@@ -451,13 +449,7 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 if FLAG_TOC: file_content = generate_and_inject_index(file_content)
                 # write header
                 write_header(tmp_file, title)
-                # TODO: fix for multi columns on regular pages? below title (need to read html)
-                # columns
-                # if FLAG_COL:
-                #     tmp_file.write(f"<div style='column-count:{FLAG_COL};'>")
-                # if FLAG_COL:
-                #     print(file_name, "OK")
-                #     file_content = re.sub(r"---", f"\n<div style='column-count:{FLAG_COL};'>" + r"\n", file_content, count=1)
+                # TODO: move this into formatting helper
                 # replace -- with &mdash;
                 file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
                 # convert markdown to html
@@ -472,7 +464,10 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 if POSTS_ON_INDEX and file_name == "index":
                     tmp_file.write("<hr>")
                     # list posts
-                    sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
+                    if FLAG_SORT == "date":
+                        sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
+                    else:
+                        sorted_global_posts = sorted(GLOBAL_POSTS, key=lambda item: item["title"])
                     tmp_file.write("<dl>")
                     for post in sorted_global_posts: tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
                     tmp_file.write("</dl>")
@@ -481,5 +476,5 @@ for root, dirs, files in os.walk(f"{SOURCE_PATH}/pages"):
                 file.close()
 
 # remove loaded folders from source folder
-for folder in LOAD_FOLDERS:
+for folder, _ in LOAD_FOLDERS:
     shutil.rmtree(f"{SOURCE_PATH}/{folder.split('/')[-1]}")
