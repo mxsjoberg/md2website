@@ -1,26 +1,30 @@
 document.addEventListener("DOMContentLoaded", function() {
     // toggle theme
-    var theme = document.querySelector("#theme");
-    theme.addEventListener("click", function() {
-        document.querySelector("html").classList.toggle("light");
-        // save to local storage
-        if (document.querySelector("html").classList.contains("light")) {
-            localStorage.setItem("light", "true");
-        } else {
-            localStorage.setItem("light", "false");
-        }
-    });
+    try {
+        var theme = document.querySelector("#theme");
+        theme.addEventListener("click", function() {
+            document.querySelector("html").classList.toggle("light");
+            // save to local storage
+            if (document.querySelector("html").classList.contains("light")) {
+                localStorage.setItem("light", "true");
+            } else {
+                localStorage.setItem("light", "false");
+            }
+        });
+    } catch {}
     // toggle styling
-    var styling = document.querySelector("#styling");
-    styling.addEventListener("click", function() {
-        document.querySelector("html").classList.toggle("styling");
-        // save to local storage
-        if (document.querySelector("html").classList.contains("styling")) {
-            localStorage.setItem("styling", "true");
-        } else {
-            localStorage.setItem("styling", "false");
-        }
-    });
+    try {
+        var styling = document.querySelector("#styling");
+        styling.addEventListener("click", function() {
+            document.querySelector("html").classList.toggle("styling");
+            // save to local storage
+            if (document.querySelector("html").classList.contains("styling")) {
+                localStorage.setItem("styling", "true");
+            } else {
+                localStorage.setItem("styling", "false");
+            }
+        });
+    } catch {}
     // check local storage
     if (localStorage.getItem("light") == "true") {
         document.querySelector("html").classList.add("light");
@@ -42,11 +46,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 // var loadTime = (timing.loadEventEnd - timing.navigationStart) / 1000;
                 var loadTime = timing.loadEventEnd - timing.navigationStart;
                 // write to dom_time
-                // document.querySelector("#dom_time").innerHTML = domContentLoadedTime + " seconds";
-                document.querySelector("#dom_time").innerHTML = domContentLoadedTime + " ms";
-                // write to load_time
-                // document.querySelector("#load_time").innerHTML = loadTime + " seconds";
-                document.querySelector("#load_time").innerHTML = loadTime + " ms";
+                try {
+                    // document.querySelector("#dom_time").innerHTML = domContentLoadedTime + " seconds";
+                    document.querySelector("#dom_time").innerHTML = domContentLoadedTime + " ms";
+                    // write to load_time
+                    // document.querySelector("#load_time").innerHTML = loadTime + " seconds";
+                    document.querySelector("#load_time").innerHTML = loadTime + " ms";
+                } catch {}
             } else {
                 setTimeout(showPageLoadTime, 100);
             }
