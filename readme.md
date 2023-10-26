@@ -1,6 +1,9 @@
 # md2website: markdown to static website builder
 
-[Example website (my personal)](https://michaelsjoberg.com/)
+Example websites:
+
+- [DEMO](https://md2website.pages.dev/)
+- [My personal](https://michaelsjoberg.com/)
 
 Going to host demo website soon TM.
 
