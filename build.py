@@ -1,5 +1,8 @@
 # md2website: markdown to static website builder
 
+# build demo: python3 build.py demo
+# watch demo: python3 watch.py demo __dist
+
 import os
 import sys
 import re
