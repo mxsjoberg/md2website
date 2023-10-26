@@ -10,10 +10,19 @@ from watchdog.events import FileSystemEventHandler
 from livereload import Server
 
 SOURCE_PATH = sys.argv[1] if len(sys.argv) > 1 else False
-DIST_PATH = sys.argv[2] if len(sys.argv) > 2 else False
+# TODO: get dist path from config file
+# DIST_PATH = sys.argv[2] if len(sys.argv) > 2 else False
+DIST_PATH = False
+if SOURCE_PATH != False and os.path.exists(f"{SOURCE_PATH}/.md2website-config"):
+    with open(f"{SOURCE_PATH}/.md2website-config", "r") as file:
+        config_content = file.read()
+        # parse config
+        for line in config_content.split("\n"):
+            CONFIG_NAME = str(line.split("=")[0].strip())
+            if CONFIG_NAME == "DIST_PATH": DIST_PATH = str(line.split("DIST_PATH =")[1].strip()[1:-1])
 
 if not SOURCE_PATH or not DIST_PATH:
-    print("No source and dist folder provided, watching demo.")
+    print("No source or dist folder provided, watching demo.")
     print("Usage: python3 watch.py <path/to/source> <path/to/dist>")
     SOURCE_PATH = "demo"
     DIST_PATH = "__dist"
