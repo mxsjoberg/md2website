@@ -292,7 +292,7 @@ def main_driver():
                                 category, subcategory = None, None
                                 date = False
                                 # title from file name
-                                post_title = post_name.replace("-", " ").capitalize()
+                                post_title = post_name.replace("-", " ")
                                 # TODO: refactor this as helper function?
                                 # embed file content in markdown code block
                                 if post_format in FORMAT_MAP.keys():
@@ -310,7 +310,7 @@ def main_driver():
                                     post_content = post_file.read()
                                 # TODO: refactor this as helper function?
                                 # create page
-                                with open(f"{DIST_PATH}/{root}/{post_name}.html", "w+") as tmp_file:
+                                with open(f"{DIST_PATH}/{root}/{post_name.replace('#', '')}.html", "w+") as tmp_file:
                                     # title
                                     try: post_title = post_content.split("\n")[0].split("# ")[1]
                                     except: pass
@@ -337,7 +337,7 @@ def main_driver():
                                         if not category in posts_dict: posts_dict[category] = {}
                                         if not subcategory in posts_dict[category]: posts_dict[category][subcategory] = []
                                         # append
-                                        posts_dict[category][subcategory].append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
+                                        posts_dict[category][subcategory].append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
                                     # category
                                     elif category:
                                         try:
@@ -345,14 +345,14 @@ def main_driver():
                                         except: date = False
                                         if not category in posts_dict: posts_dict[category] = { "_root": [] }
                                         # append
-                                        posts_dict[category]["_root"].append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
+                                        posts_dict[category]["_root"].append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
                                     else:
                                         try:
                                             if type(date) == type(""): date = datetime.strptime(date, "%B %d, %Y")
                                         except: date = False
                                         # append to posts_lst
-                                        posts_lst.append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
-                                        GLOBAL_POSTS.append({ "title": post_title, "date": date, "url": f"{root}/{post_name}" })
+                                        posts_lst.append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
+                                        GLOBAL_POSTS.append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
                                     # generate anchors and inject index
                                     post_content = generate_and_inject_index(post_content)
                                     # write
