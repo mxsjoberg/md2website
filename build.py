@@ -10,6 +10,7 @@ import shutil
 import markdown
 import sass
 import traceback
+from natsort import natsorted
 from datetime import datetime
 # syntax highlight
 from bs4 import BeautifulSoup
@@ -379,7 +380,7 @@ def main_driver():
                 if FLAG_SORT == "date":
                     sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
                 else:
-                    sorted_posts_lst = sorted(posts_lst, key=lambda item: item["title"])
+                    sorted_posts_lst = natsorted(posts_lst, key=lambda item: item["title"])
                 # write posts_lst (list by date)
                 current_date = None
                 for post in sorted_posts_lst:
@@ -404,7 +405,7 @@ def main_driver():
                     # if isinstance(posts_dict[category], dict):
                     for subcategory in posts_dict[category]:
                         if FLAG_SORT == "date": sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
-                        else: sorted_posts_dict = sorted(posts_dict[category][subcategory], key=lambda item: item["title"])
+                        else: sorted_posts_dict = natsorted(posts_dict[category][subcategory], key=lambda item: item["title"])
                         # subcategory name
                         if subcategory != "_root":
                             dir_page.write(f"<p id='{category.lower()}-{subcategory.replace(' ', '-').lower()}'>{subcategory.replace('-', ' ')}</p>")
@@ -487,7 +488,7 @@ def main_driver():
                         if FLAG_SORT == "date":
                             sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
                         else:
-                            sorted_global_posts = sorted(GLOBAL_POSTS, key=lambda item: item["title"])
+                            sorted_global_posts = natsorted(GLOBAL_POSTS, key=lambda item: item["title"])
                         tmp_file.write("<dl>")
                         for post in sorted_global_posts: tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
                         tmp_file.write("</dl>")
