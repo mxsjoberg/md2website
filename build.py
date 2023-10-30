@@ -274,7 +274,7 @@ def main_driver():
                 # parse flags
                 FLAG_TOC, FLAG_TIME, FLAG_COL, FLAG_SORT, FLAG_DESC = parse_flags(flag_content)
             # create page for folder
-            with open(f"{DIST_PATH}/{dir_}.html", "w+") as dir_page:
+            with open(f"{DIST_PATH}/{dir_.lower()}.html", "w+") as dir_page:
                 write_header(dir_page, title=dir_.title())
                 # TODO: refactor this to single data structure and use flags to set ordering? (by date, category, etc)
                 posts_lst = [] # [ { title, date, url } ]
@@ -282,7 +282,7 @@ def main_driver():
                 # for each md file in dir_, create html page and append to posts_lst or posts_dict
                 for root, dirs, posts in os.walk(f"{SOURCE_PATH}/{dir_}"):
                     root = root.replace(f"{SOURCE_PATH}/", "")
-                    if ".git" not in root and "/_" not in root: os.mkdir(f"{DIST_PATH}/{root}")
+                    if ".git" not in root and "/_" not in root: os.mkdir(f"{DIST_PATH}/{root.lower()}")
                     for post in posts if ".git" not in root and "/_" not in root else []:
                         try:
                             if post != "__flags" and post != "README.md" and not post.startswith("_") and post.split(".")[1] in ACCEPTED_FILE_FORMATS:
