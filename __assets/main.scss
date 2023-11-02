@@ -112,11 +112,16 @@ html.styling .nav {
     // padding: 1rem 0;
     // padding-bottom: 1rem;
     margin: 2rem 0;
-    padding: 0.5rem;
+    padding: 1rem;
     background: darken($blue-dark, 2%);
+
+    a {
+        margin-right: 1rem;
+    }
 }
 html.styling.light .nav {
     background: transparent;
+    padding: 0;
 }
 @media screen and (min-width: 1200px) {
     html.styling .nav.fixed-left {
@@ -136,11 +141,20 @@ html.styling.light .nav {
 }
 html.styling div.page .nav p {
     margin: 0;
+    // display: flex;
+    // justify-content: space-between;
+}
+html.styling.light div.page .nav p {
     display: flex;
     justify-content: space-between;
 }
-html.styling .nav p a {
+html.styling.light div.page p.nav {
+    display: flex;
+    justify-content: space-between;
+}
+html.styling.light .nav a {
     justify-content: center;
+    // margin-right: 2rem !important;
 }
 html.styling p + ul:not(.border):not(.columns) {
     margin-top: -1rem;
