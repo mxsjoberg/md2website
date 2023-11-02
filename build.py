@@ -146,13 +146,13 @@ def write_footer(file):
     file.write("<div id='footer' class='no-print'>")
     # page config
     if ALLOW_NO_STYLING or ALLOW_CHANGE_THEME:
-        file.write(f"<p class='small' style='display:flex;justify-content:space-between;'>")
+        file.write(f"<p class='nav'>")
         if ALLOW_NO_STYLING: file.write(f"<a id='styling'>[styling: <span id='styling-on'>on</span><span id='styling-off'>off</span>]</a> ")
         if ALLOW_CHANGE_THEME: file.write(f"<a id='theme'>[theme: <span id='theme-dark'>dark</span><span id='theme-light'>light</span>]</a> ")
         file.write(f"</p>")
     # credits
     if DEFAULT_FOOTER == "full":
-        file.write(f"<p class='small' style='text-align:justify;'>© {datetime.now().year} {AUTHOR}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
+        file.write(f"<p class='small'>© {datetime.now().year} {AUTHOR}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
     elif DEFAULT_FOOTER == "simple":
         file.write(f"<p class='small'>© {datetime.now().year} {AUTHOR}</p>")
     elif DEFAULT_FOOTER == "none":
