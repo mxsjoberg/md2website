@@ -77,6 +77,7 @@ ALLOW_NO_STYLING = True
 DEFAULT_THEME = "light"
 ALLOW_CHANGE_THEME = True
 DEFAULT_FOOTER = "full" # "full" | "simple" | "none"
+NAV_POSITION = "default" # "left" | "default"
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
@@ -134,7 +135,10 @@ def write_header(file, title="md2website – Markdown to static website builder"
         nav_content = nav_file.read()
         nav_file.close()
         # TODO: write nav even if empty to get padding?
-        file.write("<div class='nav no-print'>")
+        if NAV_POSITION == "left":
+            file.write("<div class='nav no-print fixed-left'>")
+        else:
+            file.write("<div class='nav no-print'>")
         file.write(markdown.markdown(nav_content))
         file.write("</div>")
 
@@ -518,6 +522,7 @@ if __name__ == "__main__":
                 if CONFIG_NAME == "DEFAULT_THEME": DEFAULT_THEME = str(line.split("DEFAULT_THEME =")[1].strip()[1:-1])
                 if CONFIG_NAME == "ALLOW_CHANGE_THEME": ALLOW_CHANGE_THEME = True if str(line.split("ALLOW_CHANGE_THEME =")[1].strip()) == "True" else False
                 if CONFIG_NAME == "DEFAULT_FOOTER": DEFAULT_FOOTER = str(line.split("DEFAULT_FOOTER =")[1].strip()[1:-1])
+                if CONFIG_NAME == "NAV_POSITION": NAV_POSITION = str(line.split("NAV_POSITION =")[1].strip()[1:-1])
         # generate website
         main_driver()
     elif SOURCE_PATH != False and not os.path.exists(f"{SOURCE_PATH}/.md2website-config"):
