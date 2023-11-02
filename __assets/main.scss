@@ -11,7 +11,7 @@ $blue-dark-muted: rgba($blue-dark, 0.8);
 $grey: #4F6E8E;
 // $grey-muted: rgba($grey, 0.3);
 // $grey-muted: #2B3245;
-$grey-muted: #353F57;
+$grey-muted: #283556;
 // $yellow: #E3E463;
 $yellow: #F1DF87;
 // $pink: #F47BEB;
@@ -98,7 +98,7 @@ html.styling.light body {
 }
 html.styling div.page {
     max-width: 720px;
-    padding: 1rem 2rem;
+    padding: 0 2rem;
     margin: 0 auto;
 }
 html.styling div.page p {
@@ -110,7 +110,13 @@ html.styling div.page li p {
 }
 html.styling .nav {
     // padding: 1rem 0;
-    padding-bottom: 1rem;
+    // padding-bottom: 1rem;
+    margin: 2rem 0;
+    padding: 0.5rem;
+    background: darken($blue-dark, 2%);
+}
+html.styling.light .nav {
+    background: transparent;
 }
 @media screen and (min-width: 1200px) {
     html.styling .nav.fixed-left {
@@ -128,7 +134,8 @@ html.styling .nav {
         }
     }
 }
-html.styling .nav p {
+html.styling div.page .nav p {
+    margin: 0;
     display: flex;
     justify-content: space-between;
 }
