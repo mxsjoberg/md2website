@@ -109,7 +109,23 @@ html.styling div.page li p {
     margin: 1rem 0;
 }
 html.styling .nav {
-    padding: 1rem 0;
+    // padding: 1rem 0;
+    padding-bottom: 1rem;
+}
+@media screen and (min-width: 1200px) {
+    html.styling .nav.fixed-left {
+        position: fixed;
+        left: 4rem;
+
+        p {
+            display: block !important;
+        }
+
+        p a {
+            display: block !important;
+            margin-bottom: 1rem !important;
+        }
+    }
 }
 html.styling .nav p {
     display: flex;
@@ -124,6 +140,7 @@ html.styling p + ul:not(.border):not(.columns) {
 html.styling h1 {
     font-size: 2em;
     font-weight: bold;
+    margin: 2rem 0;
 }
 html.styling a {
     cursor: pointer;
