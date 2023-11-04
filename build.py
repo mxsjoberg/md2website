@@ -139,7 +139,10 @@ def write_header(file, title="md2website – Markdown to static website builder"
             file.write("<div class='nav no-print fixed-left'>")
         else:
             file.write("<div class='nav no-print'>")
-        file.write(markdown.markdown(nav_content))
+        if len(nav_content) != 0 or "index.html" in file.name:
+            file.write(markdown.markdown(nav_content))
+        else:
+            file.write("<p><a href='/'>Go back</a></p>")
         file.write("</div>")
 
 def write_footer(file):
@@ -487,14 +490,16 @@ def main_driver():
                     tmp_file.write(file_content)
                     # list recent posts on index
                     if POSTS_ON_INDEX and file_name == "index":
+                        # tmp_file.write("<p class='small'>&#9632; &#9632; &#9632;</p>")
                         tmp_file.write("<hr>")
                         # list posts
-                        if FLAG_SORT == "date":
-                            sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
-                        else:
-                            sorted_global_posts = natsorted(GLOBAL_POSTS, key=lambda item: item["title"])
+                        # if FLAG_SORT == "date":
+                        #     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
+                        # else:
+                        #     sorted_global_posts = natsorted(GLOBAL_POSTS, key=lambda item: item["title"])
+                        sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
                         tmp_file.write("<dl>")
-                        for post in sorted_global_posts: tmp_file.write(f"<li>{datetime.date(post['date'])} &#8212; <a href='posts/{post['url']}.html'>{post['title']}</a></li>")
+                        for post in sorted_global_posts: tmp_file.write(f"<li><a href='{post['url']}.html'>{post['title']}</a> <span class='' style='float:right;'><em>{datetime.date(post['date']).strftime('%B %d, %Y')}</em></span></li>")
                         tmp_file.write("</dl>")
                     if FLAG_COL: tmp_file.write("</div>")
                     write_footer(tmp_file)
