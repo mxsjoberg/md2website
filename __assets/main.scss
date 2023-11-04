@@ -12,6 +12,7 @@ $grey: #4F6E8E;
 // $grey-muted: rgba($grey, 0.3);
 // $grey-muted: #2B3245;
 $grey-muted: #283556;
+$grey-light: #91A6BA;
 // $yellow: #E3E463;
 $yellow: #F1DF87;
 // $pink: #F47BEB;
@@ -201,6 +202,9 @@ html.styling ul.border {
     border: 1px dashed;
     border-color: $grey-muted;
 }
+html.styling.light ul.border {
+    border-color: $grey-light;
+}
 html.styling ul li ul {
     margin: 0.25rem 0;
 }
@@ -220,7 +224,7 @@ html.styling td {
     border-color: $grey-muted;
 }
 html.styling.light td {
-    border-color: $grey;
+    border-color: $grey-light;
 }
 html.styling pre {
     white-space: break-spaces;
@@ -230,8 +234,13 @@ html.styling pre {
     border: 1px dashed;
     border-color: $grey-muted;
 }
+html.styling.light pre {
+    border-color: $grey-light;
+}
+
 html.styling code,
-html.styling .highlight pre {
+html.styling .highlight pre,
+html.styling .monospace {
     font-family: "Hack", monospace !important;
     font-size: 16px;
     color: $grey;
@@ -250,7 +259,7 @@ html.styling blockquote {
 }
 html.styling.light .small,
 html.styling.light blockquote {
-    color: $grey;
+    color: $grey-light;
 }
 html.styling hr {
     border-style: dashed;
@@ -258,10 +267,13 @@ html.styling hr {
     border-color: $grey-muted;
 }
 html.styling.light hr {
-    border-color: $grey-muted;
+    border-color: $grey-light;
 }
 html.styling em {
     color: $grey;
+}
+html.styling.light em {
+    color: $grey-light;
 }
 html.styling mark {
     padding: 2px 8px;
@@ -305,7 +317,7 @@ html.styling .highlight .nc         { color: $blue !important; font-weight: bold
 html.styling.light {
     .highlight .n    { color: $blue-dark !important; }
     .highlight .kn   { color: $blue-dark !important; }
-    .highlight .c1   { color: $grey !important; }
+    .highlight .c1   { color: $grey-light !important; }
     .highlight .mi   { color: darken($blue, 15%) !important; }
     .highlight .nf   { color: darken($blue, 15%) !important; }
     .highlight .nb   { color: darken($blue, 15%) !important; }
