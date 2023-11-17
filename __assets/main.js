@@ -2,32 +2,42 @@ document.addEventListener("DOMContentLoaded", function() {
     // toggle theme
     try {
         var theme = document.querySelector("#theme");
-        theme.addEventListener("click", function() {
-            document.querySelector("html").classList.toggle("light");
-            // save to local storage
-            if (document.querySelector("html").classList.contains("light")) {
-                localStorage.setItem("light", "true");
+        theme.addEventListener("change", function() {
+            if (theme.checked == true) {
+                theme.checked = true;
+                document.querySelector("html").classList = "styling dark";
+                localStorage.setItem("dark", "true");
             } else {
-                localStorage.setItem("light", "false");
+                theme.checked = false;
+                document.querySelector("html").classList = "styling";
+                localStorage.setItem("dark", "false");
             }
+            // save to local storage
+            // if (document.querySelector("html").classList.contains("dark")) {
+            //     localStorage.setItem("dark", "true");
+            // } else {
+            //     localStorage.setItem("dark", "false");
+            // }
         });
     } catch {}
     // toggle styling
-    try {
-        var styling = document.querySelector("#styling");
-        styling.addEventListener("click", function() {
-            document.querySelector("html").classList.toggle("styling");
-            // save to local storage
-            if (document.querySelector("html").classList.contains("styling")) {
-                localStorage.setItem("styling", "true");
-            } else {
-                localStorage.setItem("styling", "false");
-            }
-        });
-    } catch {}
+    // try {
+    //     var styling = document.querySelector("#styling");
+    //     styling.addEventListener("click", function() {
+    //         document.querySelector("html").classList.toggle("styling");
+    //         // save to local storage
+    //         if (document.querySelector("html").classList.contains("styling")) {
+    //             localStorage.setItem("styling", "true");
+    //         } else {
+    //             localStorage.setItem("styling", "false");
+    //         }
+    //     });
+    // } catch {}
     // check local storage
-    if (localStorage.getItem("light") == "true") {
-        document.querySelector("html").classList.add("light");
+    if (localStorage.getItem("dark") == "true") {
+        document.querySelector("html").classList.add("dark");
+        var theme = document.querySelector("#theme");
+        if (!theme.checked) { theme.checked = true; }
     }
     if (localStorage.getItem("styling") == "true") {
         document.querySelector("html").classList.add("styling");
