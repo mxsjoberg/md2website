@@ -35,13 +35,18 @@ document.addEventListener("DOMContentLoaded", function() {
     // } catch {}
     // check local storage
     if (localStorage.getItem("dark") == "true") {
-        document.querySelector("html").classList.add("dark");
+        document.querySelector("html").classList = "styling dark";
         var theme = document.querySelector("#theme");
-        if (!theme.checked) { theme.checked = true; }
+        if (theme.checked == false) { theme.checked = true; }
+    } else {
+        // init local storage
+        if (document.querySelector("html").classList.contains("dark")) {
+            localStorage.setItem("dark", "true");
+        }
     }
-    if (localStorage.getItem("styling") == "true") {
-        document.querySelector("html").classList.add("styling");
-    }
+    // if (localStorage.getItem("styling") == "true") {
+    //     document.querySelector("html").classList.add("styling");
+    // }
     // loading time
     function showPageLoadTime() {
         // check if the browser supports the performance API
