@@ -6,7 +6,6 @@ AUTHOR = "Michael Sjöberg"
 DESCRIPTION = "This is a demo static website built by md2website."
 GOOGLE_TAG = False # "<tag>"
 APP_NAME = "My Static Website"
-DEFAULT_THEME = "light" # "dark" | "light"
 ALLOW_CHANGE_THEME = True
 POSTS_ON_INDEX = False # TODO: change this to number
 STYLING = True
