@@ -204,7 +204,12 @@ html.styling pre {
     padding: 1rem;
     background: $grey-light;
 }
-html.styling code,
+html.styling code {
+    font-family: "Hack", monospace !important;
+    font-size: 16px;
+    color: $pink;
+}
+html.styling pre code,
 html.styling .highlight pre,
 html.styling .monospace {
     font-family: "Hack", monospace !important;
