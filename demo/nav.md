@@ -1,1 +1,1 @@
-[Home](/index.html) [Posts](/posts.html) [Files](/files.html) [About](/about.html) [[mxsjoberg@proton.me]](mailto:mxsjoberg@proton.me)
+[Home](/index.html) [Posts](/posts.html) [Files](/files.html) [About](/about.html)
