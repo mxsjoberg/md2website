@@ -74,9 +74,10 @@ APP_THEME = "#0E1525"
 POSTS_ON_INDEX = False
 STYLING = True
 ALLOW_NO_STYLING = True
-DEFAULT_THEME = "light"
+DEFAULT_THEME = "" # "dark" | ""
 ALLOW_CHANGE_THEME = True
-DEFAULT_FOOTER = "full" # "full" | "simple" | "none"
+CLEAN_INDEX = False # True | False
+DEFAULT_FOOTER = "full" # "full" | "simple" | ""
 NAV_POSITION = "default" # "left" | "default"
 
 # for listing all posts on index page
@@ -134,32 +135,67 @@ def write_header(file, title="md2website – Markdown to static website builder"
         nav_file = open(f"{SOURCE_PATH}/nav.md", "r")
         nav_content = nav_file.read()
         nav_file.close()
-        # TODO: write nav even if empty to get padding?
-        if NAV_POSITION == "left":
-            file.write("<div class='nav no-print fixed-left'>")
-        else:
+        # TODO keep or remove left fixed nav?
+        # if NAV_POSITION == "left":
+        #     file.write("<div class='nav no-print fixed-left'>")
+        # else:
+        #     file.write("<div class='nav no-print'>")
+        if len(nav_content) != 0:
             file.write("<div class='nav no-print'>")
-        if len(nav_content) != 0 or "index.html" in file.name:
             file.write(markdown.markdown(nav_content))
+            # theme toggle
+            if ALLOW_CHANGE_THEME:
+                file.write("""
+                    <span class='toggle-wrapper'>
+                        <input type="checkbox" class="sr-only" id="theme">
+                        <label for="theme" class="toggle">
+                            <span>Theme</span>
+                        </label>
+                    </span>
+                """)
+            file.write("</div>")
+        elif "index.html" not in file.name:
+            file.write("<div class='nav no-print'>")
+            # render home link on pages if nav is empty
+            file.write("<p><a href='/'>Home</a></p>")
+            # theme toggle
+            if ALLOW_CHANGE_THEME:
+                file.write("""
+                    <span class='toggle-wrapper'>
+                        <input type="checkbox" class="sr-only" id="theme">
+                        <label for="theme" class="toggle">
+                            <span>Theme</span>
+                        </label>
+                    </span>
+                """)
+            file.write("</div>")
         else:
-            file.write("<p><a href='/'>Go back</a></p>")
-        file.write("</div>")
+            pass
 
 def write_footer(file):
     file.write("<div id='footer' class='no-print'>")
     # page config
-    if ALLOW_NO_STYLING or ALLOW_CHANGE_THEME:
-        file.write(f"<p class='nav'>")
-        if ALLOW_NO_STYLING: file.write(f"<a id='styling'>[styling: <span id='styling-on'>on</span><span id='styling-off'>off</span>]</a> ")
-        if ALLOW_CHANGE_THEME: file.write(f"<a id='theme'>[theme: <span id='theme-dark'>dark</span><span id='theme-light'>light</span>]</a> ")
-        file.write(f"</p>")
+    # if ALLOW_NO_STYLING or ALLOW_CHANGE_THEME:
+    #     file.write(f"<p class='nav'>")
+    #     # if ALLOW_NO_STYLING: file.write(f"<a id='styling'>[styling: <span id='styling-on'>on</span><span id='styling-off'>off</span>]</a> ")
+    #     # if ALLOW_CHANGE_THEME: file.write(f"""
+    #     #     <a id='theme'>
+    #     #         <span class='svg-moon'><svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 384 512'><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z'/></svg></span>
+    #     #         <span class='svg-sun'><svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z'/></svg></span>
+    #     #     </a>
+    #     #     """)
+    #     if ALLOW_CHANGE_THEME: file.write(f"<a id='theme'><svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 512 512'><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z'/></svg></a>")
+    #     file.write(f"</p>")
     # credits
-    if DEFAULT_FOOTER == "full":
-        file.write(f"<p class='small'>© {datetime.now().year} {AUTHOR}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}.</p>")
-    elif DEFAULT_FOOTER == "simple":
-        file.write(f"<p class='small'>© {datetime.now().year} {AUTHOR}</p>")
-    elif DEFAULT_FOOTER == "none":
+    if CLEAN_INDEX and "index.html" in file.name:
         pass
+    else:
+        if DEFAULT_FOOTER == "full":
+            file.write(f"<p class='small'>© {datetime.now().year} {AUTHOR}. This static website was built by <a href='https://github.com/mxsjoberg/md2website'>md2website</a> on {datetime.now().strftime('%B %d, %Y')}. DOM loaded in <span id='dom_time'></span> and page loaded in <span id='load_time'></span>.</p>")
+        elif DEFAULT_FOOTER == "simple":
+            file.write(f"<p class='text-center'>© {datetime.now().year} {AUTHOR}</p>")
+        else:
+            pass
     file.write("</div>")
     file.write("</div>") # ./page
     # js
@@ -193,8 +229,8 @@ def generate_and_inject_index(file_content):
     return file_content
 
 def replace_hr_with_border(file_content, toc=False):
-    file_content = re.sub(r"<hr />\n<ul>", r"<ul class='border'>\n" + f"<p class='label'>Page index</p>" if toc else "", file_content)
-    file_content = re.sub(r"</ul>\n<hr />", r"</ul>", file_content)
+    file_content = re.sub(r"<hr />\n<ul>", f"<p>In this post:</p>" + r"<ul class='toc'>\n" if toc else "", file_content)
+    file_content = re.sub(r"</ul>\n<hr />", r"</ul><hr>", file_content)
     return file_content
 
 def syntax_highlight(html_content):
@@ -365,7 +401,7 @@ def main_driver():
                                     # write
                                     write_header(tmp_file, title=post_title)
                                     # write outdated notice
-                                    if date_is_outdated: tmp_file.write(f"<p style='margin-top:0;'><em>This post is more than two years old and may contain outdated information.</em></p>")
+                                    if date_is_outdated: tmp_file.write(f"<p class='text-center' style='margin-top:0;'><mark>This post is more than two years old and may contain outdated information.</mark></p>")
                                     html_content = markdown.markdown(post_content, extensions=["fenced_code", "tables"])
                                     # replace hr with border (for table of contents)
                                     html_content = replace_hr_with_border(html_content, toc=True)
@@ -382,7 +418,7 @@ def main_driver():
                 dir_page.write(f"<h1>{dir_.title()}</h1>")
                 if FLAG_DESC:
                     dir_page.write(f"<p>{FLAG_DESC}</p>")
-                    dir_page.write("<hr>")
+                    # dir_page.write("<hr>")
                 # sort posts_lst by date then by name
                 if FLAG_SORT == "date":
                     sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
@@ -491,7 +527,7 @@ def main_driver():
                     # list recent posts on index
                     if POSTS_ON_INDEX and file_name == "index":
                         # tmp_file.write("<p class='small'>&#9632; &#9632; &#9632;</p>")
-                        tmp_file.write("<hr>")
+                        # tmp_file.write("<hr>")
                         # list posts
                         # if FLAG_SORT == "date":
                         #     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
@@ -526,6 +562,7 @@ if __name__ == "__main__":
                 if CONFIG_NAME == "ALLOW_NO_STYLING": ALLOW_NO_STYLING = True if str(line.split("ALLOW_NO_STYLING =")[1].strip()) == "True" else False
                 if CONFIG_NAME == "DEFAULT_THEME": DEFAULT_THEME = str(line.split("DEFAULT_THEME =")[1].strip()[1:-1])
                 if CONFIG_NAME == "ALLOW_CHANGE_THEME": ALLOW_CHANGE_THEME = True if str(line.split("ALLOW_CHANGE_THEME =")[1].strip()) == "True" else False
+                if CONFIG_NAME == "CLEAN_INDEX": CLEAN_INDEX = True if str(line.split("CLEAN_INDEX =")[1].strip()) == "True" else False
                 if CONFIG_NAME == "DEFAULT_FOOTER": DEFAULT_FOOTER = str(line.split("DEFAULT_FOOTER =")[1].strip()[1:-1])
                 if CONFIG_NAME == "NAV_POSITION": NAV_POSITION = str(line.split("NAV_POSITION =")[1].strip()[1:-1])
         # generate website
@@ -538,3 +575,5 @@ if __name__ == "__main__":
         print("No source provided, building demo site.")
         print("Usage: python3 build.py <path/to/source>")
         SOURCE_PATH = "demo"
+        # generate website
+        main_driver()
