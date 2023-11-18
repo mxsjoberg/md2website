@@ -37,11 +37,21 @@ document.addEventListener("DOMContentLoaded", function() {
     if (localStorage.getItem("dark") == "true") {
         document.querySelector("html").classList = "styling dark";
         var theme = document.querySelector("#theme");
-        if (theme.checked == false) { theme.checked = true; }
+        theme.checked = true;
     } else {
         // init local storage
         if (document.querySelector("html").classList.contains("dark")) {
+            document.querySelector("html").classList = "styling dark";
+            var theme = document.querySelector("#theme");
+            theme.checked = true;
+            // persist
             localStorage.setItem("dark", "true");
+        } else {
+            document.querySelector("html").classList = "styling";
+            var theme = document.querySelector("#theme");
+            theme.checked = false;
+            // persist
+            localStorage.setItem("dark", "false");
         }
     }
     // if (localStorage.getItem("styling") == "true") {
