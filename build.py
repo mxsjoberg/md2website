@@ -94,7 +94,7 @@ def write_header(file, title="md2website – Markdown to static website builder"
     This static website was built by github.com/mxsjoberg/md2website
     -->
     """.replace("    ", ""))
-    file.write(f"<html lang='en' class='styling {DEFAULT_THEME}'>")
+    file.write(f"<html lang='en' class='styling loading {DEFAULT_THEME}'>")
     file.write("<head>")
     # favicon
     # file.write("<link rel='icon' href='data:,'>")
