@@ -65,6 +65,9 @@ pre {
 // #styling-on {
 //     display: none;
 // }
+html.styling.loading {
+    filter: invert(1);
+}
 html.styling #theme-default {
     display: none;
 }
