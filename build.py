@@ -83,6 +83,11 @@ NAV_POSITION = "default" # "left" | "default"
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
 
+# TEST
+# posts_lst = []
+# posts_dict = {}
+# END TEST
+
 def write_header(file, title="md2website – Markdown to static website builder", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
@@ -227,6 +232,53 @@ def generate_and_inject_index(file_content):
         # inject index as list just before first line starting with ##
         file_content = re.sub(r"## (.*)", f"\n".join([f"{item}" for item in index]) + "\n --- \n" + r"\n## \1", file_content, count=1)
     return file_content
+
+def generate_post_index(dir_page, FLAG_SORT, FLAG_COL, posts_lst=[], posts_dict={}):
+    # sort posts_lst by date then by name
+    # if FLAG_SORT == "date":
+    #     sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+    # else:
+    #     sorted_posts_lst = natsorted(posts_lst, key=lambda item: item["title"])
+    sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
+    # write posts_lst (list by date)
+    # current_date = None
+    dir_page.write("<dl>")
+    for post in sorted_posts_lst:
+        # if post['date'] and current_date != post['date'].year:
+        #     if current_date != None:
+        #         dir_page.write("</dl>")
+        #     dir_page.write(f"<p><em>{post['date'].year}</em></p>")
+        #     current_date = post['date'].year
+        #     # columns
+        #     if FLAG_COL:
+        #         dir_page.write(f"<dl class='columns' style='column-count:{FLAG_COL};'>")
+        #     else:
+        #         dir_page.write("<dl>")
+        dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a> <span class='' style='float:right;'><em>{datetime.date(post['date']).strftime('%B %d, %Y') if post['date'] else ''}</em></span></li>")
+    dir_page.write("</dl>")
+    # create list with categories for ordering
+    category_list = sorted(posts_dict.keys())
+    # write posts in posts_dict (list by category and subcategory)
+    for category in category_list:
+        # write category
+        dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
+        for subcategory in posts_dict[category]:
+            # if FLAG_SORT == "date": sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
+            # else: sorted_posts_dict = natsorted(posts_dict[category][subcategory], key=lambda item: item["title"])
+            sorted_posts_dict = natsorted(posts_dict[category][subcategory], key=lambda item: item["title"])
+            # subcategory name
+            if subcategory != "_root":
+                dir_page.write(f"<p id='{category.lower()}-{subcategory.replace(' ', '-').lower()}'>{subcategory.replace('-', ' ')}</p>")
+            # mulitple columns
+            if FLAG_COL: dir_page.write(f"<dl class='columns' style='column-count:{FLAG_COL};'>")
+            else: dir_page.write("<dl>")
+            for post in sorted_posts_dict:
+                # if date is current or last month
+                if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
+                    dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
+                else:    
+                    dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+            dir_page.write("</dl>")
 
 def replace_hr_with_border(file_content, toc=False):
     file_content = re.sub(r"<hr />\n<ul>", f"<p>In this post:</p>" + r"<ul class='toc'>\n" if toc else "", file_content)
@@ -385,7 +437,11 @@ def main_driver():
                                     elif category:
                                         try:
                                             if type(date) == type(""): date = datetime.strptime(date, "%B %Y")
-                                        except: date = False
+                                        except:
+                                            try:
+                                                date = datetime.strptime(date, "%B %d, %Y")
+                                            except:
+                                                date = False
                                         if not category in posts_dict: posts_dict[category] = { "_root": [] }
                                         # append
                                         posts_dict[category]["_root"].append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
@@ -395,7 +451,7 @@ def main_driver():
                                         except: date = False
                                         # append to posts_lst
                                         posts_lst.append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
-                                        GLOBAL_POSTS.append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
+                                    GLOBAL_POSTS.append({ "title": post_title, "date": date, "url": f"{root.lower()}/{post_name.lower().replace('#', '')}" })
                                     # generate anchors and inject index
                                     post_content = generate_and_inject_index(post_content)
                                     # write
@@ -416,67 +472,10 @@ def main_driver():
                             pass
                 # write page title
                 dir_page.write(f"<h1>{dir_.title()}</h1>")
-                if FLAG_DESC:
-                    dir_page.write(f"<p>{FLAG_DESC}</p>")
-                    # dir_page.write("<hr>")
-                # sort posts_lst by date then by name
-                if FLAG_SORT == "date":
-                    sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
-                else:
-                    sorted_posts_lst = natsorted(posts_lst, key=lambda item: item["title"])
-                # write posts_lst (list by date)
-                current_date = None
-                for post in sorted_posts_lst:
-                    if post['date'] and current_date != post['date'].year:
-                        if current_date != None:
-                            dir_page.write("</dl>")
-                        dir_page.write(f"<p><em>{post['date'].year}</em></p>")
-                        current_date = post['date'].year
-                        # columns
-                        if FLAG_COL:
-                            dir_page.write(f"<ul class='columns' style='column-count:{FLAG_COL};'>")
-                        else:
-                            dir_page.write("<dl>")
-                    dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-                dir_page.write("</ul>")
-                # create list with categories for ordering
-                category_list = sorted(posts_dict.keys())
-                # write posts in posts_dict (list by category and subcategory)
-                for category in category_list:
-                    # write category
-                    dir_page.write(f"<h2 id='{category}'>{category.title()}</h2>")
-                    # if isinstance(posts_dict[category], dict):
-                    for subcategory in posts_dict[category]:
-                        if FLAG_SORT == "date": sorted_posts_dict = sorted(posts_dict[category][subcategory], key=sort_by_date_and_title, reverse=True)
-                        else: sorted_posts_dict = natsorted(posts_dict[category][subcategory], key=lambda item: item["title"])
-                        # subcategory name
-                        if subcategory != "_root":
-                            dir_page.write(f"<p id='{category.lower()}-{subcategory.replace(' ', '-').lower()}'>{subcategory.replace('-', ' ')}</p>")
-                        if FLAG_COL: dir_page.write(f"<ul class='columns' style='column-count:{FLAG_COL};'>")
-                        else: dir_page.write("<ul>")
-                        for post in sorted_posts_dict:
-                            # if date is current or last month
-                            if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
-                                dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
-                            else:    
-                                dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-                        dir_page.write("</ul>")
-                    # else:
-                    #     if FLAG_SORT == "date":
-                    #         sorted_posts_dict = sorted(posts_dict[category], key=sort_by_date_and_title, reverse=True)
-                    #     else:
-                    #         sorted_posts_dict = sorted(posts_dict[category], key=lambda item: item["title"])
-                    #     if FLAG_COL:
-                    #         dir_page.write(f"<ul class='columns' style='column-count:{FLAG_COL};'>")
-                    #     else:
-                    #         dir_page.write("<ul>")
-                    #     for post in sorted_posts_dict:
-                    #         # if date is current or last month
-                    #         if post['date'] and (post['date'].year == datetime.now().year and post['date'].month == datetime.now().month or post['date'].year == datetime.now().year and post['date'].month == datetime.now().month - 1):
-                    #             dir_page.write(f"<li><mark>new</mark> <a href='{post['url']}.html'>{post['title']}</a></li>")
-                    #         else:    
-                    #             dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
-                    #     dir_page.write("</ul>")
+                if FLAG_DESC: dir_page.write(f"<p>{FLAG_DESC}</p>")
+                # write posts index
+                generate_post_index(dir_page, FLAG_SORT, FLAG_COL, posts_lst, posts_dict)
+                # write footer
                 write_footer(dir_page)
 
     # create html page for each md file in pages folder
@@ -533,10 +532,13 @@ def main_driver():
                         #     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
                         # else:
                         #     sorted_global_posts = natsorted(GLOBAL_POSTS, key=lambda item: item["title"])
-                        sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
-                        tmp_file.write("<dl>")
-                        for post in sorted_global_posts: tmp_file.write(f"<li><a href='{post['url']}.html'>{post['title']}</a> <span class='' style='float:right;'><em>{datetime.date(post['date']).strftime('%B %d, %Y')}</em></span></li>")
-                        tmp_file.write("</dl>")
+                        # sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
+                        # tmp_file.write("<dl>")
+                        # for post in sorted_global_posts: tmp_file.write(f"<li><a href='{post['url']}.html'>{post['title']}</a> <span class='' style='float:right;'><em>{datetime.date(post['date']).strftime('%B %d, %Y')}</em></span></li>")
+                        # tmp_file.write("</dl>")
+                        # write posts index
+                        tmp_file.write("<hr>")
+                        generate_post_index(tmp_file, FLAG_SORT, FLAG_COL, GLOBAL_POSTS)
                     if FLAG_COL: tmp_file.write("</div>")
                     write_footer(tmp_file)
                     file.close()
