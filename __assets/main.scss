@@ -92,7 +92,8 @@ html.styling div.page {
     padding: 0 2rem;
     margin: 0 auto;
 }
-html.styling div.page p {
+html.styling div.page p,
+html.styling div.page h2 {
     margin: 2rem 0;
     line-height: 1.5;
 }
@@ -267,7 +268,9 @@ html.styling .highlight .kn         { color: $dark !important; }
 html.styling .highlight .s1,
 html.styling .highlight .si         { color: $grey !important; }
 
-html.styling .highlight .c1         { color: $grey !important; }
+html.styling .highlight .c1,
+html.styling .highlight .cm         { color: $grey !important; }
+
 html.styling .highlight .mi         { color: $blue !important; }
 
 html.styling .highlight .nf,
