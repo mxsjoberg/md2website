@@ -68,7 +68,7 @@ FORMAT_MAP = {
 
 SOURCE_PATH = False
 ASSETS = ["main.scss", "main.js"]
-APP_THEME = "#0E1525"
+APP_THEME = "#292F3E"
 
 # defaults
 POSTS_ON_INDEX = False
@@ -175,7 +175,8 @@ def write_header(file, title="md2website – Markdown to static website builder"
                 """)
             file.write("</div>")
         else:
-            pass
+            # empty nav for aligned padding across pages
+            file.write("<div class='nav no-print'><p></p></div>")
 
 def write_footer(file):
     file.write("<div id='footer' class='no-print'>")
@@ -512,6 +513,8 @@ def main_driver():
                     if FLAG_TOC: file_content = generate_and_inject_index(file_content)
                     # write header
                     write_header(tmp_file, title)
+                    # inject override styling for images (profile)
+                    # if file_name == "index": tmp_file.write("<style>html.styling img { border-radius: 0; }</style>")
                     # TODO: move this into formatting helper
                     # replace -- with &mdash;
                     file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
