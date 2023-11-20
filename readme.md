@@ -2,7 +2,7 @@
 
 Example websites:
 
-- [DEMO](https://md2website.pages.dev/)
+- [DEMO](https://mxsjoberg.github.io/md2website/)
 - [My personal](https://michaelsjoberg.com/)
 - [My notes](https://notes.michaelsjoberg.com/)
 
