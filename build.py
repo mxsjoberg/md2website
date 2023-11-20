@@ -83,11 +83,6 @@ NAV_POSITION = "default" # "left" | "default"
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
 
-# TEST
-# posts_lst = []
-# posts_dict = {}
-# END TEST
-
 def write_header(file, title="md2website – Markdown to static website builder", root=0):
     file.write("<!DOCTYPE html>\n")
     file.write("""
@@ -221,14 +216,16 @@ def sort_by_date_and_title(item):
 
 def generate_and_inject_index(file_content):
     # generate anchors
-    file_content = re.sub(r"## (.*)", r"## <a name='\1' class='anchor'></a> [\1](#\1)", file_content)
+    file_content = re.sub(r"## (.*)", r"## \1 <a name='\1' class='anchor' href='#\1'>#</a>", file_content)
     # find anchors and generate index
     index = []
     for line in file_content.split("\n"):
         if line.startswith("## "):
-            index.append("- " + line.split("## ")[1].split("</a>")[1].strip())
+            anchor = line.split("## ")[1].split("<a")[0].strip()
+            index.append(f"- [{anchor}](#{anchor})")
         if line.startswith("### "):
-            index.append("    - " + line.split("### ")[1].split("</a>")[1].strip())
+            anchor = line.split("### ")[1].split("<a")[0].strip()
+            index.append(f"    - [{anchor}](#{anchor})")
     if len(index) > 0:
         # inject index as list just before first line starting with ##
         file_content = re.sub(r"## (.*)", f"\n".join([f"{item}" for item in index]) + "\n --- \n" + r"\n## \1", file_content, count=1)
