@@ -216,7 +216,7 @@ def sort_by_date_and_title(item):
 
 def generate_and_inject_index(file_content):
     # generate anchors
-    file_content = re.sub(r"## (.*)", r"## \1 <a name='\1' class='anchor' href='#\1'>#</a>", file_content)
+    file_content = re.sub(r"## (.*)", r"## \1 <a name='\1'></a> <a class='anchor' href='#\1'>#</a>", file_content)
     # find anchors and generate index
     index = []
     for line in file_content.split("\n"):
