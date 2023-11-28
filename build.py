@@ -79,6 +79,7 @@ ALLOW_CHANGE_THEME = True
 CLEAN_INDEX = False # True | False
 DEFAULT_FOOTER = "full" # "full" | "simple" | ""
 NAV_POSITION = "default" # "left" | "default"
+SOCIAL_IMAGE = ""
 
 # for listing all posts on index page
 GLOBAL_POSTS = [] # [ { title, date, url } ]
@@ -112,6 +113,16 @@ def write_header(file, title="md2website – Markdown to static website builder"
     file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
     file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
+    # social
+    file.write("<meta property='og:type' content='website'>")
+    file.write(f"<meta property='og:title' content='{title}'>")
+    file.write(f"<meta property='og:description' content='{DESCRIPTION}'>")
+    file.write(f"<meta property='og:image' content='/{SOCIAL_IMAGE}'>")
+    # twitter
+    file.write("<meta name='twitter:card' content='summary'>")
+    file.write(f"<meta name='twitter:title' content='{title}'>")
+    file.write(f"<meta name='twitter:description' content='{DESCRIPTION}'>")
+    file.write(f"<meta name='twitter:image' content='/{SOCIAL_IMAGE}'>")
     # css
     # file.write(f"<link rel='stylesheet' href='{'../'*root}main.min.css'>")
     if STYLING:
@@ -567,6 +578,7 @@ if __name__ == "__main__":
                 if CONFIG_NAME == "CLEAN_INDEX": CLEAN_INDEX = True if str(line.split("CLEAN_INDEX =")[1].strip()) == "True" else False
                 if CONFIG_NAME == "DEFAULT_FOOTER": DEFAULT_FOOTER = str(line.split("DEFAULT_FOOTER =")[1].strip()[1:-1])
                 if CONFIG_NAME == "NAV_POSITION": NAV_POSITION = str(line.split("NAV_POSITION =")[1].strip()[1:-1])
+                if CONFIG_NAME == "SOCIAL_IMAGE": SOCIAL_IMAGE = str(line.split("SOCIAL_IMAGE =")[1].strip()[1:-1])
         # generate website
         main_driver()
     elif SOURCE_PATH != False and not os.path.exists(f"{SOURCE_PATH}/.md2website-config"):
