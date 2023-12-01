@@ -4,7 +4,6 @@ Example websites:
 
 - [DEMO](https://md2website.pages.dev/)
 - [My personal](https://michaelsjoberg.com/)
-- [My notes](https://notes.michaelsjoberg.com/)
 
 ## Usage
 
