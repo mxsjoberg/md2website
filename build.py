@@ -20,50 +20,17 @@ from pygments.formatters import HtmlFormatter
 
 ACCEPTED_FILE_FORMATS = ["md", "py", "c", "cpp", "pas", "rb", "rs", "pl", "scala", "asm", "v", "txt"]
 FORMAT_MAP = {
-    "py": {
-        "name": "python",
-        "comment": "#"
-    },
-    "c": {
-        "name": "c",
-        "comment": "//"
-    },
-    "cpp": {
-        "name": "cpp",
-        "comment": "//"
-    },
-    "pas": {
-        "name": "pascal",
-        "comment": "//"
-    },
-    "rb": {
-        "name": "ruby",
-        "comment": "#"
-    },
-    "rs": {
-        "name": "rust",
-        "comment": "//"
-    },
-    "pl": {
-        "name": "prolog",
-        "comment": "%"
-    },
-    "scala": {
-        "name": "scala",
-        "comment": "//"
-    },
-    "asm": {
-        "name": "asm",
-        "comment": ";"
-    },
-    "v": {
-        "name": "verilog",
-        "comment": "//"
-    },
-    "txt": {
-        "name": "txt",
-        "comment": None
-    }
+    "py":       { "name": "python", "comment": "#" },
+    "c":        { "name": "c", "comment": "//" },
+    "cpp":      { "name": "cpp", "comment": "//" },
+    "pas":      { "name": "pascal", "comment": "//" },
+    "rb":       { "name": "ruby", "comment": "#" },
+    "rs":       { "name": "rust", "comment": "//" },
+    "pl":       { "name": "prolog", "comment": "%" },
+    "scala":    { "name": "scala", "comment": "//" },
+    "asm":      { "name": "asm", "comment": ";" },
+    "v":        { "name": "verilog", "comment": "//" },
+    "txt":      { "name": "txt", "comment": None },
 }
 
 SOURCE_PATH = False
@@ -356,6 +323,10 @@ def main_driver():
 
     # copy fonts in _fonts folder
     os.system(f"cp -r __fonts {DIST_PATH}")
+
+    # copy source __static folder to dist (images etc)
+    if os.path.exists(f"{SOURCE_PATH}/__static"):
+        os.system(f"cp -r {SOURCE_PATH}/__static {DIST_PATH}")
 
     # copy other stuff in source folder
     for file in os.listdir(SOURCE_PATH):
