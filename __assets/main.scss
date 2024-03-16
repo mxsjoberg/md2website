@@ -101,7 +101,8 @@ html.styling.dark #theme-default {
     display: inline-block;
 }
 html.styling body {
-    font-family: "LibreBaskerville", serif !important;
+    // font-family: "LibreBaskerville", serif !important;
+    font-family: "Hack", monospace !important;
     font-size: $font-size;
     margin: 0;
     background: $white;
