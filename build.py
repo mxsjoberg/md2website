@@ -101,6 +101,8 @@ def write_header(file, title="md2website – Markdown to static website builder"
         file.write("</style>")
     # js
     # file.write(f"<script src='{'../'*root}main.min.js'></script>")
+    # import fontawesome
+    file.write("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css' integrity='sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==' crossorigin='anonymous' referrerpolicy='no-referrer'>")
     file.write("</head>")
     # -------------------------------------------
     file.write("<body>")
@@ -483,6 +485,8 @@ def main_driver():
                     for line in file_content:
                         if line.startswith("# "):
                             title = line.split("# ")[1]
+                            # remove links in title
+                            title = title.split("[")[0]
                             break
                     # join 
                     file_content = "\n".join(file_content)
