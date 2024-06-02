@@ -245,22 +245,18 @@ def main_driver():
     # create dist folder
     if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
     os.mkdir(DIST_PATH)
-
     # copy source __static folder to dist (images etc)
     if os.path.exists(f"{SOURCE_PATH}/__static"):
         os.system(f"cp -r {SOURCE_PATH}/__static {DIST_PATH}")
-
     # copy other stuff in source folder
     for file in os.listdir(SOURCE_PATH):
         if not file.startswith(".") and not file == "nav.md" and not os.path.isdir(f"{SOURCE_PATH}/{file}"):
             os.system(f"cp {SOURCE_PATH}/{file} {DIST_PATH}/{file}")
-
     # copy load folders into source
     if LOAD_FOLDER != False:
         os.system(f"rsync -av --progress {LOAD_FOLDER} {SOURCE_PATH} --exclude .git --exclude='_*'")
         # create file in source folder with flags for loaded folder
         with open(f"{SOURCE_PATH}/{LOAD_FOLDER.split('/')[-1]}/__flags", "w+") as file: file.write(LOAD_FOLDER_FLAGS)
-
     # create list page for each folder in root dir
     for dir_ in os.listdir(SOURCE_PATH):
         if "." not in dir_ and dir_ != "pages" and not dir_.startswith("__"):
