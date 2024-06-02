@@ -243,7 +243,7 @@ def parse_flags(line):
 
 def main_driver():
     # create dist folder
-    if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
+    # if os.path.isdir(DIST_PATH): shutil.rmtree(DIST_PATH)
     os.mkdir(DIST_PATH)
     # copy source __static folder to dist (images etc)
     if os.path.exists(f"{SOURCE_PATH}/__static"):
@@ -416,7 +416,7 @@ def main_driver():
                     file.close()
 
 if __name__ == "__main__":
-    SOURCE_PATH = sys.argv[1] if len(sys.argv) > 1 else False
+    SOURCE_PATH = sys.path[0] + sys.argv[1] if len(sys.argv) > 1 else False
     # build demo if no source path provided
     if SOURCE_PATH != False and os.path.exists(f"{SOURCE_PATH}/.md2website-config"):
         with open(f"{SOURCE_PATH}/.md2website-config", "r") as file:
@@ -424,7 +424,9 @@ if __name__ == "__main__":
             # parse config
             for line in config_content.split("\n"):
                 CONFIG_NAME = str(line.split("=")[0].strip())
-                if CONFIG_NAME == "DIST_PATH": DIST_PATH = str(line.split("DIST_PATH =")[1].strip()[1:-1])
+                if CONFIG_NAME == "DIST_PATH":
+                    # DIST_PATH = str(line.split("DIST_PATH =")[1].strip()[1:-1])
+                    DIST_PATH = "" + sys.path[0] + str(line.split("DIST_PATH =")[1].strip()[1:-1])
                 if CONFIG_NAME == "LOAD_FOLDER": LOAD_FOLDER = str(line.split("LOAD_FOLDER =")[1].strip()[1:-1]) if not str(line.split("LOAD_FOLDER =")[1].strip()) == "False" else False
                 if CONFIG_NAME == "LOAD_FOLDER_FLAGS": LOAD_FOLDER_FLAGS = str(line.split("LOAD_FOLDER_FLAGS =")[1].strip()[1:-1]) if not str(line.split("LOAD_FOLDER_FLAGS =")[1].strip()) == "False" else False
                 if CONFIG_NAME == "AUTHOR": AUTHOR = str(line.split("AUTHOR =")[1].strip())[1:-1]
@@ -446,6 +448,5 @@ if __name__ == "__main__":
         print("No .md2website-config file found in source folder root.")
     # check if .md2website-config in source folder root
     else:
-        print("No source provided, building demo site.")
         print("Usage: python3 md2website.py /path/to/source")
         print("example: python3 md2website.py /website (both md2website.py and website folder in root)")
