@@ -369,21 +369,6 @@ def main_driver():
                                 date = False
                                 # title from file name
                                 post_title = post_name.replace("-", " ")
-                                # TODO: refactor this as helper function?
-                                # embed file content in markdown code block
-                                # if post_format in FORMAT_MAP.keys():
-                                #     key = post.split(".")[1]
-                                #     file_content = post_file.read()
-                                #     post_content = f"# {post_title}\n"
-                                #     try:
-                                #         date = datetime.strptime(file_content.split('\n')[0].split(FORMAT_MAP[key]["comment"])[1].strip(), "%Y-%m")
-                                #         post_content += f"*{date.strftime('%B %Y')}*\n"
-                                #         file_content = "\n".join(file_content.split('\n')[1:])
-                                #     except:
-                                #         pass
-                                #     post_content += f"```{FORMAT_MAP[key]['name']}\n{file_content}\n```\n"
-                                # else:
-                                #     post_content = post_file.read()
                                 post_content = post_file.read()
                                 # TODO: refactor this as helper function?
                                 # create page
