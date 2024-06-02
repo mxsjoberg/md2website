@@ -385,7 +385,6 @@ def main_driver():
                             file_content = file_content[2:]
                         else:
                             file_content = file_content[1:]
-                    # title = file_content[0].split("# ")[1]
                     # find and use first line starting with # as title
                     title = None
                     for line in file_content:
