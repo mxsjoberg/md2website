@@ -402,9 +402,6 @@ def main_driver():
                     if FLAG_TOC: file_content = generate_and_inject_index(file_content)
                     # write header
                     write_header(tmp_file, title)
-                    # inject override styling for images (profile)
-                    # if file_name == "index": tmp_file.write("<style>html.styling img { border-radius: 0; }</style>")
-                    # TODO: move this into formatting helper
                     # replace -- with &mdash;
                     file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
                     # convert markdown to html
@@ -417,18 +414,6 @@ def main_driver():
                     tmp_file.write(file_content)
                     # list recent posts on index
                     if POSTS_ON_INDEX and file_name == "index":
-                        # tmp_file.write("<p class='small'>&#9632; &#9632; &#9632;</p>")
-                        # tmp_file.write("<hr>")
-                        # list posts
-                        # if FLAG_SORT == "date":
-                        #     sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
-                        # else:
-                        #     sorted_global_posts = natsorted(GLOBAL_POSTS, key=lambda item: item["title"])
-                        # sorted_global_posts = sorted(GLOBAL_POSTS, key=sort_by_date_and_title, reverse=True)
-                        # tmp_file.write("<dl>")
-                        # for post in sorted_global_posts: tmp_file.write(f"<li><a href='{post['url']}.html'>{post['title']}</a> <span class='' style='float:right;'><em>{datetime.date(post['date']).strftime('%B %d, %Y')}</em></span></li>")
-                        # tmp_file.write("</dl>")
-                        # write posts index
                         tmp_file.write("<hr>")
                         generate_post_index(tmp_file, FLAG_SORT, FLAG_COL, GLOBAL_POSTS)
                     if FLAG_COL: tmp_file.write("</div>")
@@ -466,9 +451,6 @@ if __name__ == "__main__":
         print("No .md2website-config file found in source folder root.")
     # check if .md2website-config in source folder root
     else:
-        from config_demo import *
         print("No source provided, building demo site.")
-        print("Usage: python3 build.py <path/to/source>")
-        SOURCE_PATH = "demo"
-        # generate website
-        main_driver()
+        print("Usage: python3 md2website.py /path/to/source")
+        print("example: python3 md2website.py /website (both md2website.py and website folder in root)")
