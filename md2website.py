@@ -18,20 +18,6 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 ACCEPTED_FILE_FORMATS = ["md"]
-FORMAT_MAP = {
-    "py":       { "name": "python", "comment": "#" },
-    "c":        { "name": "c", "comment": "//" },
-    "cpp":      { "name": "cpp", "comment": "//" },
-    "pas":      { "name": "pascal", "comment": "//" },
-    "rb":       { "name": "ruby", "comment": "#" },
-    "rs":       { "name": "rust", "comment": "//" },
-    "pl":       { "name": "prolog", "comment": "%" },
-    "scala":    { "name": "scala", "comment": "//" },
-    "asm":      { "name": "asm", "comment": ";" },
-    "v":        { "name": "verilog", "comment": "//" },
-    "txt":      { "name": "txt", "comment": None },
-}
-
 SOURCE_PATH = False
 ASSETS = ["main.scss", "main.js"]
 APP_THEME = "#292F3E"
