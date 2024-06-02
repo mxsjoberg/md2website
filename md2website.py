@@ -2,6 +2,10 @@
 # Usage: python3 md2website.py /path/to/source
 # example: python3 md2website.py /website (both md2website.py and website folder in root)
 
+# build config (cloudflare pages)
+# build command: "pip install -r requirements.txt; python3 md2website.py /website"
+# output directory: "dist"
+
 import os
 import sys
 import re
